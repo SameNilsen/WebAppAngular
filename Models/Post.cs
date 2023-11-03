@@ -27,9 +27,10 @@ namespace OsloMetAngular.Models
         public string? ImageUrl { get; set; }
         [JsonPropertyName("PostDate")]
         public string? PostDate { get; set; }
-        //public int UserId { get; set; }
-        //public virtual User User { get; set; } = default!;
-        //public virtual List<Comment>? Comments { get; set; }
+        [JsonPropertyName("UserId")]
+        public int UserId { get; set; }
+        public virtual User User { get; set; } = default!;
+        public virtual List<Comment>? Comments { get; set; }
         [JsonPropertyName("UpvoteCount")]
         public int UpvoteCount { get; set; } = 0;
         //public virtual List<Upvote>? UserVotes { get; set; }

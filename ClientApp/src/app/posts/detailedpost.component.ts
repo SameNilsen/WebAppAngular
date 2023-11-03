@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { PostService } from "./posts.service";
 import { IPost, Post } from "./post";
+import { IComment } from "./comment";
+import { IUser } from "../user/user";
 
 @Component({
   selector: "app-posts-detailedpost",
