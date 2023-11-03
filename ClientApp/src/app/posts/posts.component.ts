@@ -30,6 +30,23 @@ export class PostsComponent implements OnInit{
 
   constructor(private _router: Router, private _postService: PostService) { }
 
+  deletePost(post: IPost): void {
+    const confirmDelete = confirm(`Are you sure you want to delete "${post.Title}"?`);
+    if (confirmDelete) {
+      this._postService.deletePost(post.PostId)
+        .subscribe(
+          (response) => {
+            if (response.success) {
+              console.log(response.message);
+              this.filteredPosts = this.filteredPosts.filter(i => i !== post);
+            }
+          }
+          , (error) => {
+            console.log("Error deleting post:", error);
+          });
+    }
+  }
+
   testNavigate() {
     this._router.navigate(["/test"]);
   }

@@ -46,7 +46,7 @@
     }
 </style>
 
-<!-- This is  -->
+<!-- This is a button from the Demos. Its not used now because getPosts() is called on Init. -->
 <button class="btn btn-primary" (click)="getPosts()">Get posts</button>
 
 <div class="row">
@@ -66,6 +66,9 @@
 <!--@* CREATE and CARD view buttons *@-->
 <div class="container" style="text-align:center">
   <div>
+    <!-- New method: -->
+    <button class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create New post</button>
+    <!-- Old method: -->
     <a class="btn btn-secondary"
        asp-controller="Post"
        asp-action="Create">Create Post</a>
@@ -81,7 +84,8 @@
       <th style="display: none">ID</th>
       <th>Title</th>
       <th>Date</th>
-      <th>User</th>
+      <!-- Har ikke fiksa user enda, så det blir postid inntil videre: -->
+      <th>postid</th>
       <th>Image</th>
       <th>Actions</th>
       <th>Votes</th>
@@ -110,43 +114,45 @@
         <img [src]="post.ImageUrl" alt="Post image" style="max-width: 100px; max-height: 100px;" />
       </td>
       <td>
+        <a [routerLink]="['/postform', 'edit', post.PostId]">Update</a>
+        <a class="delete-link" (click)="deletePost(post)">Delete</a>
         <!--@* The voting buttons *@-->
         <!--@{-->
         <!--//  Gets the votes from the controller in a ViewData, and formats it as
-        //   a list. Checks if the user has voted on the post before, and displays
-        //    the correct arrows with correct colors.-->
+  //   a list. Checks if the user has voted on the post before, and displays
+  //    the correct arrows with correct colors.-->
         <!--var votes = ViewData["Votes"] as List<string>
-          ;
-          if (votes == null)
-          {-->
+    ;
+    if (votes == null)
+    {-->
         <!--//  If the viewdata doesnt contain any votes, then an error occured at server. A dummy list
-        //   with the same length as list of posts is created with dummy values.-->
+  //   with the same length as list of posts is created with dummy values.-->
         <!--votes = new List<string>
-          ();
-          for (int o = 0; o < Model.Count(); o++)
-          {
-          votes.Add("blank");
-          }
-        }
-        }-->
+    ();
+    for (int o = 0; o < Model.Count(); o++)
+    {
+    votes.Add("blank");
+    }
+  }
+  }-->
         <!--@* UPVOTE *@-->
         <!--@if (@votes.ElementAt(i) == "upvote")
-        {
-        <a class="btn-arrow-up" style="color: rgb(193, 26, 26);" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>
-        <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>
-        }-->
+  {
+  <a class="btn-arrow-up" style="color: rgb(193, 26, 26);" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>
+  <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>
+  }-->
         <!--@* DOWNVOTE *@-->
         <!--else if (@votes.ElementAt(i) == "downvote")
-        {
-        <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>
-        <a class="btn-arrow-down" style="color: rgb(20, 130, 167);" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>
-        }-->
+  {
+  <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>
+  <a class="btn-arrow-down" style="color: rgb(20, 130, 167);" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>
+  }-->
         <!--@* DEFAULT *@-->
         <!--else
-        {
-        <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>
-        <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>
-        }-->
+  {
+  <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>
+  <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>
+  }-->
         <!-- Link to the detailed view of this post -->
         <!--<a class="btn btn-secondary" asp-controller="Post" asp-action="DetailedPost" asp-route-id="@Model.ElementAt(i).PostID">Reply</a>-->
       </td>
