@@ -1,20 +1,13 @@
-<!--@model PostListViewModel-->
-<!--@* Posts View (main feed) *@
 
-@{
-    // Tab title
-    ViewData["Title"] = "Posts";
-}-->
 <!-- Welcome text -->
 <h1 style="text-align:center;">Main Feed</h1>
 
 <!-- Inherits another view called _PostsTable -->
-<!--<partial name="_PostsTable" model="Model.Posts" />-->
-<!--<partial name="_PostsTable" />-->
-<button class="btn btn-secondary" (click)="testNavigate()">Test</button>
 
-<!--@model IEnumerable<Post>-->
+<!--<button class="btn btn-secondary" (click)="testNavigate()">Test</button>-->
+
 <!--@* Classic View *@-->
+
 <!--@* Style sheet for upvote/downvote buttons *@-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -53,6 +46,7 @@
     }
 </style>
 
+<!-- This is  -->
 <button class="btn btn-primary" (click)="getPosts()">Get posts</button>
 
 <div class="row">
