@@ -12,6 +12,7 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { PostsComponent } from './posts/posts.component';
 import { PostformComponent } from './posts/postform.component';
+import { DetailedPostComponent } from './posts/detailedpost.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,8 @@ import { PostformComponent } from './posts/postform.component';
       { path: 'posts', component: PostsComponent },
       { path: "postform", component: PostformComponent },
       { path: "postform/:mode/:id", component: PostformComponent },
+      { path: "detailedpost", component: DetailedPostComponent },
+      { path: "detailedpost/:id", component: DetailedPostComponent },
       { path: "**", redirectTo: "", pathMatch: "full" }
     ])
   ],

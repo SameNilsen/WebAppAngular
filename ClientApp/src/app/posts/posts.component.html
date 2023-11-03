@@ -91,16 +91,10 @@
       <th>Votes</th>
     </tr>
 
-    <!--@* @foreach (var post in Model) *@-->
-    <!--@for (int i = 0; i < Model.Count(); i++)
-    {-->
     <tr *ngFor="let post of filteredPosts">
       <td>
-        <!-- Title (a link to the detailed view of this post) -->
-        <!--<a class="links" asp-controller="Post"
-        asp-action="DetailedPost"
-        asp-route-id="@Model.ElementAt(i).PostID">@Model.ElementAt(i).Title</a>-->
-        {{ post.Title }}
+        <!-- Title (a link to the detailed view of this post) -->           
+        <a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a>
       </td>
 
       <!-- Post date -->
