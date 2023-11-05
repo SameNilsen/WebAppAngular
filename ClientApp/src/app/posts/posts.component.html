@@ -91,7 +91,7 @@
       <th>Votes</th>
     </tr>
 
-    <tr *ngFor="let post of filteredPosts">
+    <tr *ngFor="let post of filteredPosts; index as i">
       <td>
         <!-- Title (a link to the detailed view of this post) -->           
         <a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a>
@@ -102,7 +102,7 @@
       <td>{{ post.PostDate }}</td>
 
       <!-- User -->
-      <td>{{ post.PostId }}</td>
+      <td>{{ post.user.Name }}</td>
       <td>
         <!-- Image -->
         <img [src]="post.ImageUrl" alt="Post image" style="max-width: 100px; max-height: 100px;" />

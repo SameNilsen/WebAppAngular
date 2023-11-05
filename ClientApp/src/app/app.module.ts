@@ -20,7 +20,8 @@ import { DetailedPostComponent } from './posts/detailedpost.component';
     NavMenuComponent,
     HomeComponent,
     PostsComponent,
-    PostformComponent
+    PostformComponent,
+    DetailedPostComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

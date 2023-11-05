@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
@@ -13,10 +13,11 @@ import { IUser, User } from "../user/user";
   templateUrl: "./detailedpost.component.html",
 })
 
-export class DetailedPostComponent {
+export class DetailedPostComponent implements OnInit {
 
   post: IPost = new Post();
   user: IUser = new User();
+  comments: IComment[] = this.post.comments;
   
   constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService) {
     
@@ -39,6 +40,7 @@ export class DetailedPostComponent {
           this.post = post;
           console.log("This is title: ", post.Title);
           this.loadUser(this.post.UserId);
+          this.getComments(postId); //  Istedet for post.Comments fordi det tuller med minnet.
         },
         (error: any) => {
           console.log("Error loading post:", error);
@@ -58,6 +60,18 @@ export class DetailedPostComponent {
           console.log("Error loading user:", error);
         }
       );
+  }
+
+  getComments(postId: number): void {
+    this._commentService.getComments()
+      .subscribe(data => {
+        console.log("All", JSON.stringify(data));
+        this.comments = data;
+        console.log(this.comments);
+        //  Filter kommentarer?
+      }
+      );
+    console.log("it worked?");
   }
 
   

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace OsloMetAngular.Models
@@ -8,17 +9,17 @@ namespace OsloMetAngular.Models
     
     public class Comment
     {
-        [JsonPropertyName("CommentID")]
+        [JsonProperty("CommentID")]
         public int CommentID { get; set; }
-        [JsonPropertyName("CommentText")]
+        [JsonProperty("CommentText")]
         [StringLength(200)]
         public string CommentText { get; set; } = string.Empty;
-        [JsonPropertyName("PostDate")]
+        [JsonProperty("PostDate")]
         public string? PostDate { get; set; }
-        [JsonPropertyName("UserId")]
+        [JsonProperty("UserId")]
         public int UserId { get; set; } = 1;
         public virtual User User { get; set; } = default!;
-        [JsonPropertyName("PostID")]
+        [JsonProperty("PostID")]
         public int PostID { get; set; }
         public virtual Post Post { get; set; } = default!;
 

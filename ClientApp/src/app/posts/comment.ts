@@ -1,17 +1,20 @@
+import { IUser, User } from "../user/user";
+
 export interface IComment {
-  CommentId: number;
+  CommentID: number;
   CommentText: string;
   Text: string;
   PostId: number;
   UserId: number;
   PostDate: string;
+  User: IUser;
 }
 export class Comment implements IComment {
-    CommentId: number = 0;
+    CommentID: number = 0;
     CommentText: string = "";
     Text: string = "";
     PostId: number = 0;
     UserId: number = 0;
     PostDate: string = "";
-
+    User: IUser = new User();
 }

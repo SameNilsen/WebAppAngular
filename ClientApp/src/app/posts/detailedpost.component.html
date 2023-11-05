@@ -133,10 +133,11 @@
 <br />
 
     <!--@* COMMENTS *@-->
-<!--<div class="container">-->
+<div class="container">
   <!--@* Create new comment *@-->
-  <!--<p>
-    @* The javascript code is to toggle on and off the input field for creating or editing a comment. *@
+  <p>
+    <!--@* The javascript code is to toggle on and off the input field for creating or editing a comment. *@-->
+    <!-- Should be moved to component -->
     <script>
                 function fun(id) {
                     var div = document.getElementById(id);
@@ -160,24 +161,25 @@
                         divOFF.style.display = "none";
                     }
                 }
-    </script>-->
+    </script>
 
-    <!-- COMMENT button -->
-    <!--<button class="btn btn-secondary" onclick="fun('newComment')">Comment</button>
+     <!--COMMENT button--> 
+    <button class="btn btn-secondary" onclick="fun('newComment')">Comment</button>
   </p>
 
-  @* This form is for sending the new comment to the controller *@
+  <!--@* This form is for sending the new comment to the controller *@-->
+  <!-- Should be handled in component. -->
   <div asp-validation-summary="All" class="text-danger"></div>
   <div id="newComment" style="display:none">
-    @using(Html.BeginForm("Create", "Comment"))
-    {
+    <!--@using(Html.BeginForm("Create", "Comment"))
+    {-->
     <textarea cols="50" type="text" name="CommentText"></textarea>
     <input type="text" name="PostID" value="@Model.Post.PostID" hidden />
     <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>
-    }
+    <!--}-->
   </div>
 
-  @* Displaying all comments in a table *@
+  <!--@* Displaying all comments in a table *@-->
   <h1>@ViewBag.CurrentViewName</h1>
 
   <table class="table table-striped">
@@ -192,7 +194,7 @@
       <th>Actions</th>
     </tr>
 
-    @{
+    <!--@{
     // This part is for avoiding null-reference
     List
     <Comment>
@@ -202,49 +204,49 @@
       comments = new List<Comment>
         ();
         }
-        }
+        }-->
 
-        @* Going through all comments *@
-        @foreach (var comment in comments)
-        {
-        <tr>
-          @*
-          <- This block is for editing and deleting a comment *@
+        <!--@* Going through all comments *@-->
+        <!--@foreach (var comment in comments)
+        {-->
+        <tr *ngFor="let comment of comments; index as i">
+          <!--@*
+          <- This block is for editing and deleting a comment *@-->
                     <td>
-                        <div id="editON @comment.CommentID" style="display:none">
-                            @using (Html.BeginForm("Update", "Comment"))
-                            {
+                        <div id="editON {{comment.CommentID}}" style="display:none">
+                            <!--@using (Html.BeginForm("Update", "Comment"))
+                            {-->
                                 <input type="text" name="CommentText" value="@comment.CommentText">
                                 <input type="text" name="CommentID" value="@comment.CommentID" hidden />
                                 <input type="text" name="PostDate" value="@comment.PostDate" hidden />
                                 <input type="text" name="UserId" value="@comment.UserId" hidden />
                                 <input type="text" name="PostID" value="@comment.PostID" hidden />
                                 <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>
-                            }-->
-                            <!-- DELETE button -->
-                            <!--<form asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.CommentID" method="post">
+                            <!--}
+                             DELETE button--> 
+                            <form asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.CommentID" method="post">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </div>
-                    <div id="editOFF @comment.CommentID" style="display:block">@comment.CommentText</div>
-                    @* -> *@
+                        <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
+                    <!--@* -> *@-->
 
                     </td>
-                    <td>@comment.PostDate</td>
-                    <td>@comment.User.Name</td>
+                    <td>{{comment.PostDate}}</td>
+                    <td>{{comment.User.Name}}</td>
                     <td>@comment.User.Credebility</td>
                     <td>
-                        @* This is to make sure that one can only edit the comment you yourself has made *@
+                        <!--@* This is to make sure that one can only edit the comment you yourself has made *@
                         @if (SignInManager.IsSignedIn(User) && comment.User.IdentityUserId == UserManager.GetUserId(User))
                         {
-                            // EDIT button
+                            // EDIT button-->
                             <button class="btn btn-secondary"
-                                        onclick="toggleEdit(@comment.CommentID)">
+                                        onclick="toggleEdit(comment.CommentID)">
                                     Edit
                             </button>
-                        }
+                        <!--}-->
                     </td>
         </tr>
-        }
+        <!--}-->
   </table>
-</div>-->
+</div>
