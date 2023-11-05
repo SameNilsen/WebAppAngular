@@ -52,13 +52,16 @@ export class PostsComponent implements OnInit{
   }
 
   getPosts(): void {
+    console.log("postscomponent1")
     this._postService.getPosts()
       .subscribe(data => {
         console.log("All", JSON.stringify(data));
+        console.log("postscomponent2?");
         this.posts = data;
         this.filteredPosts = this.posts;
       }
-      );
+    );
+    console.log("it worked?");
   }
 
   filteredPosts: IPost[] = this.posts;

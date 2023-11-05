@@ -3,9 +3,10 @@ import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } 
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { PostService } from "./posts.service";
+import { UserService } from "../user/users.service";
 import { IPost, Post } from "./post";
 import { IComment } from "./comment";
-import { IUser } from "../user/user";
+import { IUser, User } from "../user/user";
 
 @Component({
   selector: "app-posts-detailedpost",
@@ -15,8 +16,9 @@ import { IUser } from "../user/user";
 export class DetailedPostComponent {
 
   post: IPost = new Post();
+  user: IUser = new User();
   
-  constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute) {
+  constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService) {
     
   }
 
@@ -25,6 +27,7 @@ export class DetailedPostComponent {
       //this.post = params["id"]
       console.log("THIS IS ID: " + params["id"]);
       this.loadPost(params["id"]);
+      //this.loadUser(this.post.UserId);
     });
   }
 
@@ -35,9 +38,24 @@ export class DetailedPostComponent {
           console.log("retrived post: ", post);
           this.post = post;
           console.log("This is title: ", post.Title);
+          this.loadUser(this.post.UserId);
         },
         (error: any) => {
           console.log("Error loading post:", error);
+        }
+      );
+  }
+
+  loadUser(userId: number) {
+    this._userService.getUserById(userId)
+      .subscribe(
+        (user: any) => {
+          console.log("retrived user: ", user);
+          this.user = user;
+          console.log("This is user: ", user.Name);
+        },
+        (error: any) => {
+          console.log("Error loading user:", error);
         }
       );
   }

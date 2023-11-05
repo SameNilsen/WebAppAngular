@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
+using OsloMetAngular.ViewModels;
 
 namespace OsloMetAngular.Controllers
 {
@@ -41,13 +42,34 @@ namespace OsloMetAngular.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            Console.Write("postcontroller1");
             var posts = await _postRepository.GetAll();
+            Console.Write("postcontroller2");
             if (posts == null)
             {
+                Console.Write("postcontroller3");
                 _logger.LogError("[PostController] Post list not found when executing _postRepository.GetAll(),");
                 return NotFound("Post list not found");
             }
-            return Ok(posts);
+            Console.Write("postcontroller4" + posts.Count());
+            //  Wrap it in viewmodel without reference to other entities to avoid referencing loop by json.
+            List<Post> viewModelPosts = new List<Post>();
+            foreach (var post in posts)
+            {
+                Post simplePost = new Post {
+                    PostID = post.PostID,
+                    Title = post.Title,
+                    Text = post.Text,
+                    ImageUrl = post.ImageUrl,
+                    PostDate = post.PostDate,
+                    UserId = post.UserId,
+                    UpvoteCount = post.UpvoteCount,
+                    SubForum = post.SubForum
+                };
+                viewModelPosts.Add(simplePost);
+            }
+            var postListViewModel = new PostListViewModel(viewModelPosts);
+            return Ok(viewModelPosts);
         }
 
         [HttpPost("create")]

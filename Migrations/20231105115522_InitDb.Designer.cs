@@ -11,8 +11,8 @@ using OsloMetAngular.DAL;
 namespace OsloMetAngular.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20231103101931_ShopDbExpanded")]
-    partial class ShopDbExpanded
+    [Migration("20231105115522_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -309,6 +309,10 @@ namespace OsloMetAngular.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Credebility")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "Credebility");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -316,11 +320,20 @@ namespace OsloMetAngular.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "IdentityUserId");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "Name");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -345,6 +358,10 @@ namespace OsloMetAngular.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -361,12 +378,54 @@ namespace OsloMetAngular.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("OsloMetAngular.Models.Comment", b =>
+                {
+                    b.Property<int>("CommentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "CommentID");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "CommentText");
+
+                    b.Property<string>("PostDate")
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "PostDate");
+
+                    b.Property<int>("PostID")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "PostID");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+
+                    b.HasKey("CommentID");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("PostID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("OsloMetAngular.Models.Post", b =>
                 {
                     b.Property<int>("PostID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasAnnotation("Relational:JsonPropertyName", "PostId");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("TEXT")
@@ -394,9 +453,76 @@ namespace OsloMetAngular.Migrations
                         .HasColumnType("INTEGER")
                         .HasAnnotation("Relational:JsonPropertyName", "UpvoteCount");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+
                     b.HasKey("PostID");
 
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.Upvote", b =>
+                {
+                    b.Property<int>("UpvoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "UpvoteId");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PostID")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "PostID");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+
+                    b.Property<string>("Vote")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "Vote");
+
+                    b.HasKey("UpvoteId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("PostID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Upvotes");
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+
+                    b.Property<int>("Credebility")
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Relational:JsonPropertyName", "Credebility");
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "IdentityUserId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "Name");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -448,6 +574,90 @@ namespace OsloMetAngular.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.Comment", b =>
+                {
+                    b.HasOne("OsloMetAngular.Models.ApplicationUser", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("OsloMetAngular.Models.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OsloMetAngular.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.Post", b =>
+                {
+                    b.HasOne("OsloMetAngular.Models.ApplicationUser", null)
+                        .WithMany("Posts")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("OsloMetAngular.Models.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.Upvote", b =>
+                {
+                    b.HasOne("OsloMetAngular.Models.ApplicationUser", null)
+                        .WithMany("UserVotes")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("OsloMetAngular.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OsloMetAngular.Models.User", "User")
+                        .WithMany("UserVotes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Posts");
+
+                    b.Navigation("UserVotes");
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.Post", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("OsloMetAngular.Models.User", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Posts");
+
+                    b.Navigation("UserVotes");
                 });
 #pragma warning restore 612, 618
         }

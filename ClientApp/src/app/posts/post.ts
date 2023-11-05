@@ -6,6 +6,7 @@ export interface IPost {
   PostDate: string;
   ImageUrl: string;
   SubForum: string;
+  UserId: number;
 }
 export class Post implements IPost {
     PostId: number = 0;
@@ -15,5 +16,5 @@ export class Post implements IPost {
     PostDate: string = "";
     ImageUrl: string = "";
     SubForum: string = "";
-
+    UserId: number = 0;
 }

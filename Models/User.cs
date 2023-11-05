@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -8,18 +9,18 @@ namespace OsloMetAngular.Models
     // Comments, IdentityUser, UserVotes and Posts are navigation properties.
     public class User
     {
-        [JsonPropertyName("UserId")]
+        [JsonProperty("UserId")]
         public int UserId { get; set; }
-        [JsonPropertyName("Name")]
+        [JsonProperty("Name")]
         public string Name { get; set; } = string.Empty;
         public virtual List<Comment>? Comments { get; set; }
-        [JsonPropertyName("IdentityUserId")]
+        [JsonProperty("IdentityUserId")]
         [ForeignKey("IdentityUser")]
         public string? IdentityUserId { get; set; }
-        public virtual IdentityUser? IdentityUser { get; set; }  //  Link to the IdentityUser.
+        //public virtual IdentityUser? IdentityUser { get; set; }  //  Link to the IdentityUser.
         public virtual List<Post>? Posts { get; set; }
         public virtual List<Upvote>? UserVotes { get; set; }
-        [JsonPropertyName("Credebility")]
+        [JsonProperty("Credebility")]
         public int Credebility { get; set; }
     }
 }
