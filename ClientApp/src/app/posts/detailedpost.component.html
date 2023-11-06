@@ -180,7 +180,7 @@
   </div>
 
   <!--@* Displaying all comments in a table *@-->
-  <h1>@ViewBag.CurrentViewName</h1>
+  <h1>Comments:</h1>
 
   <table class="table table-striped">
     <tr>
@@ -233,8 +233,8 @@
 
                     </td>
                     <td>{{comment.PostDate}}</td>
-                    <td>{{comment.User.Name}}</td>
-                    <td>@comment.User.Credebility</td>
+                    <td>{{comment.user.Name}}</td>
+                    <td>{{comment.user.Credebility}}</td>
                     <td>
                         <!--@* This is to make sure that one can only edit the comment you yourself has made *@
                         @if (SignInManager.IsSignedIn(User) && comment.User.IdentityUserId == UserManager.GetUserId(User))

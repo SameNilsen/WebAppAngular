@@ -18,9 +18,11 @@ namespace OsloMetAngular.Models
         public string? PostDate { get; set; }
         [JsonProperty("UserId")]
         public int UserId { get; set; } = 1;
+        //[Newtonsoft.Json.JsonIgnore]
         public virtual User User { get; set; } = default!;
         [JsonProperty("PostID")]
         public int PostID { get; set; }
+        //[Newtonsoft.Json.JsonIgnore]
         public virtual Post Post { get; set; } = default!;
 
 

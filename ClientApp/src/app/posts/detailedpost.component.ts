@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } 
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { PostService } from "./posts.service";
+import { CommentService } from "./comments.service";
 import { UserService } from "../user/users.service";
 import { IPost, Post } from "./post";
 import { IComment } from "./comment";
@@ -17,9 +18,9 @@ export class DetailedPostComponent implements OnInit {
 
   post: IPost = new Post();
   user: IUser = new User();
-  comments: IComment[] = this.post.comments;
+  comments: IComment[] = [];
   
-  constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService) {
+  constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService, private _commentService: CommentService) {
     
   }
 
@@ -40,6 +41,7 @@ export class DetailedPostComponent implements OnInit {
           this.post = post;
           console.log("This is title: ", post.Title);
           this.loadUser(this.post.UserId);
+          //this.comments = this.post.comments;
           this.getComments(postId); //  Istedet for post.Comments fordi det tuller med minnet.
         },
         (error: any) => {
@@ -63,9 +65,10 @@ export class DetailedPostComponent implements OnInit {
   }
 
   getComments(postId: number): void {
-    this._commentService.getComments()
+    console.log("Getting the comments");
+    this._commentService.getCommentsByPostId(postId)
       .subscribe(data => {
-        console.log("All", JSON.stringify(data));
+        console.log("AllComments", JSON.stringify(data));
         this.comments = data;
         console.log(this.comments);
         //  Filter kommentarer?

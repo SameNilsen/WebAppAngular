@@ -7,124 +7,126 @@ namespace OsloMetAngular.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PostController : Controller
+    public class CommentController : Controller
     {
 
-        private readonly IPostRepository _postRepository;
-        private readonly ILogger<PostController> _logger;
+        private readonly ICommentRepository _commentRepository;
+        private readonly ILogger<CommentController> _logger;
 
-        public PostController(IPostRepository postRepository, ILogger<PostController> logger)
+        public CommentController(ICommentRepository commentRepository, ILogger<CommentController> logger)
         {
-            _postRepository = postRepository;
+            _commentRepository = commentRepository;
             _logger = logger;
         }
-
-        //private static List<Item> Items = new List<Item>()
-        //{
-        //    new Item
-        //    {
-        //        ItemId = 1,
-        //        Name = "Pizza",
-        //        Price = 150,
-        //        Description = "Delicouououoosoo",
-        //        ImageUrl = "assets/images/pizza.jpg"
-        //    },
-        //    new Item
-        //    {
-        //        ItemId = 2,
-        //        Name = "Fried Chicka",
-        //        Price = 20,
-        //        Description = "Crispy duck",
-        //        ImageUrl = "assets/images/chickenleg.jpg"
-        //    }            
-        //};
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            Console.Write("postcontroller1");
-            var posts = await _postRepository.GetAll();
-            Console.Write("postcontroller2");
-            if (posts == null)
+            var comments = await _commentRepository.GetAll();
+            if (comments == null)
             {
-                Console.Write("postcontroller3");
-                _logger.LogError("[PostController] Post list not found when executing _postRepository.GetAll(),");
-                return NotFound("Post list not found");
+                _logger.LogError("[CommentController] Comment list not found when executing _commentRepository.GetAll(),");
+                return NotFound("Comment list not found");
             }
-            Console.Write("postcontroller4" + posts.Count());
             //  Wrap it in viewmodel without reference to other entities to avoid referencing loop by json.
-            List<Post> viewModelPosts = new List<Post>();
-            foreach (var post in posts)
-            {
-                Post simplePost = new Post {
-                    PostID = post.PostID,
-                    Title = post.Title,
-                    Text = post.Text,
-                    ImageUrl = post.ImageUrl,
-                    PostDate = post.PostDate,
-                    //UserId = post.UserId,
-                    UpvoteCount = post.UpvoteCount,
-                    SubForum = post.SubForum,
-                    User = new User { Name = post.User.Name},
-                };
-                viewModelPosts.Add(simplePost);
-            }
-            var postListViewModel = new PostListViewModel(viewModelPosts);
-            return Ok(viewModelPosts);
+            //List<Post> viewModelPosts = new List<Post>();
+            //foreach (var post in posts)
+            //{
+            //    Post simplePost = new Post {
+            //        PostID = post.PostID,
+            //        Title = post.Title,
+            //        Text = post.Text,
+            //        ImageUrl = post.ImageUrl,
+            //        PostDate = post.PostDate,
+            //        //UserId = post.UserId,
+            //        UpvoteCount = post.UpvoteCount,
+            //        SubForum = post.SubForum,
+            //        User = new User { Name = post.User.Name},
+            //    };
+            //    viewModelPosts.Add(simplePost);
+            //}
+            //var postListViewModel = new PostListViewModel(viewModelPosts);
+            return Ok(comments);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] Post newPost)
+        public async Task<IActionResult> Create([FromBody] Comment newComment)
         {
-            if (newPost == null)
+            if (newComment == null)
             {
-                return BadRequest("Invalid post data");
+                return BadRequest("Invalid comment data");
             }
-            //newItem.ItemId = GetNextItemId();
-            bool returnOk = await _postRepository.Create(newPost);
+            bool returnOk = await _commentRepository.Create(newComment);
 
             if (returnOk)
             {
-                var response = new { success = true, message = "Post " + newPost.Title + " created succesfully" };
+                var response = new { success = true, message = "Comment " + newComment.CommentID + " created succesfully" };
                 return Ok(response);                
             }
             else
             {
-                var response = new { success = false, message = "Post creation failed" };
+                var response = new { success = false, message = "COmment creation failed" };
                 return Ok(response);
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetItembyId(int id)
+        public async Task<IActionResult> GetCommentbyId(int id)
         {
-            var post = await _postRepository.GetItemById(id);
-            if (post == null)
+            var comment = await _commentRepository.GetCommentById(id);
+            if (comment == null)
             {
-                _logger.LogError("[PostController] Post list not found when executing _postRepository.GetAll(),");
-                return NotFound("Post list not found");
+                _logger.LogError("[CommentController] Comment list not found when executing _commentRepository.GetAll(),");
+                return NotFound("Comment list not found");
             }
-            return Ok(post);
+            return Ok(comment);
+        }
+
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetCommentsbyPostId(int id)
+        {
+            var comments = _commentRepository.GetCommentsByPostId(id);
+            if (comments == null)
+            {
+                _logger.LogError("[CommentController] Comment list not found when executing _commentRepository.GetAll(),");
+                return NotFound("Comment list not found");
+            }
+            //  Wrap it in viewmodel without reference to other entities to avoid referencing loop by json.
+            List<Comment> viewModelComments = new List<Comment>();
+            foreach (var comment in comments)
+            {
+                Comment simpleComment = new Comment
+                {
+                    CommentID = comment.CommentID,
+                    CommentText = comment.CommentText,
+                    PostDate = comment.PostDate,
+                    UserId = comment.UserId,
+                    User = new User { Name = comment.User.Name, Credebility = comment.User.Credebility },
+                };
+                viewModelComments.Add(simpleComment);
+            }
+            //Console.WriteLine(viewModelComments[0]. + "---");
+            return Ok(viewModelComments);
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(Post newPost)
+        public async Task<IActionResult> Update(Comment newComment)
         {
-            if (newPost == null)
+            if (newComment == null)
             {
-                return BadRequest("Invalid post data");
+                return BadRequest("Invalid comment data");
             }
 
-            bool returnOk = await _postRepository.Update(newPost);
+            bool returnOk = await _commentRepository.Update(newComment);
 
             if (returnOk)
             {
-                var response = new { success = true, message = "Post " + newPost.Title + " updated succesfully" };
+                var response = new { success = true, message = "Comment " + newComment.CommentID + " updated succesfully" };
                 return Ok(response);
             }
             else
             {
-                var response = new { success = false, message = "Post update failed" };
+                var response = new { success = false, message = "Comment update failed" };
                 return Ok(response);
             }
         }
@@ -132,23 +134,14 @@ namespace OsloMetAngular.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            bool returnOk= await _postRepository.Delete(id);
+            bool returnOk= await _commentRepository.Delete(id);
             if (!returnOk)
             {
-                _logger.LogError("[PostController] Post deletion failed for the PostId {PostId:0000}", id);
-                return NotFound("Post deletion failed");
+                _logger.LogError("[CommentController] Comment deletion failed for the CommentId {CommentId:0000}", id);
+                return NotFound("Comment deletion failed");
             }
-            var response = new { success = true, message = "Post " + id.ToString()+ " deleted succesfully" };
+            var response = new { success = true, message = "Comment " + id.ToString()+ " deleted succesfully" };
             return Ok(response);
-        }
-
-        //private static int GetNextItemId()
-        //{
-        //    if (Items.Count == 0)
-        //    {
-        //        return 1;
-        //    }
-        //    return Items.Max(item => item.ItemId) + 1;
-        //}
+        }      
     }
 }

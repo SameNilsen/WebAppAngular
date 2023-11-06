@@ -7,7 +7,7 @@ export interface IComment {
   PostId: number;
   UserId: number;
   PostDate: string;
-  User: IUser;
+  user: IUser;
 }
 export class Comment implements IComment {
     CommentID: number = 0;
@@ -16,5 +16,5 @@ export class Comment implements IComment {
     PostId: number = 0;
     UserId: number = 0;
     PostDate: string = "";
-    User: IUser = new User();
+    user: IUser = new User();
 }

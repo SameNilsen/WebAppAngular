@@ -51,8 +51,7 @@ namespace OsloMetAngular.Controllers
                 _logger.LogError("[PostController] Post list not found when executing _postRepository.GetAll(),");
                 return NotFound("Post list not found");
             }
-            Console.Write("postcontroller4" + posts.Count());
-            //  Wrap it in viewmodel without reference to other entities to avoid referencing loop by json.
+            //  Create simplified post without reference to other entities to avoid referencing loop by json.
             List<Post> viewModelPosts = new List<Post>();
             foreach (var post in posts)
             {
