@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
 using OsloMetAngular.ViewModels;
@@ -11,12 +13,18 @@ namespace OsloMetAngular.Controllers
     {
 
         private readonly ICommentRepository _commentRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ILogger<CommentController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public CommentController(ICommentRepository commentRepository, ILogger<CommentController> logger)
+        public CommentController(ICommentRepository commentRepository, IUserRepository userRepository, ILogger<CommentController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _commentRepository = commentRepository;
+            _userRepository = userRepository;
             _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -52,11 +60,55 @@ namespace OsloMetAngular.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] Comment newComment)
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                Console.WriteLine("--------signed in----------");
+                Console.WriteLine(_userManager.GetUserId(User));
+                //  <--- This block is for getting both the User user and IdentityUser user. We need the
+                //       IdentityUser because then we can automatically assign the user as the 
+                //        logged in user.
+                var identityUserId = _userManager.GetUserId(User);
+                var user = _userRepository.GetUserByIdentity(identityUserId).Result;
+                if (user == null)
+                {
+                    var newUser = new User
+                    {
+                        Name = _userManager.GetUserName(User),
+                        IdentityUserId = identityUserId
+                    };
+                    await _userRepository.Create(newUser);
+                    newComment.User = newUser;
+                }
+                else
+                {
+                    newComment.User = user;
+                }
+                //  --->
+            }
+            else
+            {
+                Console.WriteLine("----Not signed in----");
+            }
+                
+            
             if (newComment == null)
             {
                 return BadRequest("Invalid comment data");
             }
-            bool returnOk = await _commentRepository.Create(newComment);
+
+            Console.WriteLine(newComment);
+            Console.WriteLine(newComment.ToString());
+            Console.WriteLine(newComment.UserId + "..a.a.a.");
+            var newComment2 = new Comment
+            {
+                CommentText = newComment.CommentText,
+                PostDate = DateTime.Now.ToString("dd.MM.yyyy HH:mm"),
+                UserId = newComment.User.UserId,
+                User = newComment.User,  //  Need to get proper user.
+                PostID = newComment.PostID,
+                //Post = newComment.Post
+            };
+            bool returnOk = await _commentRepository.Create(newComment2);
 
             if (returnOk)
             {

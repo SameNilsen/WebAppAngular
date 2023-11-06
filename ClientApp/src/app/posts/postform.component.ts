@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } 
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { PostService } from "./posts.service";
+import { IUser, User } from "../user/user";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-posts-postform",
@@ -28,6 +30,10 @@ export class PostformComponent {
     console.log("PostCreate form submitted:");
     console.log(this.postForm);
     const newPost = this.postForm.value;
+    console.log(newPost);
+    newPost.UserId = 4;
+    newPost.User = new User();
+    newPost.User.UserId = 4;
     //const createUrl = "api/item/create";
     if (this.isEditMode) {
       this._postService.updatePost(this.postId, newPost).subscribe(response => {

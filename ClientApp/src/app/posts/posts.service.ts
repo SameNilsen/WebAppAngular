@@ -19,6 +19,7 @@ export class PostService {
   }
 
   createPost(newPost: IPost): Observable<any> {
+    console.log(newPost);
     const createUrl = "api/post/create";
     return this._http.post<any>(createUrl, newPost);
   }
@@ -29,13 +30,20 @@ export class PostService {
   }
 
   updatePost(postId: number, newPost: any): Observable<any> {
-    const url = `${this.baseUrl}/update/${postId}`;
+    const url = `${this.baseUrl}update/${postId}`;
     newPost.postId = postId;
+    console.log(url, newPost);
     return this._http.put<any>(url, newPost);
   }
 
   deletePost(itemId: number): Observable<any> {
     const url = `${this.baseUrl}/delete/${itemId}`;
     return this._http.delete(url);
+  }
+
+  getSignedIn(postId: number): Observable<any> {
+    //const createUrl = "api/post/signedin";
+    const url = `${this.baseUrl}signedin/${postId}`;
+    return this._http.get<any>(url);
   }
 }

@@ -19,9 +19,16 @@ export class DetailedPostComponent implements OnInit {
   post: IPost = new Post();
   user: IUser = new User();
   comments: IComment[] = [];
+  commentForm: FormGroup;
+  isYourPost: boolean = false;
   
-  constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService, private _commentService: CommentService) {
-    
+  constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService, private _commentService: CommentService, private _formbuilder: FormBuilder) {
+    this.commentForm = _formbuilder.group({
+      commenttext: ["", Validators.required],
+      //price: [0, Validators.required],
+      //description: [""],
+      //imageUrl: [""]
+    });
   }
 
   ngOnInit(): void {
@@ -30,6 +37,21 @@ export class DetailedPostComponent implements OnInit {
       console.log("THIS IS ID: " + params["id"]);
       this.loadPost(params["id"]);
       //this.loadUser(this.post.UserId);
+      this.getSignedIn(params["id"]);
+    });
+  }
+
+  getSignedIn(postId: number): void {
+    this._postService.getSignedIn(postId).subscribe(response => {
+      if (response.success) {
+        console.log("signed in: " + response.message + " " + response.userspost);
+        console.log("type: " + typeof response.userspost);
+        this.isYourPost = response.userspost;
+        //this._router.navigate(["/posts"]);
+      }
+      else {
+        console.log("Not signed in");
+      }
     });
   }
 
@@ -75,6 +97,80 @@ export class DetailedPostComponent implements OnInit {
       }
       );
     console.log("it worked?");
+  }
+
+  toggleCommentBox(id: string): void {
+    var div = document.getElementById(id)!;
+    if (div.style.display == "block") {
+      div.style.display = "none";
+    }
+    else {
+      div.style.display = "block";
+    }
+  }
+  //  Toggle between edit comment mode or view comment mode.
+  toggleEdit(id: string): void {
+    var divON = document.getElementById("editON " + id)!;
+    var divOFF = document.getElementById("editOFF " + id)!;
+    if (divON.style.display == "block") {
+      divON.style.display = "none";
+      divOFF.style.display = "block";
+    }
+    else {
+      divON.style.display = "block";
+      divOFF.style.display = "none";
+    }
+  }
+
+  onSubmit() {
+    console.log("CommentCreate form submitted:");
+    console.log(this.commentForm);
+    const newComment = this.commentForm.value;
+    newComment.PostID = this.post.PostId;
+    newComment.Post = this.post;
+    newComment.UserId = 2;
+    newComment.User = this.post.user;
+    console.log(newComment, newComment.PostID);
+    //const createUrl = "api/item/create";
+      this._commentService.createComment(newComment).subscribe(response => {
+        if (response.success) {
+          console.log(response.message);
+          //this._router.navigate(["/posts"]);
+        }
+        else {
+          console.log("Comment creation failed");
+        }
+      });
+  }
+
+  deletePost(post: IPost): void {
+    const confirmDelete = confirm(`Are you sure you want to delete "${post.Title}"?`);
+    if (confirmDelete) {
+      this._postService.deletePost(post.PostId)
+        .subscribe(
+          (response) => {
+            if (response.success) {
+              console.log(response.message);
+              this._router.navigate(["/posts"]);
+            }
+          }
+          , (error) => {
+            console.log("Error deleting post:", error);
+          });
+    }
+  }
+
+  readyUpdate(text: string) {
+    console.log("ya");
+    this.commentForm.patchValue({
+      commenttext: text
+    });
+  }
+
+  onUpdate() {
+    console.log("CommentCreate form submitted:");
+    const newComment = this.commentForm.value;
+    console.log(newComment);
   }
 
   

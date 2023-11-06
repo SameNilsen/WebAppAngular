@@ -10,9 +10,9 @@ namespace OsloMetAngular.Controllers
     {
 
         private readonly IUserRepository _userRepository;
-        private readonly ILogger<PostController> _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserRepository userRepository, ILogger<PostController> logger)
+        public UserController(IUserRepository userRepository, ILogger<UserController> logger)
         {
             _userRepository = userRepository;
             _logger = logger;

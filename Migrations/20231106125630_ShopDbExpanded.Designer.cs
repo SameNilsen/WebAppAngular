@@ -11,8 +11,8 @@ using OsloMetAngular.DAL;
 namespace OsloMetAngular.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20231105115541_IdentityAdded")]
-    partial class IdentityAdded
+    [Migration("20231106125630_ShopDbExpanded")]
+    partial class ShopDbExpanded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -382,8 +382,7 @@ namespace OsloMetAngular.Migrations
                 {
                     b.Property<int>("CommentID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "CommentID");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("TEXT");
@@ -391,20 +390,16 @@ namespace OsloMetAngular.Migrations
                     b.Property<string>("CommentText")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "CommentText");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PostDate")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "PostDate");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PostID")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "PostID");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("CommentID");
 
@@ -421,41 +416,33 @@ namespace OsloMetAngular.Migrations
                 {
                     b.Property<int>("PostID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "PostId");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "ImageUrl");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PostDate")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "PostDate");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SubForum")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "SubForum");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Text")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "Text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "Title");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UpvoteCount")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "UpvoteCount");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("PostID");
 
@@ -504,21 +491,17 @@ namespace OsloMetAngular.Migrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Credebility")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "Credebility");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("IdentityUserId")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "IdentityUserId");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "Name");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
 

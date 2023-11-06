@@ -1,6 +1,5 @@
-
-
 <!--@* Style sheet for upvote/downvote buttons *@-->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
   /* Styling upvote/downvote buttons, from https://www.w3schools.com/howto/howto_css_icon_buttons.asp */
@@ -56,37 +55,24 @@
     <!-- Name of user and their credibility score -->
     <h5>
       Posted by: {{ user.Name }}
-  <!--<a class="links" asp-controller="User"
-                    asp-action="UserProfile"
-                    asp-route-id="@Model.Post.UserId">@Model.User.Name</a> <span>@Model.User.Credebility creds</span>-->
+      <!--<a class="links" asp-controller="User"
+                        asp-action="UserProfile"
+                        asp-route-id="@Model.Post.UserId">@Model.User.Name</a> <span>@Model.User.Credebility creds</span>-->
     </h5>
 
     <hr />
 
     <!-- BUTTONS -->
     <div style="margin-bottom:10px">
-      <!--@*
-      These are injected because some buttons like update and delete
-      should only by available if the post is created by the logged in user.
-      *@-->
+      <!-- BACK button -->
+      <!--<a class="btn btn-secondary" href="/Post/Posts">Back</a>
 
-      <!--@using Microsoft.AspNetCore.Identity
-      @inject SignInManager<IdentityUser>
-        SignInManager
-        @inject UserManager<IdentityUser>
-          UserManager-->
-
-          <!-- BACK button -->
-          <!--<a class="btn btn-secondary" href="/Post/Posts">Back</a>
-
-          @if (SignInManager.IsSignedIn(User) && Model.Post.User.IdentityUserId == UserManager.GetUserId(User))
-          {-->
-          <!-- EDIT and DELETE buttons (only accessible after logging in) -->
-          <!--<a asp-controller="Post" asp-action="Update" asp-route-id="@Model.Post.PostID" class="btn btn-secondary">Edit</a>
-          <a asp-controller="Post" asp-action="Delete" asp-route-id="@Model.Post.PostID" class="btn btn-danger">Delete</a>
-          }-->
-
-          <!-- Post date -->
+      
+      <!-- EDIT and DELETE buttons (only accessible after logging in) -->
+      <button class="btn btn-secondary" [routerLink]="['/postform', 'edit', post.PostId]" [disabled]="!isYourPost">Edit</button>
+      <button class="btn btn-secondary" (click)="deletePost(post)" [disabled]="!isYourPost">Delete</button>
+      
+      <!-- Post date -->
       <h5 class="pull-right">{{ post.PostDate }}</h5>
     </div>
 
@@ -117,67 +103,40 @@
       <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
       <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
       }-->
-      <!-- Vote count -->
-      <!--<span style="font-size:20px">@Model.Post.UpvoteCount</span>-->
-
-      <!-- Link to the post's subforum -->
-      <h5 class="pull-right">
-        <a class="links" asp-controller="Post"
-           asp-action="SubForumPosts"
-           asp-route-CurrentViewName="@Model.Post.SubForum">{{ post.SubForum }}</a>
-      </h5>
-    </div>
+    <!-- Vote count -->
+    <!--<span style="font-size:20px">@Model.Post.UpvoteCount</span>-->
+    <!-- Link to the post's subforum -->
+    <h5 class="pull-right">
+      <a class="links" asp-controller="Post"
+         asp-action="SubForumPosts"
+         asp-route-CurrentViewName="@Model.Post.SubForum">{{ post.SubForum }}</a>
+    </h5>
   </div>
+</div>
 <!--</div>-->
 
 <br />
 
-    <!--@* COMMENTS *@-->
+<!--@* COMMENTS *@-->
 <div class="container">
   <!--@* Create new comment *@-->
   <p>
-    <!--@* The javascript code is to toggle on and off the input field for creating or editing a comment. *@-->
-    <!-- Should be moved to component -->
-    <script>
-                function fun(id) {
-                    var div = document.getElementById(id);
-                    if (div.style.display == "block") {
-                        div.style.display = "none";
-                    }
-                    else {
-                        div.style.display = "block";
-                    }
-                }
-                //  Toggle between edit comment mode or view comment mode.
-                function toggleEdit(id) {
-                    var divON = document.getElementById("editON "+id);
-                    var divOFF = document.getElementById("editOFF "+id);
-                    if (divON.style.display == "block") {
-                        divON.style.display = "none";
-                        divOFF.style.display = "block";
-                    }
-                    else {
-                        divON.style.display = "block";
-                        divOFF.style.display = "none";
-                    }
-                }
-    </script>
-
-     <!--COMMENT button--> 
-    <button class="btn btn-secondary" onclick="fun('newComment')">Comment</button>
+    <!--COMMENT button-->
+    <button class="btn btn-secondary" (click)="toggleCommentBox('newComment')">Comment</button>
   </p>
 
   <!--@* This form is for sending the new comment to the controller *@-->
   <!-- Should be handled in component. -->
-  <div asp-validation-summary="All" class="text-danger"></div>
+  <!--<div asp-validation-summary="All" class="text-danger"></div>-->
+
   <div id="newComment" style="display:none">
-    <!--@using(Html.BeginForm("Create", "Comment"))
-    {-->
-    <textarea cols="50" type="text" name="CommentText"></textarea>
-    <input type="text" name="PostID" value="@Model.Post.PostID" hidden />
-    <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>
-    <!--}-->
-  </div>
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input type="text" id="commenttext" formControlName="commenttext" class="form-control" />
+      </div>
+      <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Post</button>
+    </form>
+</div>
 
   <!--@* Displaying all comments in a table *@-->
   <h1>Comments:</h1>
@@ -194,59 +153,47 @@
       <th>Actions</th>
     </tr>
 
-    <!--@{
-    // This part is for avoiding null-reference
-    List
-    <Comment>
-      ? comments = Model.Post.Comments;
-      if (comments == null)
-      {
-      comments = new List<Comment>
-        ();
-        }
-        }-->
+    <tr *ngFor="let comment of comments; index as i">
+      <!--@*
+      <- This block is for editing and deleting a comment *@-->
+      <td>
+        <div id="editON {{comment.CommentID}}" style="display:none">
+          <!--@using (Html.BeginForm("Update", "Comment"))
+  {-->
+          <form [formGroup]="commentForm" (ngSubmit)="onUpdate()">
+            <div class="form-group">
+              <input type="text" id="commenttext" formControlName="commenttext" class="form-control" value="{{comment.CommentText}}" />
+              <input type="text" id="commentid" formControlName="commentid" class="form-control" value="@comment.CommentID" hidden />
+              <input type="text" id="postdate" formControlName="postdate" class="form-control" value="@comment.PostDate" hidden />
+              <input type="text" id="userid" formControlName="userid" class="form-control" value="@comment.UserId" hidden />
+              <input type="text" id="postid" formControlName="postid" class="form-control" value="@comment.PostID" hidden />
+            </div>
+            <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Post</button>
+          </form>
+          <!--<input type="text" name="CommentText" value="@comment.CommentText">
+          <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>-->
+          <!--}
+   DELETE button-->
+          <form asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.CommentID" method="post">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+        <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
+        <!--@* -> *@-->
 
-        <!--@* Going through all comments *@-->
-        <!--@foreach (var comment in comments)
-        {-->
-        <tr *ngFor="let comment of comments; index as i">
-          <!--@*
-          <- This block is for editing and deleting a comment *@-->
-                    <td>
-                        <div id="editON {{comment.CommentID}}" style="display:none">
-                            <!--@using (Html.BeginForm("Update", "Comment"))
-                            {-->
-                                <input type="text" name="CommentText" value="@comment.CommentText">
-                                <input type="text" name="CommentID" value="@comment.CommentID" hidden />
-                                <input type="text" name="PostDate" value="@comment.PostDate" hidden />
-                                <input type="text" name="UserId" value="@comment.UserId" hidden />
-                                <input type="text" name="PostID" value="@comment.PostID" hidden />
-                                <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>
-                            <!--}
-                             DELETE button--> 
-                            <form asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.CommentID" method="post">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
-                        <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
-                    <!--@* -> *@-->
-
-                    </td>
-                    <td>{{comment.PostDate}}</td>
-                    <td>{{comment.user.Name}}</td>
-                    <td>{{comment.user.Credebility}}</td>
-                    <td>
-                        <!--@* This is to make sure that one can only edit the comment you yourself has made *@
-                        @if (SignInManager.IsSignedIn(User) && comment.User.IdentityUserId == UserManager.GetUserId(User))
-                        {
-                            // EDIT button-->
-                            <button class="btn btn-secondary"
-                                        onclick="toggleEdit(comment.CommentID)">
-                                    Edit
-                            </button>
-                        <!--}-->
-                    </td>
-        </tr>
+      </td>
+      <td>{{comment.PostDate}}</td>
+      <td>{{comment.user.Name}}</td>
+      <td>{{comment.user.Credebility}}</td>
+      <td>
+        <!--@* This is to make sure that one can only edit the comment you yourself has made *@
+        @if (SignInManager.IsSignedIn(User) && comment.User.IdentityUserId == UserManager.GetUserId(User))
+        {
+            // EDIT button-->
+        <button class="btn btn-primary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentText)">Edit</button>
         <!--}-->
+      </td>
+    </tr>
+    <!--}-->
   </table>
 </div>

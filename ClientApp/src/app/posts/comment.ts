@@ -3,7 +3,6 @@ import { IUser, User } from "../user/user";
 export interface IComment {
   CommentID: number;
   CommentText: string;
-  Text: string;
   PostId: number;
   UserId: number;
   PostDate: string;
@@ -12,7 +11,6 @@ export interface IComment {
 export class Comment implements IComment {
     CommentID: number = 0;
     CommentText: string = "";
-    Text: string = "";
     PostId: number = 0;
     UserId: number = 0;
     PostDate: string = "";

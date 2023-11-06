@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
 using OsloMetAngular.ViewModels;
@@ -11,12 +13,18 @@ namespace OsloMetAngular.Controllers
     {
 
         private readonly IPostRepository _postRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ILogger<PostController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public PostController(IPostRepository postRepository, ILogger<PostController> logger)
+        public PostController(IPostRepository postRepository, IUserRepository userRepository, ILogger<PostController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _postRepository = postRepository;
+            _userRepository = userRepository;
             _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         //private static List<Item> Items = new List<Item>()
@@ -75,12 +83,56 @@ namespace OsloMetAngular.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] Post newPost)
         {
+            Console.WriteLine("postontroleler");
             if (newPost == null)
             {
                 return BadRequest("Invalid post data");
             }
+
+            if (_signInManager.IsSignedIn(User))
+            {
+                Console.WriteLine("--------signed in----------");
+                Console.WriteLine(_userManager.GetUserId(User));
+                //  <--- This block is for getting both the User user and IdentityUser user. We need the
+                //       IdentityUser because then we can automatically assign the user as the 
+                //        logged in user.
+                var identityUserId = _userManager.GetUserId(User);
+                var user = _userRepository.GetUserByIdentity(identityUserId).Result;
+                if (user == null)
+                {
+                    var newUser = new User
+                    {
+                        Name = _userManager.GetUserName(User),
+                        IdentityUserId = identityUserId
+                    };
+                    await _userRepository.Create(newUser);
+                    newPost.User = newUser;
+                }
+                else
+                {
+                    newPost.User = user;
+                }
+                //  --->
+            }
+            else
+            {
+                Console.WriteLine("----Not signed in----");
+            }
+
+            Post simplePost = new Post
+            {
+                PostID = newPost.PostID,
+                Title = newPost.Title,
+                Text = newPost.Text,
+                ImageUrl = newPost.ImageUrl,
+                PostDate = DateTime.Now.ToString("dd.MM.yyyy HH:mm"),
+                UserId = newPost.UserId,
+                UpvoteCount = newPost.UpvoteCount,
+                SubForum = "General",
+                User = newPost.User
+            };
             //newItem.ItemId = GetNextItemId();
-            bool returnOk = await _postRepository.Create(newPost);
+            bool returnOk = await _postRepository.Create(simplePost);
 
             if (returnOk)
             {
@@ -103,19 +155,41 @@ namespace OsloMetAngular.Controllers
                 _logger.LogError("[PostController] Post list not found when executing _postRepository.GetAll(),");
                 return NotFound("Post list not found");
             }
-            return Ok(post);
+            Post simplePost = new Post
+            {
+                PostID = post.PostID,
+                Title = post.Title,
+                Text = post.Text,
+                ImageUrl = post.ImageUrl,
+                PostDate = post.PostDate,
+                UserId = post.UserId,
+                UpvoteCount = post.UpvoteCount,
+                SubForum = post.SubForum,
+                User = new User { Name = post.User.Name },
+            };
+            return Ok(simplePost);
         }
 
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(Post newPost)
         {
+            Console.WriteLine(newPost);
+            Console.WriteLine("---" + newPost.UserId);
+
             if (newPost == null)
             {
                 return BadRequest("Invalid post data");
             }
 
-            bool returnOk = await _postRepository.Update(newPost);
+            var identityUserId = _userManager.GetUserId(User);
+            var user = _userRepository.GetUserByIdentity(identityUserId).Result;
 
+            newPost.User = user;
+
+            Console.WriteLine(22);
+            bool returnOk = await _postRepository.Update(newPost);
+            Console.WriteLine(33);
+            Console.WriteLine(returnOk);
             if (returnOk)
             {
                 var response = new { success = true, message = "Post " + newPost.Title + " updated succesfully" };
@@ -139,6 +213,32 @@ namespace OsloMetAngular.Controllers
             }
             var response = new { success = true, message = "Post " + id.ToString()+ " deleted succesfully" };
             return Ok(response);
+        }
+
+        [HttpGet("signedin/{id}")]
+        public async Task<IActionResult> GetSignedIn(int id)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                var userspost = false;
+                var post = await _postRepository.GetItemById(id);
+                var identityUserId = _userManager.GetUserId(User);
+                var user = _userRepository.GetUserByIdentity(identityUserId).Result;
+                if (user != null)
+                {
+                    if (post.UserId == user.UserId)
+                    {
+                        userspost = true;
+                    }
+                }
+                var response = new { success = true, message = _userManager.GetUserId(User), userspost };
+                return Ok(response);
+            }
+            else
+            {
+                var response = new { success = false, message = "User not signed in" };
+                return Ok(response);
+            }
         }
 
         //private static int GetNextItemId()

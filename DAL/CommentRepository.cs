@@ -71,6 +71,7 @@ namespace OsloMetAngular.DAL
         {
             try
             {
+                Console.WriteLine("COMMENTREPOO----");
                 _db.Comments.Add(comment);
                 await _db.SaveChangesAsync();
                 return true;

@@ -1,5 +1,4 @@
 import { IUser, User } from "../user/user";
-import { IComment, Comment } from "../posts/comment";
 
 export interface IPost {
   PostId: number;
@@ -11,7 +10,6 @@ export interface IPost {
   SubForum: string;
   UserId: number;
   user: IUser;
-  //comments: IComment[];
 }
 export class Post implements IPost {
     PostId: number = 0;
@@ -23,5 +21,4 @@ export class Post implements IPost {
     SubForum: string = "";
     UserId: number = 0;
     user: IUser = new User();
-    //comments: IComment[] = [];
 }
