@@ -164,10 +164,18 @@ namespace OsloMetAngular.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(Comment newComment)
         {
+            Console.WriteLine(newComment + "aaaaaa");
             if (newComment == null)
             {
                 return BadRequest("Invalid comment data");
             }
+
+            var identityUserId = _userManager.GetUserId(User);
+            var user = _userRepository.GetUserByIdentity(identityUserId).Result;
+            Console.WriteLine("User " + user.Name + " " + user.UserId);
+            newComment.UserId = user.UserId;
+            newComment.User = user;
+            Console.WriteLine("User " + newComment.User.Name + " " + newComment.User.UserId);
 
             bool returnOk = await _commentRepository.Update(newComment);
 

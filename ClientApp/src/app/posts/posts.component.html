@@ -47,7 +47,7 @@
 </style>
 
 <!-- This is a button from the Demos. Its not used now because getPosts() is called on Init. -->
-<button class="btn btn-primary" (click)="getPosts()">Get posts</button>
+<!--<button class="btn btn-primary" (click)="getPosts()">Get posts</button>-->
 
 <div class="row">
   <div class="col-md-2">Filter by:</div>
@@ -84,8 +84,7 @@
       <th style="display: none">ID</th>
       <th>Title</th>
       <th>Date</th>
-      <!-- Har ikke fiksa user enda, så det blir postid inntil videre: -->
-      <th>postid</th>
+      <th>User</th>
       <th>Image</th>
       <th>Actions</th>
       <th>Votes</th>
@@ -108,8 +107,8 @@
         <img [src]="post.ImageUrl" alt="Post image" style="max-width: 100px; max-height: 100px;" />
       </td>
       <td>
-        <a [routerLink]="['/postform', 'edit', post.PostId]">Update</a>
-        <a class="delete-link" (click)="deletePost(post)">Delete</a>
+        <!--<a [routerLink]="['/postform', 'edit', post.PostId]">Update</a>-->
+        <!--<a class="delete-link" (click)="deletePost(post)">Delete</a>-->
         <!--@* The voting buttons *@-->
         <!--@{-->
         <!--//  Gets the votes from the controller in a ViewData, and formats it as
@@ -144,8 +143,8 @@
         <!--@* DEFAULT *@-->
         <!--else
         {-->
-        <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>
-        <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>
+        <!--<a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-up"></i></a>-->
+        <!--<a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.ElementAt(i).PostID"><i class="fa fa-arrow-down"></i></a>-->
         <!--}-->
         <!-- Link to the detailed view of this post -->
         <!--<a class="btn btn-secondary" asp-controller="Post" asp-action="DetailedPost" asp-route-id="@Model.ElementAt(i).PostID">Reply</a>-->

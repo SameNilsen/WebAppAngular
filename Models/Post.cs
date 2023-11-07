@@ -34,7 +34,7 @@ namespace OsloMetAngular.Models
         public virtual List<Comment>? Comments { get; set; }
         [JsonProperty("UpvoteCount")]
         public int UpvoteCount { get; set; } = 0;
-        //public virtual List<Upvote>? UserVotes { get; set; }
+        public virtual List<Upvote>? UserVotes { get; set; }
         //[Display(Name = "Subforum")]
         [JsonProperty("SubForum")]
         public string SubForum { get; set; } = string.Empty;

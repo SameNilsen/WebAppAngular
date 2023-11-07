@@ -21,13 +21,16 @@ export class DetailedPostComponent implements OnInit {
   comments: IComment[] = [];
   commentForm: FormGroup;
   isYourPost: boolean = false;
+  isSignedIn: boolean = false;
+  yourVote: string = "blank";
   
   constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService, private _commentService: CommentService, private _formbuilder: FormBuilder) {
     this.commentForm = _formbuilder.group({
       commenttext: ["", Validators.required],
-      //price: [0, Validators.required],
-      //description: [""],
-      //imageUrl: [""]
+      commentid: [],
+      userid: [],
+      postid: [],
+      postdate: [],      
     });
   }
 
@@ -38,6 +41,7 @@ export class DetailedPostComponent implements OnInit {
       this.loadPost(params["id"]);
       //this.loadUser(this.post.UserId);
       this.getSignedIn(params["id"]);
+      this.getVoting(params["id"]);
     });
   }
 
@@ -47,10 +51,32 @@ export class DetailedPostComponent implements OnInit {
         console.log("signed in: " + response.message + " " + response.userspost);
         console.log("type: " + typeof response.userspost);
         this.isYourPost = response.userspost;
+        this.isSignedIn = true;
         //this._router.navigate(["/posts"]);
       }
       else {
         console.log("Not signed in");
+      }
+    });
+  }
+
+  getVoting(postId: number): void {
+    this._postService.getVote(postId).subscribe(response => {
+      if (response.success) {
+        console.log("vote: " + response.vote);
+        this.yourVote = response.vote;
+        if (this.yourVote == "upvote") {
+          document.getElementById("upvoteButton")!.style.color = "rgb(193, 26, 26)";
+          //document.getElementById("downvoteButton")!.style.color = "inherit";
+        }
+        else if (this.yourVote == "downvote") {
+          document.getElementById("downvoteButton")!.style.color = "rgb(20, 130, 167)";
+          //document.getElementById("upvoteButton")!.style.color = "transparent";
+        }
+      }
+      else {
+        console.log("Uffda");
+        console.log(response.message);
       }
     });
   }
@@ -123,12 +149,14 @@ export class DetailedPostComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!this.isSignedIn) { return; }
     console.log("CommentCreate form submitted:");
     console.log(this.commentForm);
     const newComment = this.commentForm.value;
-    newComment.PostID = this.post.PostId;
+    newComment.commentid = 0;
+    newComment.postid = this.post.PostId;
     newComment.Post = this.post;
-    newComment.UserId = 2;
+    newComment.userid = 2;
     newComment.User = this.post.user;
     console.log(newComment, newComment.PostID);
     //const createUrl = "api/item/create";
@@ -160,17 +188,97 @@ export class DetailedPostComponent implements OnInit {
     }
   }
 
-  readyUpdate(text: string) {
-    console.log("ya");
-    this.commentForm.patchValue({
-      commenttext: text
-    });
+  readyUpdate(commentId: number) {
+    //console.log("ya");
+    this._commentService.getCommentById(commentId)
+      .subscribe(
+        (comment: any) => {
+          console.log("retrived comment: ", comment);
+          this.commentForm.patchValue({
+            commenttext: comment.CommentText,
+            commentid: comment.CommentID,
+            postdate: comment.PostDate,
+            userid: comment.UserId,
+            postid: comment.PostID,
+          });
+        },
+        (error: any) => {
+          console.log("Error loading comment for edit:", error);
+        }
+      );
+    //this.commentForm.patchValue({
+    //  commenttext: text
+    //});
   }
 
   onUpdate() {
     console.log("CommentCreate form submitted:");
     const newComment = this.commentForm.value;
+    newComment.Post = this.post;
+    newComment.User = this.post.user;
     console.log(newComment);
+    this._commentService.updateComment(newComment.commentid, newComment).subscribe(response => {
+      if (response.success) {
+        console.log(response.message);
+        this._router.navigate(["/posts"]);
+      }
+      else {
+        console.log("Comment update failed");
+      }
+    });
+  }
+
+  deleteComment(comment: IComment): void {
+    const confirmDelete = confirm(`Are you sure you want to delete "${comment.CommentID}"?`);
+    if (confirmDelete) {
+      this._commentService.deleteComment(comment.CommentID)
+        .subscribe(
+          (response) => {
+            if (response.success) {
+              console.log(response.message);
+              this._router.navigate(["/posts"]);
+            }
+          }
+          , (error) => {
+            console.log("Error deleting comment:", error);
+          });
+    }
+  }
+
+  setUpvote(): void {
+    if (this.isSignedIn) {
+      this._postService.upvotePost(this.post.PostId)
+        .subscribe(
+          (response) => {
+            if (response.success) {
+              console.log(response.message);
+              //this.ngOnInit();
+              //this._router.navigate(["/detailedpost", this.post.PostId]);
+              this._router.navigate(["/posts"]);
+            }
+          }
+          , (error) => {
+            console.log("Error upvoting:", error);
+          });
+    }
+  }
+
+  setDownvote(): void {
+    if (this.isSignedIn) {
+      this._postService.downvotePost(this.post.PostId)
+        .subscribe(
+          (response) => {
+            if (response.success) {
+              console.log(response.message);
+              //this.ngOnInit();
+              //this._router.navigate(["/detailedpost", this.post.PostId]);
+              this._router.navigate(["/posts"]);
+            }
+          }
+          , (error) => {
+            console.log("Error downvoting:", error);
+          });
+    }
   }
 
   

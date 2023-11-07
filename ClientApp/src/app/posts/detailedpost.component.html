@@ -77,21 +77,21 @@
     </div>
 
     <!--@* The voting buttons *@-->
-    <!--<div>
-      @{
+    <div>
+      <!--@{
       //  This is a complicated way of writing:
       //    string vote = ViewData["Vote"].ToString();
       //   but this way gives warnings of possible null reference. Since both the ToString()
       //   method and ViewData[] method gives this warning, this is implemented.
       string vote = (ViewData["Vote"] ?? "").ToString() ?? "";
-      }
-      @* UPVOTE *@
-      @if (vote == "upvote")
-      {
-      <a class="btn-arrow-up" style="color: rgb(193, 26, 26);" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
-      <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
-      }
-      @* DOWNVOTE *@
+      }-->
+      <!--@* UPVOTE *@-->
+      <!--@if (vote == "upvote")
+      {-->
+      <a id="upvoteButton" class="btn-arrow-up" (click)="setUpvote()"><i class="fa fa-arrow-up"></i></a>
+      <a id="downvoteButton" class="btn-arrow-down" (click)="setDownvote()"><i class="fa fa-arrow-down"></i></a>
+      <!--}-->
+      <!--@* DOWNVOTE *@
       else if (vote == "downvote")
       {
       <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
@@ -104,12 +104,10 @@
       <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
       }-->
     <!-- Vote count -->
-    <!--<span style="font-size:20px">@Model.Post.UpvoteCount</span>-->
+    <span style="font-size:20px">{{post.UpvoteCount}}</span>
     <!-- Link to the post's subforum -->
     <h5 class="pull-right">
-      <a class="links" asp-controller="Post"
-         asp-action="SubForumPosts"
-         asp-route-CurrentViewName="@Model.Post.SubForum">{{ post.SubForum }}</a>
+      <a class="links" [routerLink]="['/subforumposts', post.SubForum]">{{ post.SubForum }}</a>
     </h5>
   </div>
 </div>
@@ -171,12 +169,10 @@
             <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Post</button>
           </form>
           <!--<input type="text" name="CommentText" value="@comment.CommentText">
-          <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>-->
+  <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>-->
           <!--}
-   DELETE button-->
-          <form asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.CommentID" method="post">
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
+  DELETE button-->
+          <button class="btn btn-secondary" (click)="deleteComment(comment)" >Delete</button>
         </div>
         <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
         <!--@* -> *@-->
@@ -190,7 +186,7 @@
         @if (SignInManager.IsSignedIn(User) && comment.User.IdentityUserId == UserManager.GetUserId(User))
         {
             // EDIT button-->
-        <button class="btn btn-primary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentText)">Edit</button>
+        <button class="btn btn-primary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)">Edit</button>
         <!--}-->
       </td>
     </tr>

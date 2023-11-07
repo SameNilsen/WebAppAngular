@@ -5,6 +5,8 @@ import { HttpClient } from "@angular/common/http";
 import { PostService } from "./posts.service";
 import { IUser, User } from "../user/user";
 import { Title } from "@angular/platform-browser";
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: "app-posts-postform",
@@ -16,6 +18,22 @@ export class PostformComponent {
   postForm: FormGroup;
   isEditMode: boolean = false;
   postId: number = -1;
+  private _selectedForum: string = "";
+  get selectedForum(): string {
+    return this._selectedForum;
+  }
+  set selectedForum(value: string) {
+    this._selectedForum = value;
+    console.log("In setter:", value);
+  }
+  subforums = [
+    { name: "Gaming" },
+    { name: "Sport" },
+    { name: "School" },
+    { name: "Nature" },
+    { name: "Politics" },
+    { name: "General" }
+  ];
   
   constructor(private _formbuilder: FormBuilder, private _router: Router, private _postService: PostService, private _route: ActivatedRoute) {
     this.postForm = _formbuilder.group({
@@ -24,6 +42,7 @@ export class PostformComponent {
       //subforum: [""],
       imageUrl: [""]
     });
+    this.selectedForum = this.subforums[5]['name'];
   }
 
   onSubmit() {
@@ -34,6 +53,7 @@ export class PostformComponent {
     newPost.UserId = 4;
     newPost.User = new User();
     newPost.User.UserId = 4;
+    newPost.SubForum = this.selectedForum;
     //const createUrl = "api/item/create";
     if (this.isEditMode) {
       this._postService.updatePost(this.postId, newPost).subscribe(response => {
@@ -81,6 +101,8 @@ export class PostformComponent {
       .subscribe(
         (post: any) => {
           console.log("retrived post: ", post);
+          console.log("--" + this.subforums.findIndex(x => x.name === post.SubForum));
+          this.selectedForum = this.subforums[this.subforums.findIndex(x => x.name === post.SubForum)]["name"];
           this.postForm.patchValue({
             title: post.Title,
             text: post.Text,

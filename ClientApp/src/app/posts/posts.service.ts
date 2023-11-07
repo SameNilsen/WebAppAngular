@@ -18,6 +18,12 @@ export class PostService {
     return this._http.get<IPost[]>(this.baseUrl);
   }
 
+  getSubforumPosts(forum: string): Observable<any> {
+    const url = `${this.baseUrl}subforum/${forum}`;
+    console.log(url + " hello");
+    return this._http.get<any>(url);
+  }
+
   createPost(newPost: IPost): Observable<any> {
     console.log(newPost);
     const createUrl = "api/post/create";
@@ -44,6 +50,24 @@ export class PostService {
   getSignedIn(postId: number): Observable<any> {
     //const createUrl = "api/post/signedin";
     const url = `${this.baseUrl}signedin/${postId}`;
+    return this._http.get<any>(url);
+  }
+
+  upvotePost(postId: number): Observable<any> {
+    const url = `${this.baseUrl}upvote/${postId}`;
+    console.log(url);
+    return this._http.get<any>(url);
+  }
+
+  downvotePost(postId: number): Observable<any> {
+    const url = `${this.baseUrl}downvote/${postId}`;
+    console.log(url);
+    return this._http.get<any>(url);
+  }
+
+  getVote(postId: number): Observable<any> {
+    const url = `${this.baseUrl}getvote/${postId}`;
+    console.log(url);
     return this._http.get<any>(url);
   }
 }

@@ -9,15 +9,20 @@
     <label for="text">Text:</label>
     <input type="text" id="text" formControlName="text" class="form-control" />
   </div>
-  <!--<div class="form-group">
-    <label for="description">SubForum:</label>
-    <textarea id="description" formControlName="description" class="form-control"></textarea>
-  </div>-->
+  <label for="subforums">Choose a subforum: </label>
+  <select name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
+    <!--<option value="volvo">Volvo</option>
+  <option value="saab" [selected]="true">Saab</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>-->
+    <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
+  </select>
   <div class="form-group">
     <label for="imageUrl">Image Url:</label>
     <input type="text" id="imageUrl" formControlName="imageUrl" class="form-control" />
   </div>
   <button class="btn btn-primary" type="submit" [disabled]="postForm.invalid">
-    {{ isEditMode ? "Update" : "Create"}} post</button>
+    {{ isEditMode ? "Update" : "Create"}} post
+  </button>
   <button class="btn btn-secondary" (click)="backToPosts()">Cancel</button>
 </form>

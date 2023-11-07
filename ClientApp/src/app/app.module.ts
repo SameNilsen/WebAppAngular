@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -13,6 +15,7 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { PostsComponent } from './posts/posts.component';
 import { PostformComponent } from './posts/postform.component';
 import { DetailedPostComponent } from './posts/detailedpost.component';
+import { SubForumPostsComponent } from './posts/subforumposts.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,8 @@ import { DetailedPostComponent } from './posts/detailedpost.component';
     HomeComponent,
     PostsComponent,
     PostformComponent,
-    DetailedPostComponent
+    DetailedPostComponent,
+    SubForumPostsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,6 +40,8 @@ import { DetailedPostComponent } from './posts/detailedpost.component';
       { path: "postform/:mode/:id", component: PostformComponent },
       { path: "detailedpost", component: DetailedPostComponent },
       { path: "detailedpost/:id", component: DetailedPostComponent },
+      { path: "subforumposts", component: SubForumPostsComponent },
+      { path: "subforumposts/:forum", component: SubForumPostsComponent },
       { path: "**", redirectTo: "", pathMatch: "full" }
     ])
   ],

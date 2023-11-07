@@ -1,0 +1,72 @@
+<!-- Welcome text -->
+<h1 style="text-align:center;">SubForums</h1>
+
+<label for="subforums">Choose a subforum: </label>
+<form>
+  <select name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
+    <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
+  </select>
+</form>
+
+
+<div class="row">
+  <div class="col-md-2">Filter by:</div>
+  <div class="col-md-4">
+    <input type="text"
+           [(ngModel)]="listFilter" />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <h4>Filtered by: {{listFilter}}</h4>
+  </div>
+</div>
+
+<!--@* CREATE and CARD view buttons *@-->
+<div class="container" style="text-align:center">
+  <div>
+    <!-- New method: -->
+    <button class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create New post</button>
+    <!-- Old method: -->
+    <a class="btn btn-secondary"
+       asp-controller="Post"
+       asp-action="Create">Create Post</a>
+    <a class="btn btn-secondary" href="/Post/Card">Card View</a>
+  </div>
+</div>
+
+<!--@* Posts (main feed) *@-->
+<div style="text-align:center">
+  <h1>{{ viewTitle }}</h1>
+  <table class="table table-striped" aria-labelledby="tableLabel">
+    <tr>
+      <th style="display: none">ID</th>
+      <th>Title</th>
+      <th>Date</th>
+      <th>User</th>
+      <th>Image</th>
+    </tr>
+
+    <tr *ngFor="let post of filteredPosts; index as i">
+      <td>
+        <!-- Title (a link to the detailed view of this post) -->
+        <a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a>
+      </td>
+
+      <!-- Post date -->
+      <td>{{ post.PostDate }}</td>
+
+      <!-- User -->
+      <td>{{ post.user.Name }}</td>
+      <td>
+        <!-- Image -->
+        <img [src]="post.ImageUrl" alt="Post image" style="max-width: 100px; max-height: 100px;" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+
+

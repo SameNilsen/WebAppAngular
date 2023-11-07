@@ -11,7 +11,7 @@ using OsloMetAngular.DAL;
 namespace OsloMetAngular.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20231106125640_IdentityAdded")]
+    [Migration("20231107110521_IdentityAdded")]
     partial class IdentityAdded
     {
         /// <inheritdoc />
@@ -240,11 +240,9 @@ namespace OsloMetAngular.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -282,11 +280,9 @@ namespace OsloMetAngular.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
@@ -604,7 +600,7 @@ namespace OsloMetAngular.Migrations
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("OsloMetAngular.Models.Post", "Post")
-                        .WithMany()
+                        .WithMany("UserVotes")
                         .HasForeignKey("PostID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -632,6 +628,8 @@ namespace OsloMetAngular.Migrations
             modelBuilder.Entity("OsloMetAngular.Models.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("UserVotes");
                 });
 
             modelBuilder.Entity("OsloMetAngular.Models.User", b =>
