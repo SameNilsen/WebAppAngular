@@ -54,7 +54,7 @@
 
     <!-- Name of user and their credibility score -->
     <h5>
-      Posted by: {{ user.Name }}
+      Posted by: <a [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a>
       <!--<a class="links" asp-controller="User"
                         asp-action="UserProfile"
                         asp-route-id="@Model.Post.UserId">@Model.User.Name</a> <span>@Model.User.Credebility creds</span>-->

@@ -39,6 +39,8 @@ export class PostformComponent {
     this.postForm = _formbuilder.group({
       title: ["", Validators.required],
       text: ["", Validators.required],
+      upvotecount: [0],
+      postdate: [""],
       //subforum: [""],
       imageUrl: [""]
     });
@@ -49,11 +51,12 @@ export class PostformComponent {
     console.log("PostCreate form submitted:");
     console.log(this.postForm);
     const newPost = this.postForm.value;
-    console.log(newPost);
+    console.log("New post1: " + newPost);
     newPost.UserId = 4;
     newPost.User = new User();
     newPost.User.UserId = 4;
     newPost.SubForum = this.selectedForum;
+    console.log("New post2: " + newPost);
     //const createUrl = "api/item/create";
     if (this.isEditMode) {
       this._postService.updatePost(this.postId, newPost).subscribe(response => {
@@ -106,6 +109,8 @@ export class PostformComponent {
           this.postForm.patchValue({
             title: post.Title,
             text: post.Text,
+            upvotecount: post.UpvoteCount,
+            postdate: post.PostDate,
             //subforum: post.SubForum,  // har ikke fiksa dropdownlist enda
             imageUrl: post.ImageUrl,
           });

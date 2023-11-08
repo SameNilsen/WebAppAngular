@@ -1,0 +1,155 @@
+
+<!--@* User Profile *@-->
+
+
+<div style="margin: 0 auto; text-align:center">
+  <!-- Username -->
+  <h1>User profile for: {{user.Name}}</h1>
+
+  <!--@* This page is for displaying the Userprofile of a user. If this page is the userprofile for
+  the logged in user, then there is also a button redirecting to the Manage Account page
+  provided by Microsoft.AspNetCore.Identity.
+  *@-->
+  <!-- Manage account -->
+  <!--@if (SignInManager.IsSignedIn(User) && Model.User.IdentityUserId == UserManager.GetUserId(User))
+  {-->
+  <h3>Manage <a asp-area="Identity" asp-page="/Account/Manage/Index">account</a></h3>
+  <!--}-->
+
+  <br />
+
+  <!-- Credibility score -->
+  <h2>Credebility</h2>
+  <h3>Score: {{user.Credebility}} creds</h3>
+  <h4>
+    Read <a asp-controller="User"
+            asp-action="CredsInfo">more</a>
+  </h4>
+
+  <br />
+
+  <!-- Number of posts posted -->
+  <h2>
+    Number of posts:
+    <a>{{this.posts.length}}</a>
+  </h2>
+  <h3>
+    See all posts
+  </h3>
+  <button (click)="toggle('posts')">Posts</button>
+  <section id="posts" class="content">
+    <table class="table table-striped">
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Votes</th>
+      </tr>
+
+      <!-- Loop through all their posts -->
+
+      <tr *ngFor="let post of posts; index as i">
+        <td><a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a></td>
+        <td>{{post.PostDate}}</td>
+        <td>{{post.UpvoteCount}}</td>
+      </tr>
+    </table>
+  </section>
+  <br />
+
+  <!-- Number of comments commented -->
+  <h2>
+    Number of comments:
+    <a>{{this.comments.length}}</a>
+  </h2>
+  <h3>
+    See all comments
+  </h3>
+  <button (click)="toggle('comments')">Comments</button>
+  <section id="comments" class="content">
+    <table class="table table-striped">
+      <tr>
+        <th>Comment</th>
+        <th>Date</th>
+        <th>Post</th>
+      </tr>
+
+      <!-- Loop through all their comments -->
+      
+      <tr *ngFor="let comment of comments; index as i">
+        <td>{{comment.CommentText}}</td>
+        <td>{{comment.PostDate}}</td>
+        <td><a [routerLink]="['/detailedpost', comment.post.PostId]">{{ comment.post.Title }}</a></td>
+      </tr>
+    </table>
+  </section>
+
+  <br />
+
+  <!-- Number of votes voted -->
+  <h2>
+    Number of votes:
+    <a>{{this.votes.length}}</a>
+  </h2>
+  <h3>
+    See all votes
+  </h3>
+  <button (click)="toggle('votes')">Votes</button>
+  <section id="votes" class="content">
+    <table class="table table-striped">
+      <tr>
+        <th>Post</th>
+        <th>Vote</th>
+      </tr>
+
+      <!-- Loop through all their votes -->
+
+      <tr *ngFor="let vote of votes; index as i">
+        <td><a [routerLink]="['/detailedpost', vote.post.PostId]">{{ vote.post.Title }}</a></td>
+        <td>{{vote.Vote}}</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- THE COLLAPSIBLE ELEMENT'S STYLE AND LOGIC WAS TAKEN FROM W3SCHOOLS: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_collapsible_symbol -->
+  <style>
+    .collapsible {
+      background-color: #777;
+      color: white;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+    }
+
+      .active, .collapsible:hover {
+        background-color: #555;
+      }
+
+      .collapsible:after {
+        content: '\002B';
+        color: white;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+      }
+
+    .active:after {
+      content: "\2212";
+    }
+
+    .content {
+      padding: 0 18px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+      background-color: #f1f1f1;
+    }
+  </style>
+
+  <!--<button *ngIf="collapsed" (click)="expand()">Expand</button>
+  <button *ngIf="!collapsed" (click)="collapse()">Collapse</button>-->
+
+</div>

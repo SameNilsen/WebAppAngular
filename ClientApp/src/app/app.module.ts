@@ -16,6 +16,7 @@ import { PostsComponent } from './posts/posts.component';
 import { PostformComponent } from './posts/postform.component';
 import { DetailedPostComponent } from './posts/detailedpost.component';
 import { SubForumPostsComponent } from './posts/subforumposts.component';
+import { UserProfileComponent } from './user/userprofile.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { SubForumPostsComponent } from './posts/subforumposts.component';
     PostsComponent,
     PostformComponent,
     DetailedPostComponent,
-    SubForumPostsComponent
+    SubForumPostsComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -42,6 +44,8 @@ import { SubForumPostsComponent } from './posts/subforumposts.component';
       { path: "detailedpost/:id", component: DetailedPostComponent },
       { path: "subforumposts", component: SubForumPostsComponent },
       { path: "subforumposts/:forum", component: SubForumPostsComponent },
+      { path: "userprofile", component: UserProfileComponent },
+      { path: "userprofile/:id", component: UserProfileComponent },
       { path: "**", redirectTo: "", pathMatch: "full" }
     ])
   ],

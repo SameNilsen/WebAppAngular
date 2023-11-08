@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
 namespace OsloMetAngular.Models
@@ -7,14 +8,14 @@ namespace OsloMetAngular.Models
     // User and Post are navigation properties.
     public class Upvote
     {
-        [JsonPropertyName("UpvoteId")]
+        [JsonProperty("UpvoteId")]
         public int UpvoteId { get; set; }
-        [JsonPropertyName("Vote")]
+        [JsonProperty("Vote")]
         public string Vote { get; set; } = string.Empty;
-        [JsonPropertyName("UserId")]
+        [JsonProperty("UserId")]
         public int UserId { get; set; }
         public virtual User User { get; set; } = default!;
-        [JsonPropertyName("PostID")]
+        [JsonProperty("PostID")]
         public int PostID { get; set; }
         public virtual Post Post { get; set; } = default!;     
     }

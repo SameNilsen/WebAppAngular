@@ -26,6 +26,11 @@ export class UserService {
     return this._http.get(url);
   }
 
+  getSimplifiedUser(userId: number): Observable<any> {
+    const url = `${this.baseUrl}simpleuser/${userId}`;
+    return this._http.get(url);
+  }
+
   updateUser(userId: number, newUser: any): Observable<any> {
     const url = `${this.baseUrl}/update/${userId}`;
     newUser.userId = userId;
@@ -35,5 +40,23 @@ export class UserService {
   deleteUser(UserId: number): Observable<any> {
     const url = `${this.baseUrl}/delete/${UserId}`;
     return this._http.delete(url);
+  }
+
+  getPosts(id: number): Observable<any> {
+    const url = `${this.baseUrl}posts/${id}`;
+    console.log(url + " hello");
+    return this._http.get<any>(url);
+  }
+
+  getComments(id: number): Observable<any> {
+    const url = `${this.baseUrl}comments/${id}`;
+    console.log(url + " hello");
+    return this._http.get<any>(url);
+  }
+
+  getVotes(id: number): Observable<any> {
+    const url = `${this.baseUrl}votes/${id}`;
+    console.log(url + " hello");
+    return this._http.get<any>(url);
   }
 }

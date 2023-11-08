@@ -1,4 +1,5 @@
 import { IUser, User } from "../user/user";
+import { IPost, Post } from "./post";
 
 export interface IComment {
   CommentID: number;
@@ -7,6 +8,7 @@ export interface IComment {
   UserId: number;
   PostDate: string;
   user: IUser;
+  post: IPost;
 }
 export class Comment implements IComment {
     CommentID: number = 0;
@@ -15,4 +17,5 @@ export class Comment implements IComment {
     UserId: number = 0;
     PostDate: string = "";
     user: IUser = new User();
+    post: IPost = new Post();
 }

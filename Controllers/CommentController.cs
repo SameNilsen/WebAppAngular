@@ -14,17 +14,19 @@ namespace OsloMetAngular.Controllers
 
         private readonly ICommentRepository _commentRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IPostRepository _postRepository;
         private readonly ILogger<CommentController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public CommentController(ICommentRepository commentRepository, IUserRepository userRepository, ILogger<CommentController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public CommentController(ICommentRepository commentRepository, IUserRepository userRepository, ILogger<CommentController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IPostRepository postRepository)
         {
             _commentRepository = commentRepository;
             _userRepository = userRepository;
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _postRepository = postRepository;
         }
 
         [HttpGet]
@@ -169,6 +171,8 @@ namespace OsloMetAngular.Controllers
             {
                 return BadRequest("Invalid comment data");
             }
+            var post = _postRepository.GetItemById(newComment.PostID).Result!;
+            newComment.Post = post;
 
             var identityUserId = _userManager.GetUserId(User);
             var user = _userRepository.GetUserByIdentity(identityUserId).Result;

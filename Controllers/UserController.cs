@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
+using OsloMetAngular.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OsloMetAngular.Controllers
 {
@@ -64,6 +67,26 @@ namespace OsloMetAngular.Controllers
             return Ok(user);
         }
 
+        [HttpGet("simpleuser/{id}")]
+        public async Task<IActionResult> GetSimplifiedUser(int id)
+        {
+            var user = await _userRepository.GetItemById(id);
+            if (user == null)
+            {
+                _logger.LogError("[UserController] User not found while executing" +
+                    "_userRepository.GetItemById(id)", id);
+                return NotFound("Did not find user");
+            }
+            
+            User simpleUser = new User
+            {
+                UserId = user.UserId,
+                Name = user.Name,
+                Credebility = user.Credebility,
+            };
+            return Ok(simpleUser);
+        }
+
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(User newUser)
         {
@@ -97,6 +120,113 @@ namespace OsloMetAngular.Controllers
             }
             var response = new { success = true, message = "User " + id.ToString()+ " deleted succesfully" };
             return Ok(response);
+        }
+
+        [HttpGet("posts/{id}")]
+        public async Task<IActionResult> GetPosts(int id)
+        {
+            var user = await _userRepository.GetItemById(id);
+            if (user == null)
+            {
+                _logger.LogError("[UserController] User not found while executing" +
+                    "_userRepository.GetItemById(id)", id);
+                return NotFound("Did not find user");
+            }
+
+            var posts = user.Posts;
+
+            if (posts == null)
+            {
+                _logger.LogError("[PostController] Post list not found when executing _postRepository.GetBySubForum(),");
+                return NotFound("Post list not found");
+            }
+            //  Create simplified post without reference to other entities to avoid referencing loop by json.
+            List<Post> viewModelPosts = new List<Post>();
+            foreach (var post in posts)
+            {
+                Post simplePost = new Post
+                {
+                    PostID = post.PostID,
+                    Title = post.Title,
+                    Text = post.Text,
+                    ImageUrl = post.ImageUrl,
+                    PostDate = post.PostDate,
+                    //UserId = post.UserId,
+                    UpvoteCount = post.UpvoteCount,
+                    SubForum = post.SubForum,
+                    User = new User { Name = post.User.Name },
+                };
+                viewModelPosts.Add(simplePost);
+            }
+            var postListViewModel = new PostListViewModel(viewModelPosts);
+            return Ok(viewModelPosts);
+        }
+
+        [HttpGet("comments/{id}")]
+        public async Task<IActionResult> GetComments(int id)
+        {
+            var user = await _userRepository.GetItemById(id);
+            if (user == null)
+            {
+                _logger.LogError("[UserController] User not found while executing" +
+                    "_userRepository.GetItemById(id)", id);
+                return NotFound("Did not find user");
+            }
+
+            var comments = user.Comments;
+
+            if (comments == null)
+            {
+                _logger.LogError("[UserController] Comment list not found when executing _postRepository.GetBySubForum(),");
+                return NotFound("Post list not found");
+            }
+            //  Create simplified post without reference to other entities to avoid referencing loop by json.
+            List<Comment> viewModelComments = new List<Comment>();
+            foreach (var comment in comments)
+            {
+                Comment simpleComment = new Comment
+                {
+                    CommentID = comment.CommentID,
+                    CommentText = comment.CommentText,
+                    PostDate = comment.PostDate,
+                    Post = new Post { Title = comment.Post.Title, PostID = comment.Post.PostID },
+                };
+                viewModelComments.Add(simpleComment);
+            }
+            return Ok(viewModelComments);
+        }
+
+        [HttpGet("votes/{id}")]
+        public async Task<IActionResult> GetVotes(int id)
+        {
+            var user = await _userRepository.GetItemById(id);
+            if (user == null)
+            {
+                _logger.LogError("[UserController] User not found while executing" +
+                    "_userRepository.GetItemById(id)", id);
+                return NotFound("Did not find user");
+            }
+
+            var votes = user.UserVotes;
+
+            if (votes == null)
+            {
+                _logger.LogError("[UserController] Votes list not found when executing _postRepository.GetBySubForum(),");
+                return NotFound("Post list not found");
+            }
+            //  Create simplified post without reference to other entities to avoid referencing loop by json.
+            List<Upvote> viewModelVotes = new List<Upvote>();
+            foreach (var vote in votes)
+            {
+                Upvote simpleVote = new Upvote
+                {
+                    PostID = vote.PostID,
+                    Vote = vote.Vote,
+                    Post = new Post { Title = vote.Post.Title, PostID = vote.Post.PostID },
+                };
+                viewModelVotes.Add(simpleVote);
+            }
+            return Ok(viewModelVotes);
         }
 
         //private static int GetNextItemId()

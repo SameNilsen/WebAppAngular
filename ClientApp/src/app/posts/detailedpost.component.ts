@@ -163,7 +163,7 @@ export class DetailedPostComponent implements OnInit {
       this._commentService.createComment(newComment).subscribe(response => {
         if (response.success) {
           console.log(response.message);
-          //this._router.navigate(["/posts"]);
+          this._router.navigate(["/posts"]);
         }
         else {
           console.log("Comment creation failed");
