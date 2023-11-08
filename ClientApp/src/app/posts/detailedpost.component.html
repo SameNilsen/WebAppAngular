@@ -132,7 +132,7 @@
       <div class="form-group">
         <input type="text" id="commenttext" formControlName="commenttext" class="form-control" />
       </div>
-      <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Post</button>
+      <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid || !isSignedIn">Post</button>
     </form>
 </div>
 
@@ -186,7 +186,7 @@
         @if (SignInManager.IsSignedIn(User) && comment.User.IdentityUserId == UserManager.GetUserId(User))
         {
             // EDIT button-->
-        <button class="btn btn-primary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)">Edit</button>
+        <button class="btn btn-primary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit</button>
         <!--}-->
       </td>
     </tr>

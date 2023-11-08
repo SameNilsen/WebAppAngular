@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 export class PostformComponent {
 
+  isSignedIn = false;
   postForm: FormGroup;
   isEditMode: boolean = false;
   postId: number = -1;
@@ -88,6 +89,7 @@ export class PostformComponent {
 
   ngOnInit(): void {
     this._route.params.subscribe(params => {
+      this.getSignedIn(params["id"]);
       if (params["mode"] === "create") {
         this.isEditMode = false; // create mode
       }
@@ -119,5 +121,17 @@ export class PostformComponent {
           console.log("Error loading post for edit:", error);
         }
       );
+  }
+
+  getSignedIn(postId: number): void {
+    this._postService.getSignedIn(postId).subscribe(response => {
+      if (response.success) {
+        console.log("signed in: " + response.message + " " + response.userspost);
+        this.isSignedIn = true;
+      }
+      else {
+        console.log("Not signed in");
+      }
+    });
   }
 }

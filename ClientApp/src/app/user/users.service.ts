@@ -31,6 +31,11 @@ export class UserService {
     return this._http.get(url);
   }
 
+  getUserIdByIdentity(identityId: string): Observable<any> {
+    const url = `${this.baseUrl}getuseridbyidentity/${identityId}`;
+    return this._http.get(url);
+  }
+
   updateUser(userId: number, newUser: any): Observable<any> {
     const url = `${this.baseUrl}/update/${userId}`;
     newUser.userId = userId;

@@ -155,7 +155,7 @@ namespace OsloMetAngular.Controllers
                     CommentText = comment.CommentText,
                     PostDate = comment.PostDate,
                     UserId = comment.UserId,
-                    User = new User { Name = comment.User.Name, Credebility = comment.User.Credebility },
+                    User = new User { Name = comment.User.Name, Credebility = comment.User.Credebility, IdentityUserId = comment.User.IdentityUserId },
                 };
                 viewModelComments.Add(simpleComment);
             }

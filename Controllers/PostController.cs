@@ -258,6 +258,11 @@ namespace OsloMetAngular.Controllers
             {
                 var userspost = false;
                 var post = await _postRepository.GetItemById(id);
+                if (post == null)
+                {
+                    var responseO = new { success = true, message = _userManager.GetUserId(User), userspost };
+                    return Ok(responseO);
+                }
                 var identityUserId = _userManager.GetUserId(User);
                 var user = _userRepository.GetUserByIdentity(identityUserId).Result;
                 if (user != null)

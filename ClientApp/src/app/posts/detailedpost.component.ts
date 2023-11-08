@@ -22,6 +22,7 @@ export class DetailedPostComponent implements OnInit {
   commentForm: FormGroup;
   isYourPost: boolean = false;
   isSignedIn: boolean = false;
+  signedInId: string = "";
   yourVote: string = "blank";
   
   constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService, private _commentService: CommentService, private _formbuilder: FormBuilder) {
@@ -52,6 +53,7 @@ export class DetailedPostComponent implements OnInit {
         console.log("type: " + typeof response.userspost);
         this.isYourPost = response.userspost;
         this.isSignedIn = true;
+        this.signedInId = response.message;
         //this._router.navigate(["/posts"]);
       }
       else {

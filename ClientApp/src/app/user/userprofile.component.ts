@@ -23,6 +23,7 @@ export class UserProfileComponent implements OnInit{
   //users: IUser[] = [];
   user: IUser = new User();
   collapsed = false;
+  isYourPage: boolean = false;
 
   constructor(private _router: Router, private _postService: PostService, private _userService: UserService, private _route: ActivatedRoute) { }
 
@@ -78,8 +79,25 @@ export class UserProfileComponent implements OnInit{
       this.getComments(params["id"]);
       this.getVotes(params["id"]);
       this.getUser(params["id"]);
+      this.getSignedIn(params["id"]);
     });
     
+  }
+
+  getSignedIn(postId: number): void {
+    this._postService.getSignedIn(postId).subscribe(response => {
+      if (response.success) {
+        console.log("signed in: " + response.message + " " + response.userspost);
+        //console.log("asda" + this.user.IdentityUserId);
+        if (response.message = this.user.IdentityUserId) {
+          this.isYourPage = true;
+          console.log("YOUR OWN USERPAGE");
+        }
+      }
+      else {
+        console.log("Not signed in");
+      }
+    });
   }
 
   toggle(content: string) {
@@ -95,26 +113,26 @@ export class UserProfileComponent implements OnInit{
     } 
   }
 
-  expand() {
-    console.log("expand!");
-    this.collapsed = false;
-    var section = document.getElementById("posts")!;
-    if (section.style.maxHeight) {
-      section.style.maxHeight = "0";
-    } else {
-      section.style.maxHeight = section.scrollHeight + "px";
-    } 
-  }
+  //expand() {
+  //  console.log("expand!");
+  //  this.collapsed = false;
+  //  var section = document.getElementById("posts")!;
+  //  if (section.style.maxHeight) {
+  //    section.style.maxHeight = "0";
+  //  } else {
+  //    section.style.maxHeight = section.scrollHeight + "px";
+  //  } 
+  //}
 
-  collapse() {
-    console.log("collapse!");
-    this.collapsed = true;
-    var section = document.getElementById("posts")!;
-    if (section.style.maxHeight) {
-      section.style.maxHeight = "0";
-    } else {
-      section.style.maxHeight = section.scrollHeight + "px";
-    } 
-  }
+  //collapse() {
+  //  console.log("collapse!");
+  //  this.collapsed = true;
+  //  var section = document.getElementById("posts")!;
+  //  if (section.style.maxHeight) {
+  //    section.style.maxHeight = "0";
+  //  } else {
+  //    section.style.maxHeight = section.scrollHeight + "px";
+  //  } 
+  //}
 
 }

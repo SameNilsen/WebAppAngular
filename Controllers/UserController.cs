@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
@@ -13,12 +14,14 @@ namespace OsloMetAngular.Controllers
     {
 
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserRepository userRepository, ILogger<UserController> logger)
+        public UserController(IUserRepository userRepository, ILogger<UserController> logger, UserManager<ApplicationUser> userManager)
         {
             _userRepository = userRepository;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -83,8 +86,39 @@ namespace OsloMetAngular.Controllers
                 UserId = user.UserId,
                 Name = user.Name,
                 Credebility = user.Credebility,
+                IdentityUserId = user.IdentityUserId,
             };
             return Ok(simpleUser);
+        }
+
+        [HttpGet("getuseridbyidentity/{id}")]
+        public async Task<IActionResult> GetUserIdByIdentity(string id)
+        {
+            var user = await _userRepository.GetUserByIdentity(id);
+            
+            if (user == null)
+            {
+                var newUser = new User
+                {
+                    Name = _userManager.GetUserName(User),
+                    IdentityUserId = id
+                };
+                await _userRepository.Create(newUser);
+                user = newUser;
+
+                //_logger.LogError("[UserController] User not found while executing" +
+                //    "_userRepository.GetItemById(id)", id);
+                //return NotFound("Did not find user");
+            }
+
+            //User simpleUser = new User
+            //{
+            //    UserId = user.UserId,
+            //    Name = user.Name,
+            //    Credebility = user.Credebility,
+            //    IdentityUserId = user.IdentityUserId,
+            //};
+            return Ok(user.UserId);
         }
 
         [HttpPut("update/{id}")]

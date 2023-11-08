@@ -36,7 +36,12 @@
             <a class="nav-link text-dark" [routerLink]="['/subforumposts', 'General']"
               >Subforums</a
             >
-          </li>  
+          </li>
+          <li *ngIf="isSignedIn" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/userprofile', userId]"
+              >MyProfile</a
+            >
+          </li> 
         </ul>
         <app-login-menu></app-login-menu>
       </div>
