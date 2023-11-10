@@ -111,7 +111,7 @@
     </h5>
   </div>
 </div>
-<!--</div>-->
+</div>
 
 <br />
 
@@ -128,11 +128,18 @@
   <!--<div asp-validation-summary="All" class="text-danger"></div>-->
 
   <div id="newComment" style="display:none">
-    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="commentCreateForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <input type="text" id="commenttext" formControlName="commenttext" class="form-control" />
+        <div *ngIf="commenttext.invalid && (commenttext.dirty || commenttext.touched)"
+             class="alert alert-danger">
+          <div *ngIf="commenttext.errors?.['required']">Comment is required.</div>
+          <div *ngIf="commenttext.errors?.['minlength']">
+            Comment must be at least 2 characters long.
+          </div>
+        </div>
       </div>
-      <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid || !isSignedIn">Post</button>
+      <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentCreateForm.invalid || !isSignedIn">Post</button>
     </form>
 </div>
 

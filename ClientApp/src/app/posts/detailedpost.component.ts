@@ -20,6 +20,7 @@ export class DetailedPostComponent implements OnInit {
   user: IUser = new User();
   comments: IComment[] = [];
   commentForm: FormGroup;
+  commentCreateForm: FormGroup;
   isYourPost: boolean = false;
   isSignedIn: boolean = false;
   signedInId: string = "";
@@ -27,12 +28,23 @@ export class DetailedPostComponent implements OnInit {
   
   constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService, private _commentService: CommentService, private _formbuilder: FormBuilder) {
     this.commentForm = _formbuilder.group({
-      commenttext: ["", Validators.required],
+      commenttext: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
       commentid: [],
       userid: [],
       postid: [],
       postdate: [],      
     });
+    this.commentCreateForm = _formbuilder.group({
+      commenttext: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
+      commentid: [],
+      userid: [],
+      postid: [],
+      postdate: [],
+    });
+  }
+
+  get commenttext() {
+    return this.commentCreateForm.get("commenttext")!;
   }
 
   ngOnInit(): void {
@@ -153,8 +165,8 @@ export class DetailedPostComponent implements OnInit {
   onSubmit() {
     if (!this.isSignedIn) { return; }
     console.log("CommentCreate form submitted:");
-    console.log(this.commentForm);
-    const newComment = this.commentForm.value;
+    console.log(this.commentCreateForm);
+    const newComment = this.commentCreateForm.value;
     newComment.commentid = 0;
     newComment.postid = this.post.PostId;
     newComment.Post = this.post;

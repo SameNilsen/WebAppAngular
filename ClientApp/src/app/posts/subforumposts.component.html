@@ -3,7 +3,7 @@
 
 <label for="subforums">Choose a subforum: </label>
 <form>
-  <select name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
+  <select class="form-control" name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
     <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
   </select>
 </form>
@@ -40,30 +40,34 @@
 <div style="text-align:center">
   <h1>{{ viewTitle }}</h1>
   <table class="table table-striped" aria-labelledby="tableLabel">
-    <tr>
-      <th style="display: none">ID</th>
-      <th>Title</th>
-      <th>Date</th>
-      <th>User</th>
-      <th>Image</th>
-    </tr>
+    <thead>
+      <tr>
+        <th style="display: none">ID</th>
+        <th>Title</th>
+        <th>Date</th>
+        <th>User</th>
+        <th>Image</th>
+      </tr>
+    </thead>
 
-    <tr *ngFor="let post of filteredPosts; index as i">
-      <td>
-        <!-- Title (a link to the detailed view of this post) -->
-        <a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a>
-      </td>
+    <tbody>
+      <tr *ngFor="let post of filteredPosts; index as i">
+        <td>
+          <!-- Title (a link to the detailed view of this post) -->
+          <a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a>
+        </td>
 
-      <!-- Post date -->
-      <td>{{ post.PostDate }}</td>
+        <!-- Post date -->
+        <td>{{ post.PostDate }}</td>
 
-      <!-- User -->
-      <td>{{ post.user.Name }}</td>
-      <td>
-        <!-- Image -->
-        <img [src]="post.ImageUrl" alt="Post image" style="max-width: 100px; max-height: 100px;" />
-      </td>
-    </tr>
+        <!-- User -->
+        <td>{{ post.user.Name }}</td>
+        <td>
+          <!-- Image -->
+          <img [src]="post.ImageUrl" alt="Post image" style="max-width: 100px; max-height: 100px;" />
+        </td>
+      </tr>
+    </tbody>
   </table>
 </div>
 

@@ -38,14 +38,21 @@ export class PostformComponent {
   
   constructor(private _formbuilder: FormBuilder, private _router: Router, private _postService: PostService, private _route: ActivatedRoute) {
     this.postForm = _formbuilder.group({
-      title: ["", Validators.required],
-      text: ["", Validators.required],
+      title: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80), Validators.pattern("[0-9a-zA-Zæøå., \-]{0,80}")]],
+      text: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
       upvotecount: [0],
       postdate: [""],
       //subforum: [""],
       imageUrl: [""]
     });
     this.selectedForum = this.subforums[5]['name'];
+  }
+
+  get title() {
+    return this.postForm.get("title")!;
+  }
+  get text() {
+    return this.postForm.get("text")!;
   }
 
   onSubmit() {
