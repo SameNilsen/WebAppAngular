@@ -54,10 +54,10 @@
 
     <!-- Name of user and their credibility score -->
     <h5>
-      Posted by: <a [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a>
+      Posted by: <a [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>
       <!--<a class="links" asp-controller="User"
-                        asp-action="UserProfile"
-                        asp-route-id="@Model.Post.UserId">@Model.User.Name</a> <span>@Model.User.Credebility creds</span>-->
+                    asp-action="UserProfile"
+                    asp-route-id="@Model.Post.UserId">@Model.User.Name</a> <span>@Model.User.Credebility creds</span>-->
     </h5>
 
     <hr />
@@ -147,56 +147,54 @@
   <h1>Comments:</h1>
 
   <table class="table table-striped">
-    <tr>
-      <th>Comment</th>
-      <th>Date</th>
-      <th>User</th>
-      <th>
-        <a class="links" asp-controller="User"
-           asp-action="CredsInfo">Creds</a>
-      </th>
-      <th>Actions</th>
-    </tr>
+    <thead>
+      <tr>
+        <th>Comment</th>
+        <th>Date</th>
+        <th>User</th>
+        <th>
+          <a class="links" [routerLink]="['/credsinfo']">Creds</a>
+        </th>
+        <th>Actions</th>
+      </tr>
+    </thead>
 
-    <tr *ngFor="let comment of comments; index as i">
-      <!--@*
-      <- This block is for editing and deleting a comment *@-->
-      <td>
-        <div id="editON {{comment.CommentID}}" style="display:none">
-          <!--@using (Html.BeginForm("Update", "Comment"))
-  {-->
-          <form [formGroup]="commentForm" (ngSubmit)="onUpdate()">
-            <div class="form-group">
-              <input type="text" id="commenttext" formControlName="commenttext" class="form-control" value="{{comment.CommentText}}" />
-              <input type="text" id="commentid" formControlName="commentid" class="form-control" value="@comment.CommentID" hidden />
-              <input type="text" id="postdate" formControlName="postdate" class="form-control" value="@comment.PostDate" hidden />
-              <input type="text" id="userid" formControlName="userid" class="form-control" value="@comment.UserId" hidden />
-              <input type="text" id="postid" formControlName="postid" class="form-control" value="@comment.PostID" hidden />
-            </div>
-            <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Post</button>
-          </form>
-          <!--<input type="text" name="CommentText" value="@comment.CommentText">
-  <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>-->
-          <!--}
-  DELETE button-->
-          <button class="btn btn-secondary" (click)="deleteComment(comment)" >Delete</button>
-        </div>
-        <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
-        <!--@* -> *@-->
+    <tbody>
+      <tr *ngFor="let comment of comments; index as i">
+        <!--@*
+        <- This block is for editing and deleting a comment *@-->
+        <td>
+          <div id="editON {{comment.CommentID}}" style="display:none">
+            <!--@using (Html.BeginForm("Update", "Comment"))
+    {-->
+            <form [formGroup]="commentForm" (ngSubmit)="onUpdate()">
+              <div class="form-group">
+                <input type="text" id="commenttext" formControlName="commenttext" class="form-control" value="{{comment.CommentText}}" />
+                <input type="text" id="commentid" formControlName="commentid" class="form-control" value="@comment.CommentID" hidden />
+                <input type="text" id="postdate" formControlName="postdate" class="form-control" value="@comment.PostDate" hidden />
+                <input type="text" id="userid" formControlName="userid" class="form-control" value="@comment.UserId" hidden />
+                <input type="text" id="postid" formControlName="postid" class="form-control" value="@comment.PostID" hidden />
+              </div>
+              <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Post</button>
+            </form>
+            <!--<input type="text" name="CommentText" value="@comment.CommentText">
+    <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>-->
+            <!--}
+    DELETE button-->
+            <button class="btn btn-secondary" (click)="deleteComment(comment)" >Delete</button>
+          </div>
+          <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
+          <!--@* -> *@-->
 
-      </td>
-      <td>{{comment.PostDate}}</td>
-      <td>{{comment.user.Name}}</td>
-      <td>{{comment.user.Credebility}}</td>
-      <td>
-        <!--@* This is to make sure that one can only edit the comment you yourself has made *@
-        @if (SignInManager.IsSignedIn(User) && comment.User.IdentityUserId == UserManager.GetUserId(User))
-        {
-            // EDIT button-->
-        <button class="btn btn-primary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit</button>
-        <!--}-->
-      </td>
-    </tr>
+        </td>
+        <td>{{comment.PostDate}}</td>
+        <td>{{comment.user.Name}}</td>
+        <td>{{comment.user.Credebility}}</td>
+        <td>
+          <button class="btn btn-info" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit</button>
+        </td>
+      </tr>
+    </tbody>
     <!--}-->
   </table>
 </div>

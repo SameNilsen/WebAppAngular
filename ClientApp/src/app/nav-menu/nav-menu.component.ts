@@ -25,6 +25,8 @@ export class NavMenuComponent implements OnInit {
   constructor(private _postService: PostService, private _userService: UserService, private _route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    //document.body.setAttribute('data-bs-theme', "dark");
+    //document.documentElement.setAttribute('data-bs-theme', "dark");
     this._route.params.subscribe(params => {
       this.getSignedIn();
     });

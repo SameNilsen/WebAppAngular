@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
 
   async ngOnInit() {
     const action = this.activatedRoute.snapshot.url[1];
+    document.documentElement.setAttribute('data-bs-theme', "dark");
     switch (action.path) {
       case LoginActions.Login:
         await this.login(this.getReturnUrl());

@@ -22,8 +22,7 @@
   <h2>Credebility</h2>
   <h3>Score: {{user.Credebility}} creds</h3>
   <h4>
-    Read <a asp-controller="User"
-            asp-action="CredsInfo">more</a>
+    Read <a [routerLink]="['/credsinfo']">more</a>
   </h4>
 
   <br />
@@ -37,21 +36,25 @@
     See all posts
   </h3>
   <button (click)="toggle('posts')">Posts</button>
-  <section id="posts" class="content">
+  <section id="posts" class="content" data-bs-theme="dark">
     <table class="table table-striped">
-      <tr>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Votes</th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Votes</th>
+        </tr>
+      </thead>
 
-      <!-- Loop through all their posts -->
+      <tbody>
+        <!-- Loop through all their posts -->
 
-      <tr *ngFor="let post of posts; index as i">
-        <td><a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a></td>
-        <td>{{post.PostDate}}</td>
-        <td>{{post.UpvoteCount}}</td>
-      </tr>
+        <tr *ngFor="let post of posts; index as i">
+          <td><a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a></td>
+          <td>{{post.PostDate | simpleDateFormat}}</td>
+          <td>{{post.UpvoteCount}}</td>
+        </tr>
+      </tbody>
     </table>
   </section>
   <br />
@@ -67,19 +70,23 @@
   <button (click)="toggle('comments')">Comments</button>
   <section id="comments" class="content">
     <table class="table table-striped">
-      <tr>
-        <th>Comment</th>
-        <th>Date</th>
-        <th>Post</th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Comment</th>
+          <th>Date</th>
+          <th>Post</th>
+        </tr>
+      </thead>
 
-      <!-- Loop through all their comments -->
+      <tbody>
+        <!-- Loop through all their comments -->
       
-      <tr *ngFor="let comment of comments; index as i">
-        <td>{{comment.CommentText}}</td>
-        <td>{{comment.PostDate}}</td>
-        <td><a [routerLink]="['/detailedpost', comment.post.PostId]">{{ comment.post.Title }}</a></td>
-      </tr>
+        <tr *ngFor="let comment of comments; index as i">
+          <td>{{comment.CommentText}}</td>
+          <td>{{comment.PostDate | simpleDateFormat}}</td>
+          <td><a [routerLink]="['/detailedpost', comment.post.PostId]">{{ comment.post.Title }}</a></td>
+        </tr>
+      </tbody>
     </table>
   </section>
 
@@ -96,17 +103,21 @@
   <button (click)="toggle('votes')">Votes</button>
   <section id="votes" class="content">
     <table class="table table-striped">
-      <tr>
-        <th>Post</th>
-        <th>Vote</th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Post</th>
+          <th>Vote</th>
+        </tr>
+      </thead>
 
-      <!-- Loop through all their votes -->
+      <tbody>
+        <!-- Loop through all their votes -->
 
-      <tr *ngFor="let vote of votes; index as i">
-        <td><a [routerLink]="['/detailedpost', vote.post.PostId]">{{ vote.post.Title }}</a></td>
-        <td>{{vote.Vote}}</td>
-      </tr>
+        <tr *ngFor="let vote of votes; index as i">
+          <td><a [routerLink]="['/detailedpost', vote.post.PostId]">{{ vote.post.Title }}</a></td>
+          <td>{{vote.Vote}}</td>
+        </tr>
+      </tbody>
     </table>
   </section>
 
@@ -145,7 +156,7 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.2s ease-out;
-      background-color: #f1f1f1;
+      /*background-color: #f1f1f1;*/
     }
   </style>
 

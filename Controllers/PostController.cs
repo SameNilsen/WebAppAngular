@@ -172,6 +172,8 @@ namespace OsloMetAngular.Controllers
 
             if (returnOk)
             {
+                simplePost.User.Credebility += 7;  //  When creating a post the user gets added score of 7 to their "Credebility".
+                await _userRepository.Update(simplePost.User);
                 var response = new { success = true, message = "Post " + newPost.Title + " created succesfully" };
                 return Ok(response);                
             }

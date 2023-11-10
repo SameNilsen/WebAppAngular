@@ -17,6 +17,8 @@ import { PostformComponent } from './posts/postform.component';
 import { DetailedPostComponent } from './posts/detailedpost.component';
 import { SubForumPostsComponent } from './posts/subforumposts.component';
 import { UserProfileComponent } from './user/userprofile.component';
+import { simpleDateFormat } from './shared/formatDate.pipe';
+import { CredsInfoComponent } from './user/credsinfo.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { UserProfileComponent } from './user/userprofile.component';
     PostformComponent,
     DetailedPostComponent,
     SubForumPostsComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    simpleDateFormat,
+    CredsInfoComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -46,6 +50,7 @@ import { UserProfileComponent } from './user/userprofile.component';
       { path: "subforumposts/:forum", component: SubForumPostsComponent },
       { path: "userprofile", component: UserProfileComponent },
       { path: "userprofile/:id", component: UserProfileComponent },
+      { path: "credsinfo", component: CredsInfoComponent },
       { path: "**", redirectTo: "", pathMatch: "full" }
     ])
   ],

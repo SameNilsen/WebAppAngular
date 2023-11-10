@@ -114,6 +114,19 @@ namespace OsloMetAngular.Controllers
 
             if (returnOk)
             {
+                //  Set credibility for the commenter:
+                newComment2.User.Credebility += 3;
+                await _userRepository.Update(newComment2.User);
+
+                //  Set credibility for the posts poster:
+                var post = await _postRepository.GetItemById(newComment2.PostID);
+                if (post != null)
+                {
+                    //  If it cannot find the post, the poster will not get creds, which is not
+                    //   detrimental.
+                    post.User.Credebility += 5;
+                    await _userRepository.Update(post.User);
+                }
                 var response = new { success = true, message = "Comment " + newComment.CommentID + " created succesfully" };
                 return Ok(response);                
             }

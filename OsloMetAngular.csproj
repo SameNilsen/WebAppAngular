@@ -29,7 +29,13 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="ClientApp\src\app\shared\formatDate.pipe.ts" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\shared\formatDate.pipe.ts" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

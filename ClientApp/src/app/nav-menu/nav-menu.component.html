@@ -1,6 +1,6 @@
 <header>
-  <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
+  <nav data-bs-theme="dark"
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3"
   >
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">OsloMetAngular</a>
@@ -25,20 +25,20 @@
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <a class="nav-link" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/posts']"
+            <a class="nav-link" [routerLink]="['/posts']"
               >Posts</a
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/subforumposts', 'General']"
+            <a class="nav-link" [routerLink]="['/subforumposts', 'General']"
               >Subforums</a
             >
           </li>
           <li *ngIf="isSignedIn" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/userprofile', userId]"
+            <a class="nav-link" [routerLink]="['/userprofile', userId]"
               >MyProfile</a
             >
           </li> 

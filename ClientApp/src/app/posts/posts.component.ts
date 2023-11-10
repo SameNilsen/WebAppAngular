@@ -89,6 +89,8 @@ export class PostsComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    //document.body.setAttribute('data-bs-theme', "dark");
+    document.documentElement.setAttribute('data-bs-theme', "dark");
     this.getPosts()
   }
 
