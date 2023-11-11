@@ -1,0 +1,132 @@
+<!--@* Style sheet for upvote/downvote buttons *@-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  /* Styling upvote/downvote buttons, from https://www.w3schools.com/howto/howto_css_icon_buttons.asp */
+  .btn-arrow-up {
+    color: black; /* White text */
+    padding: 12px 16px; /* Some padding */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+  }
+
+  .btn-arrow-down {
+    color: black; /* White text */
+    padding: 12px 16px; /* Some padding */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+  }
+
+  /* Red background on mouse-over */
+  .btn-arrow-up:hover {
+    color: rgb(193, 26, 26);
+  }
+
+  /* Blue background on mouse-over */
+  .btn-arrow-down:hover {
+    color: rgb(20, 130, 167);
+  }
+
+  /* Styling the links */
+  .links {
+    text-decoration: none;
+  }
+
+  .links:hover {
+    text-decoration: underline;
+    color: lightblue;
+  }
+</style>
+
+<!-- FILTER AREA -->
+<div class="row">
+  <div class="col-md-2">Filter:</div>
+  <div class="col-md-4">
+    <input type="text"
+           [(ngModel)]="listFilter" />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <h4>Filtered by: {{listFilter}}</h4>
+  </div>
+</div>
+
+<!--@* CREATE and CARD view buttons *@-->
+<div class="container" style="text-align:center">
+  <div>
+    <!-- New method: -->
+    <button class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
+    <a class="btn btn-secondary" href="/posts">Classic View</a>
+    <!-- Old method: -->
+    <!--<a class="btn btn-secondary"
+    asp-controller="Post"
+    asp-action="Create">Create Post</a>-->
+  </div>
+</div>
+
+<!--@* Posts (main feed) *@-->
+<div style="max-width:1000px; margin: 0 auto; text-align:center" *ngFor="let post of filteredPosts; index as i">
+  <div style="margin: 0 auto">
+
+    <!-- Loop through the existing posts -->
+
+    <img [src]="post.ImageUrl"
+         style="max-width:600px; max-height:600px; margin-top:10px; margin-bottom:10px"
+         class="card-img-top" alt="{{ post.Title }}">
+
+    <div>
+      <div class="d-flex justify-content-between mt-2">
+
+        <!-- Title -->
+        <h5 class="text-start">
+          <a class="links" [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a>
+        </h5>
+
+        <!-- Description text -->
+        <h5 class="text_nowrap">{{ post.Text }}</h5>
+
+        <!-- User -->
+        <h5>
+          Posted by: <a class="links" [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>
+        </h5>
+
+        <!-- Post date -->
+        <h5 class="pull-right">{{ post.PostDate | simpleDateFormat }}</h5>
+
+        <!--@* The voting buttons *@-->
+        <div>
+          <!--@{
+          //  This is a complicated way of writing:
+          //    string vote = ViewData["Vote"].ToString();
+          //   but this way gives warnings of possible null reference. Since both the ToString()
+          //   method and ViewData[] method gives this warning, this is implemented.
+          string vote = (ViewData["Vote"] ?? "").ToString() ?? "";
+          }-->
+          <!--@* UPVOTE *@-->
+          <!--@if (vote == "upvote")
+          {-->
+          <a id="upvoteButton" class="btn-arrow-up" (click)="setUpvote()"><i class="fa fa-arrow-up"></i></a>
+          <a id="downvoteButton" class="btn-arrow-down" (click)="setDownvote()"><i class="fa fa-arrow-down"></i></a>
+          <!--}-->
+          <!--@* DOWNVOTE *@
+          else if (vote == "downvote")
+          {
+          <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
+          <a class="btn-arrow-down" style="color: rgb(20, 130, 167);" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
+          }
+          @* DEFAULT *@
+          else
+          {
+          <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
+          <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
+          }-->
+          <!-- Vote count -->
+          <span style="font-size:20px">{{post.UpvoteCount}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

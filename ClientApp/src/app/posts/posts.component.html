@@ -49,8 +49,9 @@
 <!-- This is a button from the Demos. Its not used now because getPosts() is called on Init. -->
 <!--<button class="btn btn-primary" (click)="getPosts()">Get posts</button>-->
 
+<!-- FILTER AREA -->
 <div class="row">
-  <div class="col-md-2">Filter by:</div>
+  <div class="col-md-2">Filter:</div>
   <div class="col-md-4">
     <input type="text"
            [(ngModel)]="listFilter" />
@@ -67,18 +68,17 @@
 <div class="container" style="text-align:center">
   <div>
     <!-- New method: -->
-    <button class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create New post</button>
+    <button class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
+    <a class="btn btn-secondary" [routerLink]="['/posts/card']">Card View</a>
     <!-- Old method: -->
-    <a class="btn btn-secondary"
-       asp-controller="Post"
-       asp-action="Create">Create Post</a>
-    <a class="btn btn-secondary" href="/Post/Card">Card View</a>
+    <!--<a class="btn btn-secondary"
+   asp-controller="Post"
+   asp-action="Create">Create Post</a>-->
   </div>
 </div>
 
 <!--@* Posts (main feed) *@-->
 <div style="text-align:center" data-bs-theme="dark">
-  <h1>{{ viewTitle }}</h1>
   <table class="table table-striped" aria-labelledby="tableLabel">
     <thead>
       <tr>

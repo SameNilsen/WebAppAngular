@@ -34,10 +34,10 @@
     text-decoration: none;
   }
 
-    .links:hover {
-      text-decoration: underline;
-      color: lightblue;
-    }
+  .links:hover {
+    text-decoration: underline;
+    color: lightblue;
+  }
 </style>
 
 <!-- Title -->
@@ -54,7 +54,7 @@
 
     <!-- Name of user and their credibility score -->
     <h5>
-      Posted by: <a [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>
+      Posted by: <a class="links" [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>
       <!--<a class="links" asp-controller="User"
                     asp-action="UserProfile"
                     asp-route-id="@Model.Post.UserId">@Model.User.Name</a> <span>@Model.User.Credebility creds</span>-->
@@ -65,8 +65,7 @@
     <!-- BUTTONS -->
     <div style="margin-bottom:10px">
       <!-- BACK button -->
-      <!--<a class="btn btn-secondary" href="/Post/Posts">Back</a>
-
+      <a class="btn btn-secondary" href="/posts">Back</a>
       
       <!-- EDIT and DELETE buttons (only accessible after logging in) -->
       <button class="btn btn-secondary" [routerLink]="['/postform', 'edit', post.PostId]" [disabled]="!isYourPost">Edit</button>
@@ -120,7 +119,7 @@
   <!--@* Create new comment *@-->
   <p>
     <!--COMMENT button-->
-    <button class="btn btn-secondary" (click)="toggleCommentBox('newComment')">Comment</button>
+    <button class="btn btn-secondary" [disabled]="commentCreateForm.invalid || !isSignedIn" (click)="toggleCommentBox('newComment')">Comment</button>
   </p>
 
   <!--@* This form is for sending the new comment to the controller *@-->
@@ -144,8 +143,6 @@
 </div>
 
   <!--@* Displaying all comments in a table *@-->
-  <h1>Comments:</h1>
-
   <table class="table table-striped">
     <thead>
       <tr>
@@ -181,7 +178,7 @@
     <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>-->
             <!--}
     DELETE button-->
-            <button class="btn btn-secondary" (click)="deleteComment(comment)" >Delete</button>
+            <button class="btn btn-danger" (click)="deleteComment(comment)">Delete</button>
           </div>
           <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
           <!--@* -> *@-->
@@ -191,7 +188,7 @@
         <td>{{comment.user.Name}}</td>
         <td>{{comment.user.Credebility}}</td>
         <td>
-          <button class="btn btn-info" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit</button>
+          <button class="btn btn-secondary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit</button>
         </td>
       </tr>
     </tbody>

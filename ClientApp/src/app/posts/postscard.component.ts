@@ -7,11 +7,11 @@ import { UserService } from "../user/users.service";
 
 
 @Component({
-  selector: "app-posts-component",
-  templateUrl: "./posts.component.html"
+  selector: "app-posts-postcard",
+  templateUrl: "./postscard.component.html"
 })
 
-export class PostsComponent implements OnInit{
+export class PostsCardComponent implements OnInit {
 
   viewTitle: string = "MainFeedTable";
   displayImage: boolean = true;
@@ -62,7 +62,7 @@ export class PostsComponent implements OnInit{
         console.log(this.posts);
         this.filteredPosts = this.posts;
       }
-    );
+      );
     console.log("it worked?");
   }
 
