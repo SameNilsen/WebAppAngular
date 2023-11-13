@@ -19,6 +19,7 @@ import { SubForumPostsComponent } from './posts/subforumposts.component';
 import { UserProfileComponent } from './user/userprofile.component';
 import { simpleDateFormat } from './shared/formatDate.pipe';
 import { CredsInfoComponent } from './user/credsinfo.component';
+import { PostsCardComponent } from './posts/postscard.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CredsInfoComponent } from './user/credsinfo.component';
     SubForumPostsComponent,
     UserProfileComponent,
     simpleDateFormat,
-    CredsInfoComponent
+    CredsInfoComponent,
+    PostsCardComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -43,6 +45,7 @@ import { CredsInfoComponent } from './user/credsinfo.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'posts', component: PostsComponent },
       { path: "postform", component: PostformComponent },
+      { path: "postscard", component: PostsCardComponent },
       { path: "postform/:mode/:id", component: PostformComponent },
       { path: "detailedpost", component: DetailedPostComponent },
       { path: "detailedpost/:id", component: DetailedPostComponent },

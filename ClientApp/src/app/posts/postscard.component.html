@@ -88,7 +88,8 @@
 
         <!-- User -->
         <h5>
-          Posted by: <a class="links" [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>
+          <!-- ***** MUST DEFINE "user" IN postscard.component.ts FILE  ***** -->
+      <!--    Posted by: <a class="links" [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>-->
         </h5>
 
         <!-- Post date -->
@@ -96,31 +97,10 @@
 
         <!--@* The voting buttons *@-->
         <div>
-          <!--@{
-          //  This is a complicated way of writing:
-          //    string vote = ViewData["Vote"].ToString();
-          //   but this way gives warnings of possible null reference. Since both the ToString()
-          //   method and ViewData[] method gives this warning, this is implemented.
-          string vote = (ViewData["Vote"] ?? "").ToString() ?? "";
-          }-->
-          <!--@* UPVOTE *@-->
-          <!--@if (vote == "upvote")
-          {-->
-          <a id="upvoteButton" class="btn-arrow-up" (click)="setUpvote()"><i class="fa fa-arrow-up"></i></a>
-          <a id="downvoteButton" class="btn-arrow-down" (click)="setDownvote()"><i class="fa fa-arrow-down"></i></a>
-          <!--}-->
-          <!--@* DOWNVOTE *@
-          else if (vote == "downvote")
-          {
-          <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
-          <a class="btn-arrow-down" style="color: rgb(20, 130, 167);" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
-          }
-          @* DEFAULT *@
-          else
-          {
-          <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
-          <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
-          }-->
+          <!-- ****** MUST DEFINE setUpvote() and setDownvote() IN postscard.component.ts FILE ***** -->
+         <!-- <a id="upvoteButton" class="btn-arrow-up" (click)="setUpvote()"><i class="fa fa-arrow-up"></i></a>-->
+          <!--<a id="downvoteButton" class="btn-arrow-down" (click)="setDownvote()"><i class="fa fa-arrow-down"></i></a>-->
+
           <!-- Vote count -->
           <span style="font-size:20px">{{post.UpvoteCount}}</span>
         </div>
