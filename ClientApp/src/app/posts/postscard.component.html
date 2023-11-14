@@ -88,8 +88,7 @@
 
         <!-- User -->
         <h5>
-          <!-- ***** MUST DEFINE "user" IN postscard.component.ts FILE  ***** -->
-      <!--    Posted by: <a class="links" [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>-->
+          Posted by: <a class="links" [routerLink]="['/userprofile', post.user.UserId]">{{ post.user.Name }}</a> {{post.user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>
         </h5>
 
         <!-- Post date -->
@@ -97,9 +96,10 @@
 
         <!--@* The voting buttons *@-->
         <div>
-          <!-- ****** MUST DEFINE setUpvote() and setDownvote() IN postscard.component.ts FILE ***** -->
-         <!-- <a id="upvoteButton" class="btn-arrow-up" (click)="setUpvote()"><i class="fa fa-arrow-up"></i></a>-->
-          <!--<a id="downvoteButton" class="btn-arrow-down" (click)="setDownvote()"><i class="fa fa-arrow-down"></i></a>-->
+          <a *ngIf="yourVotes[post.PostId.toString()] === 'upvote'" style="color: rgb(193, 26, 26);" id="upvoteButton" class="btn-arrow-up"><i class="fa fa-arrow-up"></i></a>
+          <a *ngIf="yourVotes[post.PostId.toString()] !== 'upvote'" (click)="setUpvote(post.PostId)" id="upvoteButton" class="btn-arrow-up"><i class="fa fa-arrow-up"></i></a>
+          <a *ngIf="yourVotes[post.PostId.toString()] === 'downvote'" style="color: rgb(20, 130, 167);" id="downvoteButton" class="btn-arrow-down"><i class="fa fa-arrow-down"></i></a>
+          <a *ngIf="yourVotes[post.PostId.toString()] !== 'downvote'" (click)="setDownvote(post.PostId)" id="downvoteButton" class="btn-arrow-down"><i class="fa fa-arrow-down"></i></a>
 
           <!-- Vote count -->
           <span style="font-size:20px">{{post.UpvoteCount}}</span>

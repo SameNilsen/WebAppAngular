@@ -75,7 +75,7 @@ namespace OsloMetAngular.Controllers
                     //UserId = post.UserId,
                     UpvoteCount = post.UpvoteCount,
                     SubForum = post.SubForum,
-                    User = new User { Name = post.User.Name},
+                    User = new User { Name = post.User.Name, Credebility = post.User.Credebility, UserId = post.User.UserId},
                 };
                 viewModelPosts.Add(simplePost);
             }

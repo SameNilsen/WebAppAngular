@@ -67,7 +67,7 @@ export class PostService {
 
   getVote(postId: number): Observable<any> {
     const url = `${this.baseUrl}getvote/${postId}`;
-    console.log(url);
+    //console.log(url);
     return this._http.get<any>(url);
   }
 }

@@ -177,7 +177,11 @@ export class DetailedPostComponent implements OnInit {
       this._commentService.createComment(newComment).subscribe(response => {
         if (response.success) {
           console.log(response.message);
-          this._router.navigate(["/posts"]);
+          location.reload();  //  Istedet for å redirecte et sted.
+          //  Hvis man hadde redirecta til /detailedpost her, altså til samme side (samme url) så hadde
+          //   ikke browseren oppdatert, siden den tror det bare er samme side. Prøver derfor med
+          //    location.reload() istedet, håper ikke det tuller til alt.
+          //this._router.navigate(["/posts"]);  
         }
         else {
           console.log("Comment creation failed");
@@ -193,7 +197,8 @@ export class DetailedPostComponent implements OnInit {
           (response) => {
             if (response.success) {
               console.log(response.message);
-              this._router.navigate(["/posts"]);
+              //location.reload();  //  Istedet for å redirecte et sted.
+              this._router.navigate(["/posts"]);  //  Her må vi jo redirecte til posts.
             }
           }
           , (error) => {
@@ -234,7 +239,8 @@ export class DetailedPostComponent implements OnInit {
     this._commentService.updateComment(newComment.commentid, newComment).subscribe(response => {
       if (response.success) {
         console.log(response.message);
-        this._router.navigate(["/posts"]);
+        location.reload();  //  Istedet for å redirecte et sted.
+        //this._router.navigate(["/posts"]);
       }
       else {
         console.log("Comment update failed");
@@ -250,7 +256,8 @@ export class DetailedPostComponent implements OnInit {
           (response) => {
             if (response.success) {
               console.log(response.message);
-              this._router.navigate(["/posts"]);
+              location.reload();  //  Istedet for å redirecte et sted.
+              //this._router.navigate(["/posts"]);
             }
           }
           , (error) => {
@@ -268,7 +275,8 @@ export class DetailedPostComponent implements OnInit {
               console.log(response.message);
               //this.ngOnInit();
               //this._router.navigate(["/detailedpost", this.post.PostId]);
-              this._router.navigate(["/posts"]);
+              location.reload();  //  Istedet for å redirecte et sted.
+              //this._router.navigate(["/posts"]);
             }
           }
           , (error) => {
@@ -286,7 +294,8 @@ export class DetailedPostComponent implements OnInit {
               console.log(response.message);
               //this.ngOnInit();
               //this._router.navigate(["/detailedpost", this.post.PostId]);
-              this._router.navigate(["/posts"]);
+              location.reload();  //  Istedet for å redirecte et sted.
+              //this._router.navigate(["/posts"]);
             }
           }
           , (error) => {
