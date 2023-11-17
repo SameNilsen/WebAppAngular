@@ -19,8 +19,8 @@ export class DetailedPostComponent implements OnInit {
   post: IPost = new Post();
   user: IUser = new User();
   comments: IComment[] = [];
-  commentForm: FormGroup;
-  commentCreateForm: FormGroup;
+  commentForm: FormGroup;         //  Form for editing comment
+  commentCreateForm: FormGroup;   //  Form for creating comment.
   isYourPost: boolean = false;
   isSignedIn: boolean = false;
   signedInId: string = "";
@@ -47,17 +47,21 @@ export class DetailedPostComponent implements OnInit {
     return this.commentCreateForm.get("commenttext")!;
   }
 
+  //  Init method.
   ngOnInit(): void {
     this._route.params.subscribe(params => {
       //this.post = params["id"]
       console.log("THIS IS ID: " + params["id"]);
-      this.loadPost(params["id"]);
+      this.loadPost(params["id"]);                 //  Load the post.
       //this.loadUser(this.post.UserId);
-      this.getSignedIn(params["id"]);
-      this.getVoting(params["id"]);
+      this.getSignedIn(params["id"]);              //  Get user if signed in. 
+      this.getVoting(params["id"]);                //  Get previous vote for this post.
     });
   }
 
+  //  Check to see if the user is signed in, and if this is the users post. This is useful for showing or
+  //   disabling various buttons. The signedInId is used for checking which (if any) comment belong to the
+  //    user, so that only the comments user can edit it.
   getSignedIn(postId: number): void {
     this._postService.getSignedIn(postId).subscribe(response => {
       if (response.success) {
@@ -74,6 +78,7 @@ export class DetailedPostComponent implements OnInit {
     });
   }
 
+  //  Gets what the user has previously voted on this post. This is used to style the voting buttons.
   getVoting(postId: number): void {
     this._postService.getVote(postId).subscribe(response => {
       if (response.success) {
@@ -95,6 +100,7 @@ export class DetailedPostComponent implements OnInit {
     });
   }
 
+  //  Method for loading post. After fetching the post, it calls on methods for loading user and comments.
   loadPost(postId: number) {
     this._postService.getPostById(postId)
       .subscribe(
@@ -112,6 +118,7 @@ export class DetailedPostComponent implements OnInit {
       );
   }
 
+  //  Fetches user.
   loadUser(userId: number) {
     this._userService.getUserById(userId)
       .subscribe(
@@ -126,6 +133,7 @@ export class DetailedPostComponent implements OnInit {
       );
   }
 
+  //  Fetching comments of the post.
   getComments(postId: number): void {
     console.log("Getting the comments");
     this._commentService.getCommentsByPostId(postId)
@@ -139,6 +147,7 @@ export class DetailedPostComponent implements OnInit {
     console.log("it worked?");
   }
 
+  //  Method used for toggling visibility of comment box.
   toggleCommentBox(id: string): void {
     var div = document.getElementById(id)!;
     if (div.style.display == "block") {
@@ -162,8 +171,9 @@ export class DetailedPostComponent implements OnInit {
     }
   }
 
+  //  Method for creating and submitting new comment.
   onSubmit() {
-    if (!this.isSignedIn) { return; }
+    if (!this.isSignedIn) { return; }  //  If the user is not logged in, abort.
     console.log("CommentCreate form submitted:");
     console.log(this.commentCreateForm);
     const newComment = this.commentCreateForm.value;
@@ -189,6 +199,7 @@ export class DetailedPostComponent implements OnInit {
       });
   }
 
+  //  Method for deleting post. Triggers a confirmation alert first.
   deletePost(post: IPost): void {
     const confirmDelete = confirm(`Are you sure you want to delete "${post.Title}"?`);
     if (confirmDelete) {
@@ -207,6 +218,9 @@ export class DetailedPostComponent implements OnInit {
     }
   }
 
+  //  Method for preparing comment for edit. When clicking edit button this method is called to fetch the
+  //   comment to be edited. The values of the comment are patched in a form, and the commenttext is displayed
+  //    in the edit comment field.
   readyUpdate(commentId: number) {
     //console.log("ya");
     this._commentService.getCommentById(commentId)
@@ -229,7 +243,7 @@ export class DetailedPostComponent implements OnInit {
     //  commenttext: text
     //});
   }
-
+   //  Method for submitting edited comment.
   onUpdate() {
     console.log("CommentCreate form submitted:");
     const newComment = this.commentForm.value;
@@ -248,6 +262,7 @@ export class DetailedPostComponent implements OnInit {
     });
   }
 
+  //  Method to delete comment, similar to deleting post.
   deleteComment(comment: IComment): void {
     const confirmDelete = confirm(`Are you sure you want to delete "${comment.CommentID}"?`);
     if (confirmDelete) {
@@ -265,9 +280,9 @@ export class DetailedPostComponent implements OnInit {
           });
     }
   }
-
+   //  Method called when clicking upvote button.
   setUpvote(): void {
-    if (this.isSignedIn) {
+    if (this.isSignedIn) {  //  Must be signed in to vote.
       this._postService.upvotePost(this.post.PostId)
         .subscribe(
           (response) => {
@@ -285,8 +300,9 @@ export class DetailedPostComponent implements OnInit {
     }
   }
 
+   //  Method called when clicking upvote button.
   setDownvote(): void {
-    if (this.isSignedIn) {
+    if (this.isSignedIn) {  //  Must be signed in to vote.
       this._postService.downvotePost(this.post.PostId)
         .subscribe(
           (response) => {

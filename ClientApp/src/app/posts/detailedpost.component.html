@@ -55,9 +55,6 @@
     <!-- Name of user and their credibility score -->
     <h5>
       Posted by: <a class="links" [routerLink]="['/userprofile', user.UserId]">{{ user.Name }}</a> {{user.Credebility}} <a class="links" [routerLink]="['/credsinfo']">creds</a>
-      <!--<a class="links" asp-controller="User"
-                    asp-action="UserProfile"
-                    asp-route-id="@Model.Post.UserId">@Model.User.Name</a> <span>@Model.User.Credebility creds</span>-->
     </h5>
 
     <hr />
@@ -67,7 +64,7 @@
       <!-- BACK button -->
       <a class="btn btn-secondary" href="/posts">Back</a>
       
-      <!-- EDIT and DELETE buttons (only accessible after logging in) -->
+      <!-- EDIT and DELETE buttons (only accessible after logging in and this being your post.) -->
       <button class="btn btn-secondary" [routerLink]="['/postform', 'edit', post.PostId]" [disabled]="!isYourPost">Edit</button>
       <button class="btn btn-secondary" (click)="deletePost(post)" [disabled]="!isYourPost">Delete</button>
       
@@ -77,33 +74,12 @@
 
     <!--@* The voting buttons *@-->
     <div>
-      <!--@{
-      //  This is a complicated way of writing:
-      //    string vote = ViewData["Vote"].ToString();
-      //   but this way gives warnings of possible null reference. Since both the ToString()
-      //   method and ViewData[] method gives this warning, this is implemented.
-      string vote = (ViewData["Vote"] ?? "").ToString() ?? "";
-      }-->
-      <!--@* UPVOTE *@-->
-      <!--@if (vote == "upvote")
-      {-->
       <a id="upvoteButton" class="btn-arrow-up" (click)="setUpvote()"><i class="fa fa-arrow-up"></i></a>
       <a id="downvoteButton" class="btn-arrow-down" (click)="setDownvote()"><i class="fa fa-arrow-down"></i></a>
-      <!--}-->
-      <!--@* DOWNVOTE *@
-      else if (vote == "downvote")
-      {
-      <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
-      <a class="btn-arrow-down" style="color: rgb(20, 130, 167);" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
-      }
-      @* DEFAULT *@
-      else
-      {
-      <a class="btn-arrow-up" asp-action="UpVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-up"></i></a>
-      <a class="btn-arrow-down" asp-action="DownVote" asp-route-id="@Model.Post.PostID"><i class="fa fa-arrow-down"></i></a>
-      }-->
+      
     <!-- Vote count -->
     <span style="font-size:20px">{{post.UpvoteCount}}</span>
+
     <!-- Link to the post's subforum -->
     <h5 class="pull-right">
       <a class="links" [routerLink]="['/subforumposts', post.SubForum]">{{ post.SubForum }}</a>
@@ -119,6 +95,7 @@
   <!--@* Create new comment *@-->
   <p>
     <!--COMMENT button-->
+    <!-- Button to toggle visibility of creating comment input field. Is disabled if user is not signed in -->
     <button class="btn btn-secondary" [disabled]="!isSignedIn" (click)="toggleCommentBox('newComment')">Comment</button>
   </p>
 
@@ -188,6 +165,7 @@
         <td>{{comment.user.Name}}</td>
         <td>{{comment.user.Credebility}}</td>
         <td>
+          <!-- Button for toggling edit view of comment. A call to readyUpdate() is made to load comment. Must be signed in, and the comment must be yours. -->
           <button class="btn btn-secondary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit</button>
         </td>
       </tr>

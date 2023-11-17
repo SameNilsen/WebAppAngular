@@ -28,7 +28,7 @@ export class PostsCardComponent implements OnInit {
 
   posts: IPost[] = [];
   users: IUser[] = [];
-  yourVotes: { [id: string]: string; } = {};
+  yourVotes: { [id: string]: string; } = {};  //  Map/dictionary of the users vote on each post. Mapped by postId.
   isSignedIn: boolean = false;
 
   constructor(private _router: Router, private _postService: PostService, private _userService: UserService) { }
@@ -108,24 +108,23 @@ export class PostsCardComponent implements OnInit {
     });
   }
 
+  //  Method for get users previous vote for each post. In project 1 we did not have a filter, and
+  //   therefore we could just get all votes by user for each post and put it in a list with equal size
+  //    as posts list, and when displaying the posts we would know that the correct uservote would have
+  //     the same index as the post in their respective list. When filtering this would not work, unless we
+  //     fetched the votes from server each time we alter filter. This would be ineffective. So this time
+  //     we map each uservote to its post with a dictionary upon initialization, and then getting the correct
+  //     uservote from that when needed. 
   getVoting(): void {
     console.log("START: " + this.posts.length);
-    this.posts.forEach((post) => {
+    this.posts.forEach((post) => {  //  Iterates through all posts.
       console.log(post.PostId);
       var postId = post.PostId;
-      this._postService.getVote(postId).subscribe(response => {
+      this._postService.getVote(postId).subscribe(response => {  //  Gets the users vote on that post.
         if (response.success) {
           console.log("vote: " + response.vote + " " + postId);
-          this.yourVotes[postId.toString()] = response.vote;
+          this.yourVotes[postId.toString()] = response.vote;    //  Map it in dictionary.
           console.log("vote.: " + this.yourVotes + " " + this.yourVotes[postId.toString()]);
-          //if (this.yourVote == "upvote") {
-          //  document.getElementById("upvoteButton")!.style.color = "rgb(193, 26, 26)";
-          //  //document.getElementById("downvoteButton")!.style.color = "inherit";
-          //}
-          //else if (this.yourVote == "downvote") {
-          //  document.getElementById("downvoteButton")!.style.color = "rgb(20, 130, 167)";
-          //  //document.getElementById("upvoteButton")!.style.color = "transparent";
-          //}
         }
         else {
           console.log("Uffda, ingen votes for " + postId);

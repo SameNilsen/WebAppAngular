@@ -96,6 +96,10 @@
 
         <!--@* The voting buttons *@-->
         <div>
+          <!-- Which style for the voting buttons is decided by whether the user has previously voted
+                on this post before, and what that vote was. If, for example, the user has upvoted then
+                 a red arrow-up button is displayed which cannot be clicked, along with a neutral
+                 arrow-down button which can be clicked. -->
           <a *ngIf="yourVotes[post.PostId.toString()] === 'upvote'" style="color: rgb(193, 26, 26);" id="upvoteButton" class="btn-arrow-up"><i class="fa fa-arrow-up"></i></a>
           <a *ngIf="yourVotes[post.PostId.toString()] !== 'upvote'" (click)="setUpvote(post.PostId)" id="upvoteButton" class="btn-arrow-up"><i class="fa fa-arrow-up"></i></a>
           <a *ngIf="yourVotes[post.PostId.toString()] === 'downvote'" style="color: rgb(20, 130, 167);" id="downvoteButton" class="btn-arrow-down"><i class="fa fa-arrow-down"></i></a>

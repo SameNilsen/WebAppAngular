@@ -28,6 +28,7 @@ export class SubForumPostsComponent implements OnInit{
     this.filteredPosts = this.performFilter(value);
   }
 
+  //  Getters and setters for selected forum.
   private _selectedForum: string = "";
   get selectedForum(): string {
     return this._selectedForum;
@@ -35,9 +36,12 @@ export class SubForumPostsComponent implements OnInit{
   set selectedForum(value: string) {
     this._selectedForum = value;
     console.log("In setter:", value);
+    //  When the user selects a forum, this is called and directly redirects with the selected forum
+    //   as parameter.
     //this.getPosts(value);   //  Doesnt change url :(
     this._router.navigate(["/subforumposts", value]);  //  This does.
   }
+  //  The available forums.
   subforums = [
     { name: "Gaming" },
     { name: "Sport" },
@@ -52,7 +56,7 @@ export class SubForumPostsComponent implements OnInit{
 
   constructor(private _router: Router, private _postService: PostService, private _userService: UserService, private _route: ActivatedRoute) { }
 
-
+  //  Method to fetch all posts belonging to the selected forum.
   getPosts(forum: string): void {
     this._postService.getSubforumPosts(forum)
       .subscribe(data => {
@@ -89,6 +93,9 @@ export class SubForumPostsComponent implements OnInit{
     console.log(11);
     this._route.params.subscribe(params => {
       console.log("--" + this.subforums.findIndex(x => x.name === params["forum"]));
+      //  Upon initialztion the subforum parameter from url is extracted. We then find the
+      //   corresponding value in the subforums list, and sets this as the selected forum in
+      //    dropdownlist. Then the posts relating to that subforum is fetched by getPosts() method.
       this.selectedForum = this.subforums[this.subforums.findIndex(x => x.name === params["forum"])]["name"];
       this.getPosts(params["forum"]);
     });
