@@ -62,10 +62,10 @@
     <!-- BUTTONS -->
     <div style="margin-bottom:10px">
       <!-- BACK button -->
-      <a class="btn btn-secondary" href="/posts">Back</a>
+      <a style="margin-right: 5px" class="btn btn-secondary" href="/posts">Back</a>
       
       <!-- EDIT and DELETE buttons (only accessible after logging in and this being your post.) -->
-      <button class="btn btn-secondary" [routerLink]="['/postform', 'edit', post.PostId]" [disabled]="!isYourPost">Edit</button>
+      <button style="margin-right:5px" class="btn btn-secondary" [routerLink]="['/postform', 'edit', post.PostId]" [disabled]="!isYourPost">Edit</button>
       <button class="btn btn-secondary" (click)="deletePost(post)" [disabled]="!isYourPost">Delete</button>
       
       <!-- Post date -->

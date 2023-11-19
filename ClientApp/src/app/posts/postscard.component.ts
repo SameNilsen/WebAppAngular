@@ -89,6 +89,16 @@ export class PostsCardComponent implements OnInit {
       post.Title.toLocaleLowerCase().includes(filterBy));
   }
 
+  toggleFilter(id: string): void {
+    var div = document.getElementById(id)!;
+    if (div.style.display == "block") {
+      div.style.display = "none";
+    }
+    else {
+      div.style.display = "block";
+    }
+  }
+
   ngOnInit(): void {
     //document.body.setAttribute('data-bs-theme', "dark");
     document.documentElement.setAttribute('data-bs-theme', "dark");

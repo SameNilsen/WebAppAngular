@@ -89,6 +89,16 @@ export class SubForumPostsComponent implements OnInit{
       post.Title.toLocaleLowerCase().includes(filterBy));
   }
 
+  toggleFilter(id: string): void {
+    var div = document.getElementById(id)!;
+    if (div.style.display == "block") {
+      div.style.display = "none";
+    }
+    else {
+      div.style.display = "block";
+    }
+  }
+
   ngOnInit(): void {
     console.log(11);
     this._route.params.subscribe(params => {

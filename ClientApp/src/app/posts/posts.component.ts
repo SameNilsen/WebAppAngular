@@ -92,6 +92,16 @@ export class PostsComponent implements OnInit{
       post.Title.toLocaleLowerCase().includes(filterBy));  //  Uses built in filter method.
   }
 
+  toggleFilter(id: string): void {
+    var div = document.getElementById(id)!;
+    if (div.style.display == "block") {
+      div.style.display = "none";
+    }
+    else {
+      div.style.display = "block";
+    }
+  }
+
   //  Method to be called on page load. As a lifecycle hook it executes at the beginning.
   ngOnInit(): void {
     //document.body.setAttribute('data-bs-theme', "dark");

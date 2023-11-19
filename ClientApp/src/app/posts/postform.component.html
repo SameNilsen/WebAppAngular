@@ -36,11 +36,11 @@
     <option value="audi">Audi</option>-->
     <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
   </select>
-  <div class="form-group">
+  <div class="form-group" style="margin-bottom: 10px">
     <label for="imageUrl">Image Url:</label>
     <input type="text" id="imageUrl" formControlName="imageUrl" class="form-control" placeholder="/assets/images/books.jpg" />
   </div>
-  <button name="submitBtn" class="btn btn-primary" type="submit" [disabled]="postForm.invalid || !isSignedIn">
+  <button name="submitBtn" style="margin-right:10px" class="btn btn-primary" type="submit" [disabled]="postForm.invalid || !isSignedIn">
     {{ isEditMode ? "Update" : "Create"}} post
   </button>
   <button class="btn btn-secondary" (click)="backToPosts()">Cancel</button>

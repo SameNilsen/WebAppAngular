@@ -1,3 +1,6 @@
+<!-- Welcome text -->
+<h1 style="text-align:center;">Main Feed</h1>
+
 <!--@* Style sheet for upvote/downvote buttons *@-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -31,37 +34,38 @@
     text-decoration: none;
   }
 
-  .links:hover {
-    text-decoration: underline;
-    color: lightblue;
-  }
+    .links:hover {
+      text-decoration: underline;
+      color: lightblue;
+    }
 </style>
-
-<!-- FILTER AREA -->
-<div class="row">
-  <div class="col-md-2">Filter:</div>
-  <div class="col-md-4">
-    <input type="text"
-           [(ngModel)]="listFilter" />
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-6">
-    <h4>Filtered by: {{listFilter}}</h4>
-  </div>
-</div>
 
 <!--@* CREATE and CARD view buttons *@-->
 <div class="container" style="text-align:center">
   <div>
     <!-- New method: -->
-    <button class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
-    <a class="btn btn-secondary" href="/posts">Classic View</a>
+    <button style="margin:5px" class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
+    <a style="margin:5px" class="btn btn-secondary" href="/posts">Classic View</a>
+    <a style="margin:5px" class="btn btn-secondary" (click)="toggleFilter('filter')">Filter</a>
     <!-- Old method: -->
     <!--<a class="btn btn-secondary"
-    asp-controller="Post"
-    asp-action="Create">Create Post</a>-->
+  asp-controller="Post"
+  asp-action="Create">Create Post</a>-->
+  </div>
+</div>
+
+<!-- FILTER AREA -->
+<div id="filter" style="display:none; text-align:left">
+  <div class="row">
+    <div class="col-md-4">
+      <input style="margin:0px 10px 10px 0px" type="text" id="input" [(ngModel)]="listFilter" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Filtered by: {{listFilter}}</h4>
+    </div>
   </div>
 </div>
 

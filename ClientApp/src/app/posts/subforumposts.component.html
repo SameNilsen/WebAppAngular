@@ -4,36 +4,37 @@
 <!-- Dropdown list for subforums. When an option is selected, it will automatically redirect. -->
 <label for="subforums">Choose a subforum: </label>
 <form>
-  <select class="form-control" name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
+  <select style="margin-bottom: 20px" class="form-control" name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
     <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
   </select>
 </form>
-
-<!-- FILTER AREA -->
-<div class="row">
-  <div class="col-md-2">Filter:</div>
-  <div class="col-md-4">
-    <input type="text"
-           [(ngModel)]="listFilter" />
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-6">
-    <h4>Filtered by: {{listFilter}}</h4>
-  </div>
-</div>
 
 <!--@* CREATE and CARD view buttons *@-->
 <div class="container" style="text-align:center">
   <div>
     <!-- New method: -->
-    <button class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
-    <a class="btn btn-secondary" href="/Post/Card">Card View</a>
+    <button style="margin:5px" class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
+    <a style="margin:5px" class="btn btn-secondary" [routerLink]="['/postscard']">Card View</a>
+    <a style="margin:5px" class="btn btn-secondary" (click)="toggleFilter('filter')">Filter</a>
     <!-- Old method: -->
     <!--<a class="btn btn-secondary"
-       asp-controller="Post"
-       asp-action="Create">Create Post</a>-->
+     asp-controller="Post"
+     asp-action="Create">Create Post</a>-->
+  </div>
+</div>
+
+<!-- FILTER AREA -->
+<div id="filter" style="display:none; text-align:left">
+  <div class="row">
+    <div class="col-md-4">
+      <input style="margin:0px 10px 10px 0px" type="text" id="input" [(ngModel)]="listFilter" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Filtered by: {{listFilter}}</h4>
+    </div>
   </div>
 </div>
 
