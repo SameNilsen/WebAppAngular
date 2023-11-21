@@ -5,8 +5,6 @@ import { HttpClient } from "@angular/common/http";
 import { PostService } from "./posts.service";
 import { IUser, User } from "../user/user";
 import { Title } from "@angular/platform-browser";
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: "app-posts-postform",
