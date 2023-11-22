@@ -29,6 +29,7 @@ namespace OsloMetAngular.Controllers
             _postRepository = postRepository;
         }
 
+        //  Fetches all comments.
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -59,6 +60,7 @@ namespace OsloMetAngular.Controllers
             return Ok(comments);
         }
 
+        //  Creates new comment.
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] Comment newComment)
         {
@@ -137,6 +139,7 @@ namespace OsloMetAngular.Controllers
             }
         }
 
+        //  Fetches one specific comment by a given commentId.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCommentbyId(int id)
         {
@@ -149,6 +152,7 @@ namespace OsloMetAngular.Controllers
             return Ok(comment);
         }
 
+        //  Fetches all comments belonging to a given post by its postId.
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetCommentsbyPostId(int id)
         {
@@ -176,6 +180,7 @@ namespace OsloMetAngular.Controllers
             return Ok(viewModelComments);
         }
 
+        //  Updates a comment.
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(Comment newComment)
         {
@@ -208,6 +213,7 @@ namespace OsloMetAngular.Controllers
             }
         }
 
+        //  Deletes a comment.
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {

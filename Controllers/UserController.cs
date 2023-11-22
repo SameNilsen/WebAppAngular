@@ -24,6 +24,7 @@ namespace OsloMetAngular.Controllers
             _userManager = userManager;
         }
 
+        //  Fetches all users.
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -37,6 +38,7 @@ namespace OsloMetAngular.Controllers
             return Ok(users);
         }
 
+        //  Creates new user.
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] User newUser)
         {
@@ -58,6 +60,7 @@ namespace OsloMetAngular.Controllers
             }
         }
 
+        //  Fetches a specific user by a given userId.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserbyId(int id)
         {
@@ -70,6 +73,8 @@ namespace OsloMetAngular.Controllers
             return Ok(user);
         }
 
+        //  Fetches a specific user, much like GetUserbyId(), but only return certain aspects of that
+        //   user. This is to prevent reference loops and memory issues. 
         [HttpGet("simpleuser/{id}")]
         public async Task<IActionResult> GetSimplifiedUser(int id)
         {
@@ -91,6 +96,7 @@ namespace OsloMetAngular.Controllers
             return Ok(simpleUser);
         }
 
+        //  Fetches a specific user by a given IdentityUserId. 
         [HttpGet("getuseridbyidentity/{id}")]
         public async Task<IActionResult> GetUserIdByIdentity(string id)
         {
@@ -121,6 +127,7 @@ namespace OsloMetAngular.Controllers
             return Ok(user.UserId);
         }
 
+        //  Updates a user.
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(User newUser)
         {
@@ -143,6 +150,7 @@ namespace OsloMetAngular.Controllers
             }
         }
 
+        //  Deletes a user.
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -156,6 +164,7 @@ namespace OsloMetAngular.Controllers
             return Ok(response);
         }
 
+        //  Fetches all post belonging to a given user and its userId.
         [HttpGet("posts/{id}")]
         public async Task<IActionResult> GetPosts(int id)
         {
@@ -196,6 +205,7 @@ namespace OsloMetAngular.Controllers
             return Ok(viewModelPosts);
         }
 
+        //  Fetches all comments belonging to a user by its userId.
         [HttpGet("comments/{id}")]
         public async Task<IActionResult> GetComments(int id)
         {
@@ -230,6 +240,7 @@ namespace OsloMetAngular.Controllers
             return Ok(viewModelComments);
         }
 
+        //  Fetches all votes made by a user given its userId.
         [HttpGet("votes/{id}")]
         public async Task<IActionResult> GetVotes(int id)
         {

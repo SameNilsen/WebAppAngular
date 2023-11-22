@@ -50,6 +50,7 @@ namespace OsloMetAngular.Controllers
         //    }            
         //};
 
+        //  Fetches all posts.
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -83,6 +84,7 @@ namespace OsloMetAngular.Controllers
             return Ok(viewModelPosts);
         }
 
+        //  Fetches all posts that belongs to a given subforum.
         [HttpGet("subforum/{forum}")]
         public async Task<IActionResult> GetBySubForum(string forum)
         {
@@ -115,6 +117,7 @@ namespace OsloMetAngular.Controllers
             return Ok(viewModelPosts);
         }
 
+        //  Creates new post.
         [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] Post newPost)
@@ -184,6 +187,7 @@ namespace OsloMetAngular.Controllers
             }
         }
 
+        //  Fetches a spesific post by a given postId.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItembyId(int id)
         {
@@ -208,6 +212,7 @@ namespace OsloMetAngular.Controllers
             return Ok(simplePost);
         }
 
+        //  Updates a post.
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(Post newPost)
         {
@@ -240,6 +245,7 @@ namespace OsloMetAngular.Controllers
             }
         }
 
+        //  Deletes a post.
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
@@ -253,6 +259,10 @@ namespace OsloMetAngular.Controllers
             return Ok(response);
         }
 
+        //  Finds out if a user is signed in. It takes in a postId as paramater so it can check if 
+        //   a post belongs to the logged in user. It can return a success string saying if the user 
+        //   is logged in, a message string with the logged in identityUserId and a userspost string
+        //   which says wether or not a post belongs to the logged in user.
         [HttpGet("signedin/{id}")]
         public async Task<IActionResult> GetSignedIn(int id)
         {
@@ -429,7 +439,7 @@ namespace OsloMetAngular.Controllers
             return Ok(response);
         }
 
-        // Gets vote for this post, if any.
+        // Gets vote for a given post, if any.
         [HttpGet("getvote/{id}")]
         public async Task<IActionResult> GetVoteString(int id)
         {
