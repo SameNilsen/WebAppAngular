@@ -8,6 +8,7 @@ namespace OsloMetAngular.Models
 {
     // Data model (data schema) for DB
     // User, Comments and UserVotes are navigation properties.
+    //  Test for revert changes.
     public class Post
     {
         [JsonProperty("PostId")]
