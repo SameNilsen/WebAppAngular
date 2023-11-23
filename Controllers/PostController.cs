@@ -30,27 +30,7 @@ namespace OsloMetAngular.Controllers
             _postDbContext = postDbContext;
         }
 
-        //private static List<Item> Items = new List<Item>()
-        //{
-        //    new Item
-        //    {
-        //        ItemId = 1,
-        //        Name = "Pizza",
-        //        Price = 150,
-        //        Description = "Delicouououoosoo",
-        //        ImageUrl = "assets/images/pizza.jpg"
-        //    },
-        //    new Item
-        //    {
-        //        ItemId = 2,
-        //        Name = "Fried Chicka",
-        //        Price = 20,
-        //        Description = "Crispy duck",
-        //        ImageUrl = "assets/images/chickenleg.jpg"
-        //    }            
-        //};
-
-        //  Fetches all posts.
+        // Gets all posts.
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -77,39 +57,6 @@ namespace OsloMetAngular.Controllers
                     UpvoteCount = post.UpvoteCount,
                     SubForum = post.SubForum,
                     User = new User { Name = post.User.Name, Credebility = post.User.Credebility, UserId = post.User.UserId},
-                };
-                viewModelPosts.Add(simplePost);
-            }
-            var postListViewModel = new PostListViewModel(viewModelPosts);
-            return Ok(viewModelPosts);
-        }
-
-        //  Fetches all posts that belongs to a given subforum.
-        [HttpGet("subforum/{forum}")]
-        public async Task<IActionResult> GetBySubForum(string forum)
-        {
-            var posts = _postRepository.GetBySubForum(forum);
-
-            if (posts == null)
-            {
-                _logger.LogError("[PostController] Post list not found when executing _postRepository.GetBySubForum(),");
-                return NotFound("Post list not found");
-            }
-            //  Create simplified post without reference to other entities to avoid referencing loop by json.
-            List<Post> viewModelPosts = new List<Post>();
-            foreach (var post in posts)
-            {
-                Post simplePost = new Post
-                {
-                    PostID = post.PostID,
-                    Title = post.Title,
-                    Text = post.Text,
-                    ImageUrl = post.ImageUrl,
-                    PostDate = post.PostDate,
-                    //UserId = post.UserId,
-                    UpvoteCount = post.UpvoteCount,
-                    SubForum = post.SubForum,
-                    User = new User { Name = post.User.Name },
                 };
                 viewModelPosts.Add(simplePost);
             }
@@ -259,6 +206,39 @@ namespace OsloMetAngular.Controllers
             return Ok(response);
         }
 
+        //  Fetches all posts that belongs to a given subforum.
+        [HttpGet("subforum/{forum}")]
+        public async Task<IActionResult> GetBySubForum(string forum)
+        {
+            var posts = _postRepository.GetBySubForum(forum);
+
+            if (posts == null)
+            {
+                _logger.LogError("[PostController] Post list not found when executing _postRepository.GetBySubForum(),");
+                return NotFound("Post list not found");
+            }
+            //  Create simplified post without reference to other entities to avoid referencing loop by json.
+            List<Post> viewModelPosts = new List<Post>();
+            foreach (var post in posts)
+            {
+                Post simplePost = new Post
+                {
+                    PostID = post.PostID,
+                    Title = post.Title,
+                    Text = post.Text,
+                    ImageUrl = post.ImageUrl,
+                    PostDate = post.PostDate,
+                    //UserId = post.UserId,
+                    UpvoteCount = post.UpvoteCount,
+                    SubForum = post.SubForum,
+                    User = new User { Name = post.User.Name },
+                };
+                viewModelPosts.Add(simplePost);
+            }
+            var postListViewModel = new PostListViewModel(viewModelPosts);
+            return Ok(viewModelPosts);
+        }
+
         //  Finds out if a user is signed in. It takes in a postId as paramater so it can check if 
         //   a post belongs to the logged in user. It can return a success string saying if the user 
         //   is logged in, a message string with the logged in identityUserId and a userspost string
@@ -268,7 +248,6 @@ namespace OsloMetAngular.Controllers
         {
             if (_signInManager.IsSignedIn(User))
             {
-                Console.WriteLine("LOGGED IN");
                 var userspost = false;
                 var post = await _postRepository.GetItemById(id);
                 if (post == null)
@@ -290,7 +269,6 @@ namespace OsloMetAngular.Controllers
             }
             else
             {
-                Console.WriteLine("NOT LOGGED IN");
                 var response = new { success = false, message = "User not signed in" };
                 return Ok(response);
             }
