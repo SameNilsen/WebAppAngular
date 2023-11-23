@@ -13,7 +13,9 @@
   <!-- Manage account -->
   <!--@if (SignInManager.IsSignedIn(User) && Model.User.IdentityUserId == UserManager.GetUserId(User))
   {-->
- <!-- <h3 *ngIf="isYourPage">Manage <a asp-area="Identity" asp-page="/Account/Manage/Index">account</a></h3>-->
+  <h3 *ngIf="isYourPage">
+    Manage         <a [routerLink]='["/authentication/profile"]' title="Manage">account</a>
+  </h3>
   <!--}-->
 
   <br />

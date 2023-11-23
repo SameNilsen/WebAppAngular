@@ -268,6 +268,7 @@ namespace OsloMetAngular.Controllers
         {
             if (_signInManager.IsSignedIn(User))
             {
+                Console.WriteLine("LOGGED IN");
                 var userspost = false;
                 var post = await _postRepository.GetItemById(id);
                 if (post == null)
@@ -289,6 +290,7 @@ namespace OsloMetAngular.Controllers
             }
             else
             {
+                Console.WriteLine("NOT LOGGED IN");
                 var response = new { success = false, message = "User not signed in" };
                 return Ok(response);
             }

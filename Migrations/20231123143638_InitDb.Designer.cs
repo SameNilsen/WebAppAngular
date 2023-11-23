@@ -11,7 +11,7 @@ using OsloMetAngular.DAL;
 namespace OsloMetAngular.Migrations
 {
     [DbContext(typeof(PostDbContext))]
-    [Migration("20231107110501_InitDb")]
+    [Migration("20231123143638_InitDb")]
     partial class InitDb
     {
         /// <inheritdoc />
@@ -453,24 +453,20 @@ namespace OsloMetAngular.Migrations
                 {
                     b.Property<int>("UpvoteId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "UpvoteId");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PostID")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "PostID");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "UserId");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Vote")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "Vote");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UpvoteId");
 
