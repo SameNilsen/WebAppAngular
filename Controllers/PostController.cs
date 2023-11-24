@@ -44,6 +44,12 @@ namespace OsloMetAngular.Controllers
                 return NotFound("Post list not found");
             }
             //  Create simplified post without reference to other entities to avoid referencing loop by json.
+            //   All entities in the datbase are essentially related in some way, so when we do a
+            //   getAll method like this, we are almost getting the entire database. This worked in
+            //   project 1, but angular wont let us do this and if we work around the error messages, 
+            //   we would see a big amount of memoryusage. So therefore we limit the amount of 
+            //   information we send back to client, by excluding some of the navigational/relational
+            //   properties.
             List<Post> viewModelPosts = new List<Post>();
             foreach (var post in posts)
             {
