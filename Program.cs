@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 //using OsloMetAngular.Data;
 using OsloMetAngular.Models;
 using OsloMetAngular.DAL;
-using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 

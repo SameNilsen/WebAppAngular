@@ -14,13 +14,13 @@ namespace OsloMetAngular.Controllers
     {
 
         private readonly IPostRepository _postRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository? _userRepository;
         private readonly ILogger<PostController> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly PostDbContext _postDbContext;
+        private readonly UserManager<ApplicationUser>? _userManager;
+        private readonly SignInManager<ApplicationUser>? _signInManager;
+        private readonly PostDbContext? _postDbContext;
 
-        public PostController(IPostRepository postRepository, IUserRepository userRepository, ILogger<PostController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, PostDbContext postDbContext)
+        public PostController(IPostRepository postRepository, IUserRepository? userRepository, ILogger<PostController> logger, UserManager<ApplicationUser>? userManager, SignInManager<ApplicationUser>? signInManager, PostDbContext? postDbContext)
         {
             _postRepository = postRepository;
             _userRepository = userRepository;
