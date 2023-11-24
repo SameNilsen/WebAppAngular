@@ -61,10 +61,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
+builder.Services.AddScoped<IUpVoteRepository, UpVoteRepository>();
+
 // Logger
 //var loggerConfiguration = new LoggerConfiguration()
-    //.MinimumLevel.Information()
-    //.WriteTo.File($"Logs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+//.MinimumLevel.Information()
+//.WriteTo.File($"Logs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
 
 //loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var value) &&
 //e.Level == LogEventLevel.Information &&

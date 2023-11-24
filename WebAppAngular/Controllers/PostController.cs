@@ -15,19 +15,21 @@ namespace OsloMetAngular.Controllers
 
         private readonly IPostRepository _postRepository;
         private readonly IUserRepository? _userRepository;
+        private readonly IUpVoteRepository? _upvoteRepository;
         private readonly ILogger<PostController> _logger;
         private readonly UserManager<ApplicationUser>? _userManager;
         private readonly SignInManager<ApplicationUser>? _signInManager;
         private readonly PostDbContext? _postDbContext;
 
-        public PostController(IPostRepository postRepository, IUserRepository? userRepository, ILogger<PostController> logger, UserManager<ApplicationUser>? userManager, SignInManager<ApplicationUser>? signInManager, PostDbContext? postDbContext)
+        public PostController(IPostRepository postRepository, IUserRepository? userRepository, ILogger<PostController> logger, UserManager<ApplicationUser>? userManager, SignInManager<ApplicationUser>? signInManager, IUpVoteRepository? upvoteRepository)
         {
             _postRepository = postRepository;
             _userRepository = userRepository;
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
-            _postDbContext = postDbContext;
+            //_postDbContext = postDbContext;
+            _upvoteRepository = upvoteRepository;
         }
 
         // Gets all posts.
@@ -363,8 +365,10 @@ namespace OsloMetAngular.Controllers
                 await _postRepository.Update(post);  //  First update the database with the new votecount.
 
                 vote.Vote = "upvote";  //  Set the new vote to upvote.
-                _postDbContext.Upvotes.Update(vote);  // Then update the vote in the database.
-                await _postDbContext.SaveChangesAsync();  //  Save it all.
+
+                //_postDbContext.Upvotes.Update(vote);  // Then update the vote in the database.
+                //await _postDbContext.SaveChangesAsync();  //  Save it all.
+                await _upvoteRepository.Update(vote);   //  Use repo instead to save.
 
                 post.User.Credebility += 9;  //  When a post gets upvoted, the posts poster gets added "Credebility".
                 await _userRepository.Update(post.User);
@@ -412,8 +416,9 @@ namespace OsloMetAngular.Controllers
                 await _postRepository.Update(post);  //  First update the database with the new votecount.
 
                 vote.Vote = "downvote";  //  Set the new vote to downvote.
-                _postDbContext.Upvotes.Update(vote);  // Then update the vote in the database.
-                await _postDbContext.SaveChangesAsync();  //  Save it all.
+                //_postDbContext.Upvotes.Update(vote);  // Then update the vote in the database.
+                //await _postDbContext.SaveChangesAsync();  //  Save it all.
+                await _upvoteRepository.Update(vote);   //  Use repo instead to save.
 
                 post.User.Credebility -= 4;  //  When a post gets downvoted, the posts poster loses "Credebility".
                 await _userRepository.Update(post.User);
