@@ -1,25 +1,15 @@
-﻿using Duende.IdentityServer.EntityFramework.Options;
-using Duende.IdentityServer.Models;
-using IdentityModel;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NuGet.Protocol;
 using OsloMetAngular.Controllers;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
-using OsloMetAngular.ViewModels;
 using Xunit.Abstractions;
-using static IdentityModel.ClaimComparer;
 
 namespace xUnitTestWebAppAngular.Controllers
 {
@@ -32,6 +22,7 @@ namespace xUnitTestWebAppAngular.Controllers
         {
             this.output = output;
         }
+
         //  READ POSITIVE TEST.
         // Read (CRUD)
         [Fact]
@@ -446,6 +437,176 @@ namespace xUnitTestWebAppAngular.Controllers
             var expectedOkresultMessage = "Post creation failed";
             Assert.Equal(expectedOkresultMessage, okResultMessage);  //  Check to see if we get correct message.        
     }
+
+        // POSITIVE TEST.
+        // UPDATE (CRUD)
+        [Fact]
+        public async Task TestUpdate()
+        {
+            // Arrange
+            var post = new Post
+            {
+                PostID = 1,
+                Title = "TestUpdate",
+                Text = "Test",
+                ImageUrl = "assets/images/test.jpg",
+                PostDate = new DateTime(2000, 1, 1, 12, 12, 0).ToString("dd.MM.yyyy HH:mm"),
+                UpvoteCount = 1,
+                SubForum = "Gaming",
+                //User = new User { Name = "BOB", Credebility = 11, UserId = 1}
+            };
+
+            // Mocking the post repository
+            var mockPostRepository = new Mock<IPostRepository>();
+            mockPostRepository.Setup(repo => repo.Update(post)).ReturnsAsync(true);
+
+            // Mocking the logger
+            var mockLogger = new Mock<ILogger<PostController>>();
+
+            //  Set up User Repository. It is used alot by the Create() method, so we have to controll it.
+            var mockUser = new Mock<IUserRepository>();
+            var user = new User { Name = "ALICE", Credebility = 9, UserId = 2 };   //  Dummy User.
+                                                                                   //Task<User?> responseTask = Task.FromResult(user);
+            mockUser.Setup(repo => repo.GetUserByIdentity("identityId")).ReturnsAsync(user);  //  When its asks for a user, return dummy.
+            mockUser.Setup(repo => repo.Create(user)).ReturnsAsync(false);  //  We dont want it to accidentally create a user hehe.
+            mockUser.Setup(repo => repo.Update(user)).ReturnsAsync(false);  //  When creating a post, the user gets credibility, but not now.
+            var mockUpvoteRepo = new Mock<IUpVoteRepository>();
+
+            //  From: https://code-maze.com/aspnetcore-identity-testing-usermanager-rolemanager/
+            var userManagerMock = new Mock<UserManager<ApplicationUser>>(
+                new Mock<IUserStore<ApplicationUser>>().Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<IPasswordHasher<ApplicationUser>>().Object,
+                new IUserValidator<ApplicationUser>[0],
+                new IPasswordValidator<ApplicationUser>[0],
+                new Mock<ILookupNormalizer>().Object,
+                new Mock<IdentityErrorDescriber>().Object,
+                new Mock<IServiceProvider>().Object,
+                new Mock<ILogger<UserManager<ApplicationUser>>>().Object);
+
+            //  We just return some dummy values. We use It.IsAny<...> beacause it is irrelavant what the input is. We dont
+            //   use it in the testing scenario and it just returns dummy values.
+            userManagerMock.Setup(repo => repo.GetUserId(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).Returns("123abc");
+            userManagerMock.Setup(repo => repo.GetUserName(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).Returns("Bobby");
+
+            var signInManagerMock = new Mock<SignInManager<ApplicationUser>>(
+                userManagerMock.Object,
+                new Mock<IHttpContextAccessor>().Object,
+                new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>().Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<ILogger<SignInManager<ApplicationUser>>>().Object,
+                new Mock<IAuthenticationSchemeProvider>().Object,
+                new Mock<IUserConfirmation<ApplicationUser>>().Object);
+
+            //  For now it says you are signed in. Can be switched i guess.
+            signInManagerMock.Setup(repo => repo.IsSignedIn(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).Returns(true);
+            var postController = new PostController(
+                mockPostRepository.Object,
+                mockUser.Object,
+                mockLogger.Object,
+                userManagerMock.Object,
+                signInManagerMock.Object,
+                mockUpvoteRepo.Object
+                );
+
+            // Act
+            var result = await postController.Update(post);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);    //  Test to see the return from Update is of correct type 
+            Assert.True(okResult is OkObjectResult);  //  Another way to test return type.
+                                                      //  Now we test to see if Update actually works. We know we get an anonymous object
+                                                      //   in return from Update() which has a "success" key that is either true or false. It is
+                                                      //   not very easy to get values from keys from anonymous objects inbetween functions, but 
+                                                      //   we found a way here: https://stackoverflow.com/questions/874746/how-can-i-get-a-value-of-a-property-from-an-anonymous-type
+            bool okResultSuccess = (bool)okResult.Value!.GetType().GetProperty("success")!.GetValue(okResult.Value, null)!;
+            Assert.True(okResultSuccess);  //  Check if update works.
+        }
+
+        // NEGATIVE TEST.
+        // UPDATE (CRUD)
+        [Fact]
+        public async Task TestUpdateFail()
+        {
+            // Arrange
+            var post = new Post
+            {
+                PostID = 1,
+                Title = "TestUpdate",
+                Text = "Test",
+                ImageUrl = "assets/images/test.jpg",
+                PostDate = new DateTime(2000, 1, 1, 12, 12, 0).ToString("dd.MM.yyyy HH:mm"),
+                UpvoteCount = 1,
+                SubForum = "Gaming",
+                //User = new User { Name = "BOB", Credebility = 11, UserId = 1}
+            };
+
+            // Mocking the post repository
+            var mockPostRepository = new Mock<IPostRepository>();
+            mockPostRepository.Setup(repo => repo.Update(post)).ReturnsAsync(false);
+
+            // Mocking the logger
+            var mockLogger = new Mock<ILogger<PostController>>();
+
+            //  Set up User Repository. It is used alot by the Create() method, so we have to controll it.
+            var mockUser = new Mock<IUserRepository>();
+            var user = new User { Name = "ALICE", Credebility = 9, UserId = 2 };   //  Dummy User.
+                                                                                   //Task<User?> responseTask = Task.FromResult(user);
+            mockUser.Setup(repo => repo.GetUserByIdentity("identityId")).ReturnsAsync(user);  //  When its asks for a user, return dummy.
+            mockUser.Setup(repo => repo.Create(user)).ReturnsAsync(false);  //  We dont want it to accidentally create a user hehe.
+            mockUser.Setup(repo => repo.Update(user)).ReturnsAsync(false);  //  When creating a post, the user gets credibility, but not now.
+            var mockUpvoteRepo = new Mock<IUpVoteRepository>();
+
+            //  From: https://code-maze.com/aspnetcore-identity-testing-usermanager-rolemanager/
+            var userManagerMock = new Mock<UserManager<ApplicationUser>>(
+                new Mock<IUserStore<ApplicationUser>>().Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<IPasswordHasher<ApplicationUser>>().Object,
+                new IUserValidator<ApplicationUser>[0],
+                new IPasswordValidator<ApplicationUser>[0],
+                new Mock<ILookupNormalizer>().Object,
+                new Mock<IdentityErrorDescriber>().Object,
+                new Mock<IServiceProvider>().Object,
+                new Mock<ILogger<UserManager<ApplicationUser>>>().Object);
+
+            //  We just return some dummy values. We use It.IsAny<...> beacause it is irrelavant what the input is. We dont
+            //   use it in the testing scenario and it just returns dummy values.
+            userManagerMock.Setup(repo => repo.GetUserId(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).Returns("123abc");
+            userManagerMock.Setup(repo => repo.GetUserName(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).Returns("Bobby");
+
+            var signInManagerMock = new Mock<SignInManager<ApplicationUser>>(
+                userManagerMock.Object,
+                new Mock<IHttpContextAccessor>().Object,
+                new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>().Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<ILogger<SignInManager<ApplicationUser>>>().Object,
+                new Mock<IAuthenticationSchemeProvider>().Object,
+                new Mock<IUserConfirmation<ApplicationUser>>().Object);
+
+            //  For now it says you are signed in. Can be switched i guess.
+            signInManagerMock.Setup(repo => repo.IsSignedIn(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).Returns(true);
+            var postController = new PostController(
+                mockPostRepository.Object,
+                mockUser.Object,
+                mockLogger.Object,
+                userManagerMock.Object,
+                signInManagerMock.Object,
+                mockUpvoteRepo.Object
+                );
+
+            // Act
+            var result = await postController.Update(post);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);    //  Test to see the return from Update is of correct type 
+            Assert.True(okResult is OkObjectResult);  //  Another way to test return type.
+                                                      //  Now we test to see if Update actually failed. We know we get an anonymous object
+                                                      //   in return from Update() which has a "success" key that is either true or false. It is
+                                                      //   not very easy to get values from keys from anonymous objects inbetween functions, but 
+                                                      //   we found a way here: https://stackoverflow.com/questions/874746/how-can-i-get-a-value-of-a-property-from-an-anonymous-type
+            bool okResultSuccess = (bool)okResult.Value!.GetType().GetProperty("success")!.GetValue(okResult.Value, null)!;
+            Assert.False(okResultSuccess);  //  Check if update failed.
+        }
 
         // DELETE POSITIVE TEST.
         [Fact]
