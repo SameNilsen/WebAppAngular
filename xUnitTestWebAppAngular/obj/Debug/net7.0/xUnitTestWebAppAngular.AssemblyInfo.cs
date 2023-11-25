@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("xUnitTestWebAppAngular")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad86e9f638cbc39f25158cf38badec90f7512816")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1fa65e7b5a26de740b3fe4ff1782c3e18f7a3c61")]
 [assembly: System.Reflection.AssemblyProductAttribute("xUnitTestWebAppAngular")]
 [assembly: System.Reflection.AssemblyTitleAttribute("xUnitTestWebAppAngular")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
