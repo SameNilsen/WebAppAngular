@@ -1,28 +1,25 @@
-
 <!--@* User Profile *@-->
 
+<!--
+This page is for displaying the profile of a user. If this page is the userprofile for
+the logged in user, then there is also a button redirecting to the Manage Account page
+provided by Microsoft.AspNetCore.Identity.
+-->
 
 <div style="margin: 0 auto; text-align:center">
   <!-- Username -->
-  <h1>User profile for: {{user.Name}}</h1>
+  <h1><b>{{user.Name}}</b><button style="margin-left: 20px"class="btn btn-secondary" onclick="history.back()">Back</button></h1>
 
-  <!--@* This page is for displaying the Userprofile of a user. If this page is the userprofile for
-  the logged in user, then there is also a button redirecting to the Manage Account page
-  provided by Microsoft.AspNetCore.Identity.
-  *@-->
   <!-- Manage account -->
-  <!--@if (SignInManager.IsSignedIn(User) && Model.User.IdentityUserId == UserManager.GetUserId(User))
-  {-->
+  <!--@if (SignInManager.IsSignedIn(User) && Model.User.IdentityUserId == UserManager.GetUserId(User))-->
   <h3 *ngIf="isYourPage">
-    Manage         <a [routerLink]='["/authentication/profile"]' title="Manage">account</a>
+    Manage <a [routerLink]='["/authentication/profile"]' title="Manage">account</a>
   </h3>
-  <!--}-->
 
   <br />
 
   <!-- Credibility score -->
-  <h2>Credebility</h2>
-  <h3>Score: {{user.Credebility}} creds</h3>
+  <h2>Credebility score: <i>{{user.Credebility}}</i></h2>
   <h4>
     Read <a [routerLink]="['/credsinfo']">more</a>
   </h4>
@@ -34,10 +31,11 @@
     Number of posts:
     <a>{{this.posts.length}}</a>
   </h2>
-  <h3>
-    See all posts
-  </h3>
-  <button (click)="toggle('posts')">Posts</button>
+  <h4>
+    See all posts ->
+    <button class="btn btn-secondary" (click)="toggle('posts')">Posts</button>
+  </h4>
+
   <section id="posts" class="content" data-bs-theme="dark">
     <table class="table table-striped">
       <thead>
@@ -50,7 +48,6 @@
 
       <tbody>
         <!-- Loop through all their posts -->
-
         <tr *ngFor="let post of posts; index as i">
           <td><a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a></td>
           <td>{{post.PostDate | simpleDateFormat}}</td>
@@ -59,6 +56,7 @@
       </tbody>
     </table>
   </section>
+
   <br />
 
   <!-- Number of comments commented -->
@@ -66,10 +64,10 @@
     Number of comments:
     <a>{{this.comments.length}}</a>
   </h2>
-  <h3>
-    See all comments
-  </h3>
-  <button (click)="toggle('comments')">Comments</button>
+  <h4>
+    See all comments ->
+    <button class="btn btn-secondary" (click)="toggle('comments')">Comments</button>
+  </h4>
   <section id="comments" class="content">
     <table class="table table-striped">
       <thead>
@@ -82,7 +80,6 @@
 
       <tbody>
         <!-- Loop through all their comments -->
-      
         <tr *ngFor="let comment of comments; index as i">
           <td>{{comment.CommentText}}</td>
           <td>{{comment.PostDate | simpleDateFormat}}</td>
@@ -99,10 +96,10 @@
     Number of votes:
     <a>{{this.votes.length}}</a>
   </h2>
-  <h3>
-    See all votes
-  </h3>
-  <button (click)="toggle('votes')">Votes</button>
+  <h4>
+    See all votes ->
+    <button class="btn btn-secondary" (click)="toggle('votes')">Votes</button>
+  </h4>
   <section id="votes" class="content">
     <table class="table table-striped">
       <thead>
@@ -114,7 +111,6 @@
 
       <tbody>
         <!-- Loop through all their votes -->
-
         <tr *ngFor="let vote of votes; index as i">
           <td><a [routerLink]="['/detailedpost', vote.post.PostId]">{{ vote.post.Title }}</a></td>
           <td>{{vote.Vote}}</td>
@@ -123,7 +119,7 @@
     </table>
   </section>
 
-  <!-- THE COLLAPSIBLE ELEMENT'S STYLE AND LOGIC WAS TAKEN FROM W3SCHOOLS: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_collapsible_symbol -->
+  <!-- THE COLLAPSIBLE ELEMENT'S STYLE AND LOGIC IS FROM W3SCHOOLS: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_collapsible_symbol -->
   <style>
     .collapsible {
       background-color: #777;
@@ -161,8 +157,4 @@
       /*background-color: #f1f1f1;*/
     }
   </style>
-
-  <!--<button *ngIf="collapsed" (click)="expand()">Expand</button>
-  <button *ngIf="!collapsed" (click)="collapse()">Collapse</button>-->
-
 </div>

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { PostService } from "../posts/posts.service";
 import { UserService } from "../user/users.service";
 import { ActivatedRoute } from "@angular/router";
-import { User } from '../user/user';
 
 @Component({
   selector: 'app-nav-menu',

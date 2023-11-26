@@ -62,7 +62,7 @@
     <!-- BUTTONS -->
     <div style="margin-bottom:10px">
       <!-- BACK button -->
-      <a style="margin-right: 5px" class="btn btn-secondary" href="/posts">Back</a>
+      <a style="margin-right: 5px" class="btn btn-secondary" onclick="history.back()">Back</a>
       
       <!-- EDIT and DELETE buttons (only accessible after logging in and this being your post.) -->
       <button style="margin-right:5px" class="btn btn-secondary" [routerLink]="['/postform', 'edit', post.PostId]" [disabled]="!isYourPost">Edit</button>

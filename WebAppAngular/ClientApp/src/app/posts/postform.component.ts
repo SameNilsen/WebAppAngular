@@ -1,10 +1,8 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 import { PostService } from "./posts.service";
 import { IUser, User } from "../user/user";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-posts-postform",
@@ -36,8 +34,8 @@ export class PostformComponent {
   
   constructor(private _formbuilder: FormBuilder, private _router: Router, private _postService: PostService, private _route: ActivatedRoute) {
     this.postForm = _formbuilder.group({
-      title: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80), Validators.pattern("[0-9a-zA-Zæøå., \-]{0,80}")]],
-      text: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
+      title: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80), Validators.pattern("[0-9a-zA-Zæøå.,!? \-]{0,80}")]],
+      text: ["", [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
       upvotecount: [0],
       postdate: [""],
       //subforum: [""],

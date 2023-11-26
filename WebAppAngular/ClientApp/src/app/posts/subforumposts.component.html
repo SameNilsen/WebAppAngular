@@ -1,14 +1,6 @@
 <!-- Welcome text -->
 <h1 style="text-align:center;">SubForums</h1>
 
-<!-- Dropdown list for subforums. When an option is selected, it will automatically redirect. -->
-<label for="subforums">Choose a subforum: </label>
-<form>
-  <select style="margin-bottom: 20px" class="form-control" name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
-    <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
-  </select>
-</form>
-
 <!--@* CREATE and CARD view buttons *@-->
 <div class="container" style="text-align:center">
   <div>
@@ -22,6 +14,14 @@
      asp-action="Create">Create Post</a>-->
   </div>
 </div>
+
+<!-- Dropdown list for subforums. When an option is selected, it will automatically redirect. -->
+<label for="subforums">Choose a subforum: </label>
+<form>
+  <select style="margin-bottom: 20px" class="form-control" name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
+    <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
+  </select>
+</form>
 
 <!-- FILTER AREA -->
 <div id="filter" style="display:none; text-align:left">

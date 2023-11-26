@@ -30,10 +30,6 @@
   </div>
   <label for="subforums">Choose a subforum: </label>
   <select class="form-control" name="subforums" id="subforums" [(ngModel)]="selectedForum" [ngModelOptions]="{standalone: true}">
-    <!--<option value="volvo">Volvo</option>
-    <option value="saab" [selected]="true">Saab</option>
-    <option value="mercedes">Mercedes</option>
-    <option value="audi">Audi</option>-->
     <option *ngFor="let forum of subforums" [ngValue]="forum['name']">{{forum.name}}</option>
   </select>
   <div class="form-group" style="margin-bottom: 10px">
@@ -41,7 +37,7 @@
     <input type="text" id="imageUrl" formControlName="imageUrl" class="form-control" placeholder="/assets/images/books.jpg" />
   </div>
   <button name="submitBtn" style="margin-right:10px" class="btn btn-primary" type="submit" [disabled]="postForm.invalid || !isSignedIn">
-    {{ isEditMode ? "Update" : "Create"}} post
+    {{ isEditMode ? "Update" : "Create"}}
   </button>
   <button class="btn btn-secondary" (click)="backToPosts()">Cancel</button>
   <div *ngIf="!isSignedIn">Login to {{ isEditMode ? "Update" : "Create"}} post</div>
