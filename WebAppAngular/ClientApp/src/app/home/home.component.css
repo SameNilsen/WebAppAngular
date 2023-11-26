@@ -1,4 +1,4 @@
-/*Simple carousel stolen from: https://www.w3schools.com/howto/howto_js_slideshow.asp*/
+/* Simple carousel from: https://www.w3schools.com/howto/howto_js_slideshow.asp */
 
 * {
   box-sizing: border-box
@@ -6,7 +6,7 @@
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 1000px;
+  max-width: 850px;
   position: relative;
   margin: auto;
 }
@@ -30,6 +30,7 @@
   transition: 0.6s ease;
   border-radius: 0 3px 3px 0;
   user-select: none;
+  text-decoration: none;
 }
 
 /* Position the "next button" to the right */
@@ -52,6 +53,7 @@
   bottom: 8px;
   width: 100%;
   text-align: center;
+  background: rgba(0,0,0,0.3);
 }
 
 /* Number text (1/3 etc) */
@@ -60,6 +62,7 @@
   font-size: 12px;
   padding: 8px 12px;
   position: absolute;
+  font-style: italic;
   top: 0;
 }
 
@@ -79,4 +82,18 @@
     background-color: #717171;
   }
 
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
 
+@keyframes fade {
+  from {
+    opacity: .4
+  }
+
+  to {
+    opacity: 1
+  }
+}
