@@ -27,6 +27,7 @@ export class DetailedPostComponent implements OnInit {
   yourVote: string = "blank";
   
   constructor(private _router: Router, private _postService: PostService, private _route: ActivatedRoute, private _userService: UserService, private _commentService: CommentService, private _formbuilder: FormBuilder) {
+    //  Create/group the form used for editing comment.
     this.commentForm = _formbuilder.group({
       commenttext: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
       commentid: [],
@@ -34,6 +35,7 @@ export class DetailedPostComponent implements OnInit {
       postid: [],
       postdate: [],      
     });
+    //  Create/group the form used for creating comment.
     this.commentCreateForm = _formbuilder.group({
       commenttext: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
       commentid: [],
@@ -43,6 +45,7 @@ export class DetailedPostComponent implements OnInit {
     });
   }
 
+  //  Getter method for the commenttext.
   get commenttext() {
     return this.commentCreateForm.get("commenttext")!;
   }
@@ -50,10 +53,10 @@ export class DetailedPostComponent implements OnInit {
   //  Init method.
   ngOnInit(): void {
     this._route.params.subscribe(params => {
-      //this.post = params["id"]
-      console.log("THIS IS ID: " + params["id"]);
+      
+      console.log("THIS IS POSTID: " + params["id"]);
       this.loadPost(params["id"]);                 //  Load the post.
-      //this.loadUser(this.post.UserId);
+      
       this.getSignedIn(params["id"]);              //  Get user if signed in. 
       this.getVoting(params["id"]);                //  Get previous vote for this post.
     });
@@ -63,17 +66,17 @@ export class DetailedPostComponent implements OnInit {
   //   disabling various buttons. The signedInId is used for checking which (if any) comment belong to the
   //    user, so that only the comments user can edit it.
   getSignedIn(postId: number): void {
-    this._postService.getSignedIn(postId).subscribe(response => {
+    this._postService.getSignedIn(postId).subscribe(response => {    //  Use the postservice to perform request.
       if (response.success) {
-        console.log("signed in: " + response.message + " " + response.userspost);
-        console.log("type: " + typeof response.userspost);
-        this.isYourPost = response.userspost;
-        this.isSignedIn = true;
-        this.signedInId = response.message;
+        console.log("Signed in: true, Id: " + response.message + ", userspost: " + response.userspost);  //  Logging successful response. 
+        //console.log("type: " + typeof response.userspost);
+        this.isYourPost = response.userspost;   //  Variable to store wether this post is or isnt the signed in users post.
+        this.isSignedIn = true;                 //  The user is signed in.
+        this.signedInId = response.message;     //  This is the IdentityUserId from the ApplicationUser.
         //this._router.navigate(["/posts"]);
       }
       else {
-        console.log("Not signed in");
+        console.log("Not signed in");  //  Log to console.
       }
     });
   }
@@ -82,19 +85,17 @@ export class DetailedPostComponent implements OnInit {
   getVoting(postId: number): void {
     this._postService.getVote(postId).subscribe(response => {
       if (response.success) {
-        console.log("vote: " + response.vote);
+        console.log("Previous vote: " + response.vote);  //  Log the users previous vote.
         this.yourVote = response.vote;
         if (this.yourVote == "upvote") {
-          document.getElementById("upvoteButton")!.style.color = "rgb(193, 26, 26)";
-          //document.getElementById("downvoteButton")!.style.color = "inherit";
+          document.getElementById("upvoteButton")!.style.color = "rgb(193, 26, 26)"; //  Previously upvoted: Red upvote button.
         }
         else if (this.yourVote == "downvote") {
-          document.getElementById("downvoteButton")!.style.color = "rgb(20, 130, 167)";
-          //document.getElementById("upvoteButton")!.style.color = "transparent";
+          document.getElementById("downvoteButton")!.style.color = "rgb(20, 130, 167)"; //  Previously downvoted: blue downvote button.          
         }
       }
       else {
-        console.log("Uffda");
+        console.log("Error occured while fetching vote.");  //  Log error message.
         console.log(response.message);
       }
     });
@@ -103,17 +104,17 @@ export class DetailedPostComponent implements OnInit {
   //  Method for loading post. After fetching the post, it calls on methods for loading user and comments.
   loadPost(postId: number) {
     this._postService.getPostById(postId)
-      .subscribe(
+      .subscribe(      //  Warning message saying that "subscribe" is deprecated, but it is whats used in demos.
         (post: any) => {
-          console.log("retrived post: ", post);
+          console.log("retrived post: ", post);  //  Logs to console the retrived post.
           this.post = post;
           console.log("This is title: ", post.Title);
-          this.loadUser(this.post.UserId);
-          //this.comments = this.post.comments;
-          this.getComments(postId); //  Istedet for post.Comments fordi det tuller med minnet.
+          this.loadUser(this.post.UserId);  //  When post is loaded, we can load the user aswell.
+          //  In project 1 where we didnt have angular, we would probably set comments = post.Comments, but now we use separate function.
+          this.getComments(postId); 
         },
         (error: any) => {
-          console.log("Error loading post:", error);
+          console.log("Error loading post:", error);  //  Log error message.
         }
       );
   }
@@ -123,33 +124,33 @@ export class DetailedPostComponent implements OnInit {
     this._userService.getUserById(userId)
       .subscribe(
         (user: any) => {
-          console.log("retrived user: ", user);
+          console.log("retrived user: ", user);  //  Logging user.
           this.user = user;
-          console.log("This is user: ", user.Name);
+          console.log("This is posts user: ", user.Name);
         },
         (error: any) => {
-          console.log("Error loading user:", error);
+          console.log("Error loading user:", error);  //  Logging error.
         }
       );
   }
 
   //  Fetching comments of the post.
   getComments(postId: number): void {
-    console.log("Getting the comments");
-    this._commentService.getCommentsByPostId(postId)
+    this._commentService.getCommentsByPostId(postId)  //  Use commentservice to fetch all comments related to this post.
       .subscribe(data => {
-        console.log("AllComments", JSON.stringify(data));
+        console.log("AllComments", JSON.stringify(data));  //  Log response.
         this.comments = data;
-        console.log(this.comments);
-        //  Filter kommentarer?
-      }
+      },
+        (error: any) => {
+          console.log("Error loading comments:", error);  //  Log error message.
+        }
       );
-    console.log("it worked?");
   }
 
   //  Method used for toggling visibility of comment box.
   toggleCommentBox(id: string): void {
     var div = document.getElementById(id)!;
+    //  Sets display style of the comment box in html code to either block or none (visible or non visible).
     if (div.style.display == "block") {
       div.style.display = "none";
     }
@@ -159,6 +160,8 @@ export class DetailedPostComponent implements OnInit {
   }
   //  Toggle between edit comment mode or view comment mode.
   toggleEdit(id: string): void {
+    //  Since the comments (and the html elements showing them) are used in a loop, we use this
+    //   editOn + id to find the correct element to toggle. The id is the comments commentId.
     var divON = document.getElementById("editON " + id)!;
     var divOFF = document.getElementById("editOFF " + id)!;
     if (divON.style.display == "block") {
@@ -174,46 +177,46 @@ export class DetailedPostComponent implements OnInit {
   //  Method for creating and submitting new comment.
   onSubmit() {
     if (!this.isSignedIn) { return; }  //  If the user is not logged in, abort.
-    console.log("CommentCreate form submitted:");
+    console.log("CommentCreate form submitted:");  //  Log succesful creation of form.
     console.log(this.commentCreateForm);
-    const newComment = this.commentCreateForm.value;
+    const newComment = this.commentCreateForm.value;  //  Retrive the comment from form.
+    //  Not all attributes are set by form, but are required to be set before sending to server. We therefore set some
+    //   dummy values on client side, before they are sent and then properly set in controller.
     newComment.commentid = 0;
     newComment.postid = this.post.PostId;
     newComment.Post = this.post;
     newComment.userid = 2;
     newComment.User = this.post.user;
-    console.log(newComment, newComment.PostID);
-    //const createUrl = "api/item/create";
-      this._commentService.createComment(newComment).subscribe(response => {
+    
+      this._commentService.createComment(newComment).subscribe(response => {  //  Create comment via commentservice.
         if (response.success) {
-          console.log(response.message);
+          console.log(response.message);  //  Log response message.
           location.reload();  //  Istedet for å redirecte et sted.
-          //  Hvis man hadde redirecta til /detailedpost her, altså til samme side (samme url) så hadde
-          //   ikke browseren oppdatert, siden den tror det bare er samme side. Prøver derfor med
-          //    location.reload() istedet, håper ikke det tuller til alt.
-          //this._router.navigate(["/posts"]);  
-        }
+          //  Normally we would use this._router.navigate(['/detailedpost']); to redirect to the same page.
+          //   Unfortunatly when redirecting to the same url as its currently at, the browser thinks that
+          //   nothing has changed and wont reload the page, and so the new comment wont be shown. Instead
+          //   we use location.reload() to manually reload page.
+                 }
         else {
-          console.log("Comment creation failed");
+          console.log("Comment creation failed");  //  Log failed creation of comment.
         }
       });
   }
 
   //  Method for deleting post. Triggers a confirmation alert first.
   deletePost(post: IPost): void {
-    const confirmDelete = confirm(`Are you sure you want to delete "${post.Title}"?`);
-    if (confirmDelete) {
+    const confirmDelete = confirm(`Are you sure you want to delete "${post.Title}"?`);  //  Confirmation alert.
+    if (confirmDelete) {  //  If user clicks 'ok', proceed.
       this._postService.deletePost(post.PostId)
         .subscribe(
           (response) => {
             if (response.success) {
-              console.log(response.message);
-              //location.reload();  //  Istedet for å redirecte et sted.
-              this._router.navigate(["/posts"]);  //  Her må vi jo redirecte til posts.
+              console.log(response.message);  //  Logs confirmation message upon deletion.
+              this._router.navigate(["/posts"]);  //  Redirects back to posts page, as this post no longer exist.
             }
           }
           , (error) => {
-            console.log("Error deleting post:", error);
+            console.log("Error deleting post:", error);  //  Log error message.
           });
     }
   }
@@ -222,12 +225,12 @@ export class DetailedPostComponent implements OnInit {
   //   comment to be edited. The values of the comment are patched in a form, and the commenttext is displayed
   //    in the edit comment field.
   readyUpdate(commentId: number) {
-    //console.log("ya");
+    //  First use commentservice to get the comment from server.
     this._commentService.getCommentById(commentId)
       .subscribe(
         (comment: any) => {
-          console.log("retrived comment: ", comment);
-          this.commentForm.patchValue({
+          console.log("retrived comment: ", comment);  //  Log the retrived comment.
+          this.commentForm.patchValue({  //  Patch the values from comment to form. When editing the comment the commenttext is loaded in so user can edit directly.
             commenttext: comment.CommentText,
             commentid: comment.CommentID,
             postdate: comment.PostDate,
@@ -236,43 +239,39 @@ export class DetailedPostComponent implements OnInit {
           });
         },
         (error: any) => {
-          console.log("Error loading comment for edit:", error);
+          console.log("Error loading comment for edit:", error);  //  Log error message.
         }
       );
-    //this.commentForm.patchValue({
-    //  commenttext: text
-    //});
+   
   }
    //  Method for submitting edited comment.
   onUpdate() {
     console.log("CommentCreate form submitted:");
     const newComment = this.commentForm.value;
+    //  Again, not all attributes are set automatically, but are set here. 
     newComment.Post = this.post;
     newComment.User = this.post.user;
-    console.log(newComment);
-    this._commentService.updateComment(newComment.commentid, newComment).subscribe(response => {
+    this._commentService.updateComment(newComment.commentid, newComment).subscribe(response => {  //  Http request to server via commentservice.
       if (response.success) {
         console.log(response.message);
-        location.reload();  //  Istedet for å redirecte et sted.
-        //this._router.navigate(["/posts"]);
+        location.reload();  //  Reloads page.
       }
       else {
-        console.log("Comment update failed");
+        console.log("Comment update failed");  //  Log error message.
       }
     });
   }
 
   //  Method to delete comment, similar to deleting post.
   deleteComment(comment: IComment): void {
-    const confirmDelete = confirm(`Are you sure you want to delete "${comment.CommentID}"?`);
+    const confirmDelete = confirm(`Are you sure you want to delete "${comment.CommentID}"?`);  //  Confirmation alert message.
     if (confirmDelete) {
       this._commentService.deleteComment(comment.CommentID)
         .subscribe(
           (response) => {
             if (response.success) {
               console.log(response.message);
-              location.reload();  //  Istedet for å redirecte et sted.
-              //this._router.navigate(["/posts"]);
+              location.reload();  //  Reload page so comment is gone.
             }
           }
           , (error) => {
@@ -287,15 +286,12 @@ export class DetailedPostComponent implements OnInit {
         .subscribe(
           (response) => {
             if (response.success) {
-              console.log(response.message);
-              //this.ngOnInit();
-              //this._router.navigate(["/detailedpost", this.post.PostId]);
-              location.reload();  //  Istedet for å redirecte et sted.
-              //this._router.navigate(["/posts"]);
+              console.log(response.message);  //  Log response.
+              location.reload();  //  When successfully voted, reload to show changes in upvote count and votebutton colors.
             }
           }
           , (error) => {
-            console.log("Error upvoting:", error);
+            console.log("Error upvoting:", error);  //  Log error.
           });
     }
   }
@@ -307,15 +303,12 @@ export class DetailedPostComponent implements OnInit {
         .subscribe(
           (response) => {
             if (response.success) {
-              console.log(response.message);
-              //this.ngOnInit();
-              //this._router.navigate(["/detailedpost", this.post.PostId]);
-              location.reload();  //  Istedet for å redirecte et sted.
-              //this._router.navigate(["/posts"]);
+              console.log(response.message);  //  Log response.
+              location.reload();  //  When successfully voted, reload to show changes in upvote count and votebutton colors.
             }
           }
           , (error) => {
-            console.log("Error downvoting:", error);
+            console.log("Error downvoting:", error);  //  Log error.
           });
     }
   }

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj": {}
+    "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\WebAppAngular\\OsloMetAngular.csproj": {
+    "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\WebAppAngular\\OsloMetAngular.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\WebAppAngular\\OsloMetAngular.csproj",
+        "projectUniqueName": "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\WebAppAngular\\OsloMetAngular.csproj",
         "projectName": "OsloMetAngular",
-        "projectPath": "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\WebAppAngular\\OsloMetAngular.csproj",
-        "packagesPath": "C:\\Users\\kevin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\WebAppAngular\\obj\\",
+        "projectPath": "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\WebAppAngular\\OsloMetAngular.csproj",
+        "packagesPath": "C:\\Users\\Morten\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\WebAppAngular\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kevin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Morten\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -112,21 +112,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj": {
+    "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj",
+        "projectUniqueName": "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj",
         "projectName": "xUnitTestWebAppAngular",
-        "projectPath": "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj",
-        "packagesPath": "C:\\Users\\kevin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\xUnitTestWebAppAngular\\obj\\",
+        "projectPath": "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\xUnitTestWebAppAngular\\xUnitTestWebAppAngular.csproj",
+        "packagesPath": "C:\\Users\\Morten\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\xUnitTestWebAppAngular\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kevin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Morten\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -140,8 +140,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\WebAppAngular\\OsloMetAngular.csproj": {
-                "projectPath": "C:\\Users\\kevin\\Documents\\GitHub\\WebAppAngular\\WebAppAngular\\OsloMetAngular.csproj"
+              "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\WebAppAngular\\OsloMetAngular.csproj": {
+                "projectPath": "C:\\Users\\Morten\\source\\repos\\OsloMetAngular\\WebAppAngular\\OsloMetAngular.csproj"
               }
             }
           }
@@ -197,7 +197,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
