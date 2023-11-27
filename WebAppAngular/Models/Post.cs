@@ -1,44 +1,49 @@
-﻿
-//using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;  //  Because we are using Newtonssoft for serializing.
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json; // Because we are using Newtonssoft for serializing.
 
-namespace OsloMetAngular.Models
+namespace OsloMetAngular.Models;
+
+/* DATA MODEL (SCHEMA) FOR POSTS */
+// User, Comments and UserVotes are navigation properties.
+public class Post
 {
-    // Data model (data schema) for DB
-    // User, Comments and UserVotes are navigation properties.
-    public class Post
-    {
-        [JsonProperty("PostId")]
-        public int PostID { get; set; }
+    // PostID
+    [JsonProperty("PostId")]
+    public int PostID { get; set; }
 
-        //[RegularExpression(@"[0-9a-zA-Zæøå. \-]{2,80}", ErrorMessage = "The title must contain numbers " +
-        //    "or letters, and must be between 2 and 80 characters.")]
-        //[Display(Name = "Title")]
-        [JsonProperty("Title")]
-        public string Title { get; set; } = string.Empty;
+    // Title
+    [JsonProperty(nameof(Title))]
+    public string Title { get; set; } = string.Empty;
 
-        //[StringLength(200)]
-        //[Display(Name = "Description")]
-        //[Required]
-        [JsonProperty("Text")]
-        public string? Text { get; set; }
-        [JsonProperty("ImageUrl")]
-        public string? ImageUrl { get; set; }
-        [JsonProperty("PostDate")]
-        public string? PostDate { get; set; }
-        [JsonProperty("UserId")]
-        public int UserId { get; set; }
-        public virtual User User { get; set; } = default!;
-        public virtual List<Comment>? Comments { get; set; }
-        [JsonProperty("UpvoteCount")]
-        public int UpvoteCount { get; set; } = 0;
-        public virtual List<Upvote>? UserVotes { get; set; }
-        //[Display(Name = "Subforum")]
-        [JsonProperty("SubForum")]
-        public string SubForum { get; set; } = string.Empty;
-        //public int ApplicationUserId { get; set; }
-        //public virtual ApplicationUser ApplicationUser { get; set; } = default!;
-    }
+    // Description text
+    [JsonProperty(nameof(Text))]
+    public string? Text { get; set; }
+
+    // Image URL
+    [JsonProperty(nameof(ImageUrl))]
+    public string? ImageUrl { get; set; }
+
+    // Post date
+    [JsonProperty(nameof(PostDate))]
+    public string? PostDate { get; set; }
+
+    // UserID
+    [JsonProperty(nameof(UserId))]
+    public int UserId { get; set; }
+
+    // Virtual user
+    public virtual User User { get; set; } = default!;
+
+    // List of comments
+    public virtual List<Comment>? Comments { get; set; }
+
+    // Vote count
+    [JsonProperty(nameof(UpvoteCount))]
+    public int UpvoteCount { get; set; } = 0;
+
+    // List of user votes
+    public virtual List<Upvote>? UserVotes { get; set; }
+
+    // Subforum name
+    [JsonProperty(nameof(SubForum))]
+    public string SubForum { get; set; } = string.Empty;
 }
