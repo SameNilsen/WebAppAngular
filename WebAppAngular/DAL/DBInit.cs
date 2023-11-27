@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OsloMetAngular.Models;
+﻿using OsloMetAngular.Models;
 
 namespace OsloMetAngular.DAL
 {
@@ -12,7 +11,7 @@ namespace OsloMetAngular.DAL
             PostDbContext context = serviceScope.ServiceProvider.GetRequiredService<PostDbContext>();
             
             // Wipe and recreate database
-            //context.Database.EnsureDeleted();
+            // context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             // Initial user data

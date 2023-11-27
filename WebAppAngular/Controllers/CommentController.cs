@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
-using OsloMetAngular.ViewModels;
 
 namespace OsloMetAngular.Controllers
 {

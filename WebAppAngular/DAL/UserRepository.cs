@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using OsloMetAngular.Models;
 
 namespace OsloMetAngular.DAL
