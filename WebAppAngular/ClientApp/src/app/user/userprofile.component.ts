@@ -20,78 +20,75 @@ export class UserProfileComponent implements OnInit{
   posts: IPost[] = [];
   comments: IComment[] = [];
   votes: IUpvote[] = [];
-  //users: IUser[] = [];
   user: IUser = new User();
   collapsed = false;
   isYourPage: boolean = false;
 
   constructor(private _router: Router, private _postService: PostService, private _userService: UserService, private _route: ActivatedRoute) { }
 
-
+  //  Gets all posts belonging to the user.
   getPosts(id: number): void {
     this._userService.getPosts(id)
       .subscribe(data => {
-        console.log("AllPosts", JSON.stringify(data));
+        console.log("AllPosts", JSON.stringify(data));  //  Log response.
         this.posts = data;
-        console.log(this.posts);
       }
     );
-    console.log("it worked?");
   }
 
+  //  Gets all comments belonging to the user.
   getComments(id: number): void {
     this._userService.getComments(id)
       .subscribe(data => {
-        console.log("AllComments", JSON.stringify(data));
+        console.log("AllComments", JSON.stringify(data));  //  Log response.
         this.comments = data;
-        console.log(this.comments);
       }
       );
-    console.log("it worked?");
   }
 
+  //  Gets all votes belonging to the user.
   getVotes(id: number): void {
     this._userService.getVotes(id)
       .subscribe(data => {
-        console.log("AllVotes", JSON.stringify(data));
+        console.log("AllVotes", JSON.stringify(data));  //  Log response.
         this.votes = data;
-        console.log(this.votes);
       }
       );
-    console.log("it worked?");
   }
 
+  //  Gets the user object for this page.
   getUser(id: number): void {
     this._userService.getSimplifiedUser(id)
       .subscribe(data => {
-        console.log("TheUser", JSON.stringify(data));
+        console.log("TheUser", JSON.stringify(data));  //  Log response.
         this.user = data;
-        console.log(this.user);
       }
       );
-    console.log("it worked?");
   }
 
-
+  //  To be called on Initiliazation.
   ngOnInit(): void {
     this._route.params.subscribe(params => {
+      //  Get the posts, comments and votes.
       this.getPosts(params["id"]);
       this.getComments(params["id"]);
       this.getVotes(params["id"]);
+      //  Gets the user and if it is signed in.
       this.getUser(params["id"]);
       this.getSignedIn(params["id"]);
     });
     
   }
 
+  //  Check to see if the user is signed in. If signed in and this page is the profile
+  //   page for the user, then some additional options will be available in the html.
   getSignedIn(postId: number): void {
     this._postService.getSignedIn(postId).subscribe(response => {
       if (response.success) {
         console.log("signed in: " + response.message + " " + response.userspost);
-        //console.log("asda" + this.user.IdentityUserId);
         if (response.message = this.user.IdentityUserId) {
           this.isYourPage = true;
-          console.log("YOUR OWN USERPAGE");
+          console.log("YOUR OWN USERPAGE");  //  Log message.
         }
       }
       else {
@@ -100,39 +97,16 @@ export class UserProfileComponent implements OnInit{
     });
   }
 
-  toggle(content: string) {
+  //  Function to toggle visibility of the box with posts, comments and votes.
+  toggle(content: string) {  //  content is the id of the html section to be toggled. For examole 'posts'.
     this.collapsed = !this.collapsed;
-    var section = document.getElementById(content)!;
-    console.log("It is now: " + section.style.maxHeight);
+    var section = document.getElementById(content)!;  //  Get the html section.
     if (section.style.maxHeight) {
-      console.log("collapse!");
       section.style.maxHeight = "";
     } else {
-      console.log("expand!");
       section.style.maxHeight = section.scrollHeight + "px";
     } 
   }
 
-  //expand() {
-  //  console.log("expand!");
-  //  this.collapsed = false;
-  //  var section = document.getElementById("posts")!;
-  //  if (section.style.maxHeight) {
-  //    section.style.maxHeight = "0";
-  //  } else {
-  //    section.style.maxHeight = section.scrollHeight + "px";
-  //  } 
-  //}
-
-  //collapse() {
-  //  console.log("collapse!");
-  //  this.collapsed = true;
-  //  var section = document.getElementById("posts")!;
-  //  if (section.style.maxHeight) {
-  //    section.style.maxHeight = "0";
-  //  } else {
-  //    section.style.maxHeight = section.scrollHeight + "px";
-  //  } 
-  //}
 
 }

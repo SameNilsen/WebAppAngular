@@ -69,11 +69,9 @@ export class DetailedPostComponent implements OnInit {
     this._postService.getSignedIn(postId).subscribe(response => {    //  Use the postservice to perform request.
       if (response.success) {
         console.log("Signed in: true, Id: " + response.message + ", userspost: " + response.userspost);  //  Logging successful response. 
-        //console.log("type: " + typeof response.userspost);
         this.isYourPost = response.userspost;   //  Variable to store wether this post is or isnt the signed in users post.
         this.isSignedIn = true;                 //  The user is signed in.
         this.signedInId = response.message;     //  This is the IdentityUserId from the ApplicationUser.
-        //this._router.navigate(["/posts"]);
       }
       else {
         console.log("Not signed in");  //  Log to console.
