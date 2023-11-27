@@ -778,6 +778,7 @@ C:\Users\Morten\source\repos\OsloMetAngular\xUnitTestWebAppAngular\obj\Debug\net
 C:\Users\Morten\source\repos\OsloMetAngular\xUnitTestWebAppAngular\obj\Debug\net7.0\xUnitTestWebAppAngular.genruntimeconfig.cache
 C:\Users\Morten\source\repos\OsloMetAngular\xUnitTestWebAppAngular\obj\Debug\net7.0\ref\xUnitTestWebAppAngular.dll
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\CoverletSourceRootsMapping
+C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\testhost.dll
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\OsloMetAngular.deps.json
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\OsloMetAngular.runtimeconfig.json
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\spa.proxy.json
@@ -786,7 +787,6 @@ C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\n
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\OsloMetAngular.staticwebassets.runtime.json
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\OsloMetAngular.exe
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\testhost.exe
-C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\testhost.dll
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\xunit.runner.reporters.netcoreapp10.dll
 C:\Users\kevin\Documents\GitHub\WebAppAngular\xUnitTestWebAppAngular\bin\Debug\net7.0\xunit.runner.utility.netcoreapp10.dll
