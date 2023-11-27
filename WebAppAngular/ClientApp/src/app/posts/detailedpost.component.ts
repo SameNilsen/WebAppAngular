@@ -262,7 +262,7 @@ export class DetailedPostComponent implements OnInit {
 
   //  Method to delete comment, similar to deleting post.
   deleteComment(comment: IComment): void {
-    const confirmDelete = confirm(`Are you sure you want to delete "${comment.CommentID}"?`);  //  Confirmation alert message.
+    const confirmDelete = confirm(`Are you sure you want to delete your comment"?`);  //  Confirmation alert message.
     if (confirmDelete) {
       this._commentService.deleteComment(comment.CommentID)
         .subscribe(

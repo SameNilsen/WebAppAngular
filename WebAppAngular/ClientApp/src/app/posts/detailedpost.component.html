@@ -1,5 +1,4 @@
 <!--@* Style sheet for upvote/downvote buttons *@-->
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
   /* Styling upvote/downvote buttons, from https://www.w3schools.com/howto/howto_css_icon_buttons.asp */
@@ -59,7 +58,7 @@
 
     <hr />
 
-    <!-- BUTTONS -->
+    <!-- Buttons -->
     <div style="margin-bottom:10px">
       <!-- BACK button -->
       <a style="margin-right: 5px" class="btn btn-secondary" onclick="history.back()">Back</a>
@@ -72,54 +71,66 @@
       <h5 class="pull-right">{{ post.PostDate }}</h5>
     </div>
 
-    <!--@* The voting buttons *@-->
+    <!-- Voting buttons -->
     <div>
+
       <a id="upvoteButton" class="btn-arrow-up" (click)="setUpvote()"><i class="fa fa-arrow-up"></i></a>
       <a id="downvoteButton" class="btn-arrow-down" (click)="setDownvote()"><i class="fa fa-arrow-down"></i></a>
       
-    <!-- Vote count -->
-    <span style="font-size:20px">{{post.UpvoteCount}}</span>
+      <!-- Vote count -->
+      <span style="font-size:20px">{{post.UpvoteCount}}</span>
 
-    <!-- Link to the post's subforum -->
-    <h5 class="pull-right">
-      <a class="links" [routerLink]="['/subforumposts', post.SubForum]">{{ post.SubForum }}</a>
-    </h5>
+      <!-- Link to the post's subforum -->
+      <h5 class="pull-right">
+        <a class="links" [routerLink]="['/subforumposts', post.SubForum]">{{ post.SubForum }}</a>
+      </h5>
+    </div>
   </div>
-</div>
 </div>
 
 <br />
 
-<!--@* COMMENTS *@-->
+<!-- COMMENTS -->
 <div class="container">
-  <!--@* Create new comment *@-->
+
+  <!-- Create new comment -->
   <p>
-    <!--COMMENT button-->
-    <!-- Button to toggle visibility of creating comment input field. Is disabled if user is not signed in -->
+    <!-- Comment button to toggle visibility of creating comment input field (disabled if user is not signed in) -->
     <button class="btn btn-secondary" [disabled]="!isSignedIn" (click)="toggleCommentBox('newComment')">Comment</button>
   </p>
 
-  <!--@* This form is for sending the new comment to the controller *@-->
+  <!-- This form is for sending the new comment to the controller -->
   <!-- Should be handled in component. -->
-  <!--<div asp-validation-summary="All" class="text-danger"></div>-->
-
   <div id="newComment" style="display:none">
     <form [formGroup]="commentCreateForm" (ngSubmit)="onSubmit()">
+
       <div class="form-group">
         <input type="text" id="commenttext" formControlName="commenttext" class="form-control" />
+
+        <!-- Input validation -->
         <div *ngIf="commenttext.invalid && (commenttext.dirty || commenttext.touched)"
              class="alert alert-danger">
+
           <div *ngIf="commenttext.errors?.['required']">Comment is required.</div>
+
           <div *ngIf="commenttext.errors?.['minlength']">
             Comment must be at least 2 characters long.
           </div>
+
+          <div *ngIf="commenttext.errors?.['maxlength']">
+            Comment cannot be more than 80 characters long.
+          </div>
+
         </div>
       </div>
-      <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentCreateForm.invalid || !isSignedIn">Post</button>
+      <!-- Post button -->
+      <button style="margin: 10px 0px 10px 5px" type="submit" class="btn btn-primary"
+              [disabled]="commentCreateForm.invalid || !isSignedIn">Post
+      </button>
     </form>
-</div>
+  </div>
 
-  <!--@* Displaying all comments in a table *@-->
+  <!-- Displaying all comments in a table -->
   <table class="table table-striped">
     <thead>
       <tr>
@@ -134,13 +145,13 @@
     </thead>
 
     <tbody>
+      <!-- Loop through comments -->
       <tr *ngFor="let comment of comments; index as i">
-        <!--@*
-        <- This block is for editing and deleting a comment *@-->
+        <!-- This block is for editing and deleting a comment -->
         <td>
           <div id="editON {{comment.CommentID}}" style="display:none">
-            <!--@using (Html.BeginForm("Update", "Comment"))
-    {-->
+
+            <!-- Only comment text shown -->
             <form [formGroup]="commentForm" (ngSubmit)="onUpdate()">
               <div class="form-group">
                 <input type="text" id="commenttext" formControlName="commenttext" class="form-control" value="{{comment.CommentText}}" />
@@ -149,27 +160,31 @@
                 <input type="text" id="userid" formControlName="userid" class="form-control" value="@comment.UserId" hidden />
                 <input type="text" id="postid" formControlName="postid" class="form-control" value="@comment.PostID" hidden />
               </div>
-              <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Post</button>
+
+              <!-- SAVE changes button -->
+              <button style="margin: 10px 0px 5px 5px" type="submit" class="btn btn-primary" [disabled]="commentForm.invalid">Save</button>
             </form>
-            <!--<input type="text" name="CommentText" value="@comment.CommentText">
-    <button style="margin: 0px 0px 10px 5px" type="submit" class="btn btn-primary">Post</button>-->
-            <!--}
-    DELETE button-->
+
+            <!-- DELETE button -->
             <button class="btn btn-danger" (click)="deleteComment(comment)">Delete</button>
+
           </div>
+
           <div id="editOFF {{comment.CommentID}}" style="display:block">{{comment.CommentText}}</div>
-          <!--@* -> *@-->
 
         </td>
         <td>{{comment.PostDate}}</td>
         <td>{{comment.user.Name}}</td>
         <td>{{comment.user.Credebility}}</td>
         <td>
-          <!-- Button for toggling edit view of comment. A call to readyUpdate() is made to load comment. Must be signed in, and the comment must be yours. -->
-          <button class="btn btn-secondary" (click)="toggleEdit(comment.CommentID.toString()); readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit</button>
+          <!--
+            Button for toggling edit view of comment.
+            A call to readyUpdate() is made to load comment. Must be signed in, and the comment must be yours. -->
+          <button class="btn btn-secondary" (click)="toggleEdit(comment.CommentID.toString());
+                  readyUpdate(comment.CommentID)" [disabled]="!isSignedIn || !(comment.user.IdentityUserId == signedInId)">Edit
+          </button>
         </td>
       </tr>
     </tbody>
-    <!--}-->
   </table>
 </div>

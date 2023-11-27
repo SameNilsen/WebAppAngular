@@ -1,7 +1,8 @@
-<!-- Welcome text -->
+<!-- Title text -->
 <h1 style="text-align:center;">Main Feed</h1>
 
-<!--@* Style sheet for upvote/downvote buttons *@-->
+<!-- MAIN FEED (CARD VIEW) -->
+<!-- Style sheet for upvote/downvote buttons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
   /* Styling upvote/downvote buttons, from https://www.w3schools.com/howto/howto_css_icon_buttons.asp */
@@ -40,10 +41,10 @@
     }
 </style>
 
-<!--@* CREATE and CARD view buttons *@-->
+<!-- BUTTONS -->
 <div class="container" style="text-align:center">
   <div>
-    <!-- New method: -->
+    <!-- Create post, card view, and filter buttons -->
     <button style="margin:5px" class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
     <a style="margin:5px" class="btn btn-secondary" href="/posts">Classic View</a>
     <a style="margin:5px" class="btn btn-secondary" (click)="toggleFilter('filter')">Filter</a>
@@ -65,12 +66,12 @@
   </div>
 </div>
 
-<!--@* Posts (main feed) *@-->
+<!-- Posts (main feed) -->
+<!-- Loop through the existing posts -->
 <div style="max-width:1000px; margin: 0 auto; text-align:center" *ngFor="let post of filteredPosts; index as i">
   <div style="margin: 0 auto">
 
-    <!-- Loop through the existing posts -->
-
+    <!-- Image -->
     <img [src]="post.ImageUrl"
          style="max-width:600px; max-height:600px; margin-top:10px; margin-bottom:10px"
          class="card-img-top" alt="{{ post.Title }}">
@@ -94,12 +95,12 @@
         <!-- Post date -->
         <h5 class="pull-right">{{ post.PostDate | simpleDateFormat }}</h5>
 
-        <!--@* The voting buttons *@-->
+        <!-- The voting buttons -->
         <div>
           <!-- Which style for the voting buttons is decided by whether the user has previously voted
-                on this post before, and what that vote was. If, for example, the user has upvoted then
-                 a red arrow-up button is displayed which cannot be clicked, along with a neutral
-                 arrow-down button which can be clicked. -->
+               on this post before, and what that vote was. If, for example, the user has upvoted then
+               a red arrow-up button is displayed which cannot be clicked, along with a neutral
+               arrow-down button which can be clicked. -->
           <a *ngIf="yourVotes[post.PostId.toString()] === 'upvote'" style="color: rgb(193, 26, 26);" id="upvoteButton" class="btn-arrow-up"><i class="fa fa-arrow-up"></i></a>
           <a *ngIf="yourVotes[post.PostId.toString()] !== 'upvote'" (click)="setUpvote(post.PostId)" id="upvoteButton" class="btn-arrow-up"><i class="fa fa-arrow-up"></i></a>
           <a *ngIf="yourVotes[post.PostId.toString()] === 'downvote'" style="color: rgb(20, 130, 167);" id="downvoteButton" class="btn-arrow-down"><i class="fa fa-arrow-down"></i></a>

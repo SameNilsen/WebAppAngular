@@ -1,4 +1,4 @@
-<!--@* User Profile *@-->
+<!-- User Profile -->
 
 <!--
 This page is for displaying the profile of a user. If this page is the userprofile for
@@ -8,10 +8,15 @@ provided by Microsoft.AspNetCore.Identity.
 
 <div style="margin: 0 auto; text-align:center">
   <!-- Username -->
-  <h1><b>{{user.Name}}</b><button style="margin-left: 20px"class="btn btn-secondary" onclick="history.back()">Back</button></h1>
+  <h1>
+    <b>{{user.Name}}</b>
+    <!-- BACK button -->
+    <button style="margin-left: 20px"class="btn btn-secondary" onclick="history.back()">Back</button>
+  </h1>
+
+  <hr />
 
   <!-- Manage account -->
-  <!--@if (SignInManager.IsSignedIn(User) && Model.User.IdentityUserId == UserManager.GetUserId(User))-->
   <h3 *ngIf="isYourPage">
     Manage <a [routerLink]='["/authentication/profile"]' title="Manage">account</a>
   </h3>

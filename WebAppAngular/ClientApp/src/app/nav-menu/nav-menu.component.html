@@ -1,50 +1,51 @@
+<!-- NAVIGATION BAR -->
 <header>
-  <nav data-bs-theme="dark"
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3"
-  >
+  <nav data-bs-theme="dark" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+
     <div class="container">
+      <!-- Logo -->
       <a class="navbar-brand" [routerLink]="['/']"><img alt="epicforum.no.png" src="../../assets/images/epicforum.no.png" width="250" height="35"></a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
+
+      <!-- Navbar toggler button (for smaller devices) -->
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target=".navbar-collapse"
+              aria-label="Toggle navigation"
+              [attr.aria-expanded]="isExpanded"
+              (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
-        [ngClass]="{ show: isExpanded }"
-      >
+
+      <!-- Actual navbar -->
+      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+           [ngClass]="{ show: isExpanded }">
+
+        <!-- Navbar links -->
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
+          <li class="nav-item"
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }">
+            <!-- HOME -->
             <a class="nav-link" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/posts']"
-              >Posts</a
-            >
+            <!-- POSTS -->
+            <a class="nav-link" [routerLink]="['/posts']">Posts</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/subforumposts', 'General']"
-              >Subforums</a
-            >
+            <!-- SUBFORUMS -->
+            <a class="nav-link" [routerLink]="['/subforumposts', 'General']">Subforums</a>
           </li>
           <li *ngIf="isSignedIn" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['/userprofile', userId]"
-              >Profile</a
-            >
-          </li> 
+            <!-- PROFILE (if signed in) -->
+            <a class="nav-link" [routerLink]="['/userprofile', userId]">Profile</a>
+          </li>
         </ul>
+        <!-- Register and login buttons -->
         <app-login-menu></app-login-menu>
       </div>
+
     </div>
   </nav>
 </header>

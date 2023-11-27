@@ -1,17 +1,13 @@
-<!-- Welcome text -->
+<!-- Title text -->
 <h1 style="text-align:center;">SubForums</h1>
 
-<!--@* CREATE and CARD view buttons *@-->
+<!-- BUTTONS -->
 <div class="container" style="text-align:center">
   <div>
-    <!-- New method: -->
+    <!-- Create post, card view, and filter buttons -->
     <button style="margin:5px" class="btn btn-primary" [routerLink]="['/postform', 'create', -1]">Create Post</button>
     <a style="margin:5px" class="btn btn-secondary" [routerLink]="['/postscard']">Card View</a>
     <a style="margin:5px" class="btn btn-secondary" (click)="toggleFilter('filter')">Filter</a>
-    <!-- Old method: -->
-    <!--<a class="btn btn-secondary"
-     asp-controller="Post"
-     asp-action="Create">Create Post</a>-->
   </div>
 </div>
 
@@ -38,7 +34,7 @@
   </div>
 </div>
 
-<!--@* Posts (main feed) *@-->
+<!-- Posts (main feed) -->
 <div style="text-align:center">
   <table class="table table-striped" aria-labelledby="tableLabel">
     <thead>
@@ -52,9 +48,11 @@
     </thead>
 
     <tbody>
+      <!-- Angular for-loop which iterates over the filtered posts. -->
       <tr *ngFor="let post of filteredPosts; index as i">
+
+        <!-- Title (a link to the detailed view of this post) -->
         <td>
-          <!-- Title (a link to the detailed view of this post) -->
           <a [routerLink]="['/detailedpost', post.PostId]">{{ post.Title }}</a>
         </td>
 
@@ -63,6 +61,7 @@
 
         <!-- User -->
         <td>{{ post.user.Name }}</td>
+
         <td>
           <!-- Image -->
           <img [src]="post.ImageUrl" alt="Post image" style="max-width: 100px; max-height: 100px;" />

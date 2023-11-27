@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
-//using OsloMetAngular.Data;
 using OsloMetAngular.Models;
 using OsloMetAngular.DAL;
 
@@ -14,13 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<PostDbContext>(options =>
     options.UseSqlite(connectionString));
 
-//builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<PostDbContext>();
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<PostDbContext>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -39,7 +31,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<PostDbContext>()
     .AddDefaultTokenProviders()
-    .AddDefaultUI();    //  Pga IEmailSender
+    .AddDefaultUI(); // Because of IEmailSender
 
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, PostDbContext>();
