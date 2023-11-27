@@ -9,12 +9,13 @@ import { IUser, User } from "../user/user";
   templateUrl: "./postform.component.html",
 })
 
-export class PostformComponent {
+export class PostformComponent {  //  Class for both creating and updating posts.
 
   isSignedIn = false;
   postForm: FormGroup;
   isEditMode: boolean = false;
   postId: number = -1;
+  //  Getters and setters for selectedForum (dropdownlist).
   private _selectedForum: string = "";
   get selectedForum(): string {
     return this._selectedForum;
@@ -23,6 +24,7 @@ export class PostformComponent {
     this._selectedForum = value;
     console.log("In setter:", value);
   }
+  //  The different categories that make up the subforums.
   subforums = [
     { name: "Gaming" },
     { name: "Sport" },
@@ -33,15 +35,15 @@ export class PostformComponent {
   ];
   
   constructor(private _formbuilder: FormBuilder, private _router: Router, private _postService: PostService, private _route: ActivatedRoute) {
+    //  group the form.
     this.postForm = _formbuilder.group({
       title: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(80), Validators.pattern("[0-9a-zA-Zæøå.,!? \-]{0,80}")]],
       text: ["", [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
       upvotecount: [0],
       postdate: [""],
-      //subforum: [""],
       imageUrl: [""]
     });
-    this.selectedForum = this.subforums[5]['name'];
+    this.selectedForum = this.subforums[5]['name'];  //  Default set to number 5: General.
   }
 
   get title() {
@@ -51,18 +53,17 @@ export class PostformComponent {
     return this.postForm.get("text")!;
   }
 
+  //  When submitting the form, either to create or update.
   onSubmit() {
     console.log("PostCreate form submitted:");
     console.log(this.postForm);
     const newPost = this.postForm.value;
-    console.log("New post1: " + newPost);
+    //  Set some values not set by form. Will be revised in controller.
     newPost.UserId = 4;
     newPost.User = new User();
     newPost.User.UserId = 4;
     newPost.SubForum = this.selectedForum;
-    console.log("New post2: " + newPost);
-    //const createUrl = "api/item/create";
-    if (this.isEditMode) {
+    if (this.isEditMode) {  //  If updating:
       this._postService.updatePost(this.postId, newPost).subscribe(response => {
         if (response.success) {
           console.log(response.message);
@@ -73,7 +74,7 @@ export class PostformComponent {
         }
       });
     }
-    else {
+    else {  //  If creating:
       this._postService.createPost(newPost).subscribe(response => {
         if (response.success) {
           console.log(response.message);
@@ -85,38 +86,38 @@ export class PostformComponent {
       });
     }
   }
-
+  //  Back button.
   backToPosts() {
     this._router.navigate(["/posts"]);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {  //  Called on initilization.
     this._route.params.subscribe(params => {
-      this.getSignedIn(params["id"]);
+      this.getSignedIn(params["id"]);  //  Call on function to see if signed in.
       if (params["mode"] === "create") {
         this.isEditMode = false; // create mode
       }
       else if (params["mode"] === "edit") {
         this.isEditMode = true; // edit mode
         this.postId = +params["id"]; // convert to number
-        this.loadPostForEdit(this.postId);
+        this.loadPostForEdit(this.postId);  //  Patch post values.
       }
     });
   }
 
+  //  When updating this is called to patch the values of the post into the form.
   loadPostForEdit(postId: number) {
     this._postService.getPostById(postId)
       .subscribe(
         (post: any) => {
-          console.log("retrived post: ", post);
-          console.log("--" + this.subforums.findIndex(x => x.name === post.SubForum));
+          console.log("Retrived post: ", post);
+          //  Set correct option in dropdownlist.
           this.selectedForum = this.subforums[this.subforums.findIndex(x => x.name === post.SubForum)]["name"];
           this.postForm.patchValue({
             title: post.Title,
             text: post.Text,
             upvotecount: post.UpvoteCount,
             postdate: post.PostDate,
-            //subforum: post.SubForum,  // har ikke fiksa dropdownlist enda
             imageUrl: post.ImageUrl,
           });
         },
@@ -126,11 +127,12 @@ export class PostformComponent {
       );
   }
 
+  //  Function to see if the user is signed in. Should only be able to create or update if signed in.
   getSignedIn(postId: number): void {
     this._postService.getSignedIn(postId).subscribe(response => {
       if (response.success) {
         console.log("signed in: " + response.message + " " + response.userspost);
-        this.isSignedIn = true;
+        this.isSignedIn = true;  //  Yay signed in.
       }
       else {
         console.log("Not signed in");

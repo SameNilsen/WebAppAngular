@@ -50,7 +50,7 @@ namespace OsloMetAngular.DAL
         {
             try
             {
-                return _db.Comments.Where(x => x.PostID == id);  //  A query to get all posts that has the specified forum as SubForum.
+                return _db.Comments.Where(x => x.PostID == id);  //  A query to get all comments that belongs to a post..
             }
             catch (Exception e)
             {
@@ -60,18 +60,13 @@ namespace OsloMetAngular.DAL
             }
         }
 
-        //  Gets the user from the database that has the IdentityUserId matching the given id.
-        //public async Task<User?> GetUserByIdentity(string id)
-        //{            
-        //    return await _db.Users.FirstOrDefaultAsync(x => x.IdentityUserId == id);
-        //}
+      
 
         //  When creating a comment, this method adds it to the database.
         public async Task<bool> Create(Comment comment)
         {
             try
             {
-                Console.WriteLine("COMMENTREPOO----");
                 _db.Comments.Add(comment);
                 await _db.SaveChangesAsync();
                 return true;

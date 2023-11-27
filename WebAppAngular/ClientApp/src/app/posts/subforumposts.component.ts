@@ -17,7 +17,7 @@ export class SubForumPostsComponent implements OnInit{
 
   viewTitle: string = "SubForumTable";
   displayImage: boolean = true;
-  //listFilter: string = "";
+  //  Getters and setters for filter.
   private _listFilter: string = "";
   get listFilter(): string {
     return this._listFilter;
@@ -60,35 +60,34 @@ export class SubForumPostsComponent implements OnInit{
   getPosts(forum: string): void {
     this._postService.getSubforumPosts(forum)
       .subscribe(data => {
-        console.log("All", JSON.stringify(data));
+        console.log("All", JSON.stringify(data));  //  Log response.
         this.posts = data;
-        console.log(this.posts);
         this.filteredPosts = this.posts;
       }
     );
     console.log("it worked?");
   }
 
+  //  Gets the users of the posts.
   getUsers(): void {
-    console.log("postscomponent21")
     this._userService.getUsers()
       .subscribe(data => {
         console.log("All", JSON.stringify(data));
-        console.log("postscomponent22?");
         this.users = data;
       }
       );
-    console.log("it worked?");
   }
 
   filteredPosts: IPost[] = this.posts;
 
+  //  Function for filtering the posts.
   performFilter(filterBy: string): IPost[] {
     filterBy = filterBy.toLocaleLowerCase();
     return this.posts.filter((post: IPost) =>
-      post.Title.toLocaleLowerCase().includes(filterBy));
+      post.Title.toLocaleLowerCase().includes(filterBy));  // Actually filters.
   }
 
+  //  Toggle on and of visibility of filter input box.
   toggleFilter(id: string): void {
     var div = document.getElementById(id)!;
     if (div.style.display == "block") {
@@ -100,14 +99,12 @@ export class SubForumPostsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    console.log(11);
     this._route.params.subscribe(params => {
-      console.log("--" + this.subforums.findIndex(x => x.name === params["forum"]));
       //  Upon initialztion the subforum parameter from url is extracted. We then find the
       //   corresponding value in the subforums list, and sets this as the selected forum in
       //    dropdownlist. Then the posts relating to that subforum is fetched by getPosts() method.
       this.selectedForum = this.subforums[this.subforums.findIndex(x => x.name === params["forum"])]["name"];
-      this.getPosts(params["forum"]);
+      this.getPosts(params["forum"]);  //  Gets posts.
     });
   }
 

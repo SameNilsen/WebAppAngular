@@ -16,76 +16,71 @@ namespace OsloMetAngular.DAL
             _logger = logger;
         }
 
-        //  Gets all comments from the database.
+        //  Gets all votes from the database.
         public async Task<IEnumerable<Upvote>?> GetAll()
         {
             try
             {
-                return await _db.Upvotes.ToListAsync();  //  Gets all comments as a list.
+                return await _db.Upvotes.ToListAsync();  //  Gets all votes as a list.
             }
             catch (Exception e)
             {
-                _logger.LogError("[CommentRepository] comments ToListAsync() failed when GetAll(), error " +
+                _logger.LogError("[VoteRepository] votes ToListAsync() failed when GetAll(), error " +
                     "message: {e}", e.Message);
                 return null;
             }
         }
 
-        //  Gets a comment with the given userid id.
+        //  Gets a vote with the given userid id.
         public async Task<Upvote?> GetVoteById(int id)
         {
             try
             {
-                return await _db.Upvotes.FindAsync(id);  //  Tries to find one item/comment by id.
+                return await _db.Upvotes.FindAsync(id);  //  Tries to find one item/vote by id.
             }
             catch (Exception e)
             {
-                _logger.LogError("[CommentRepository] comment FindAsync(id) failed when GetItemById for " +
-                    "CommentID {CommentID:0000}, error message: {e}", id, e.Message);
+                _logger.LogError("[VoteRepository] vote FindAsync(id) failed when GetVoteById for " +
+                    "UpvoteID {UpvoteID:0000}, error message: {e}", id, e.Message);
                 return null;
             }
         }
 
-        //  Method for getting all comments belonging to a post.
+        //  Method for getting all votes belonging to a post.
         public IEnumerable<Upvote>? GetVotesByPostId(int id)
         {
             try
             {
-                return _db.Upvotes.Where(x => x.PostID == id);  //  A query to get all posts that has the specified forum as SubForum.
+                return _db.Upvotes.Where(x => x.PostID == id);  //  A query to get all votes that belong to a post.
             }
             catch (Exception e)
             {
-                _logger.LogError("[CommentRepository] comment Where(x => x.PostID == id) failed when GetCommentByPostId" +
+                _logger.LogError("[VoteRepository] vote Where(x => x.PostID == id) failed when GetVotesByPostId" +
                     "  error message: {e}", e.Message);
                 return null;
             }
         }
 
-        //  Gets the user from the database that has the IdentityUserId matching the given id.
-        //public async Task<User?> GetUserByIdentity(string id)
-        //{            
-        //    return await _db.Users.FirstOrDefaultAsync(x => x.IdentityUserId == id);
-        //}
 
-        //  When creating a comment, this method adds it to the database.
+
+        //  When creating a vote, this method adds it to the database.
         public async Task<bool> Create(Upvote upvote)
         {
             try
             {
-                Console.WriteLine("COMMENTREPOO----");
                 _db.Upvotes.Add(upvote);
                 await _db.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
             {
-                _logger.LogError("[CommentRepository] comment creation failed for comment {@comment}, error " +
+                _logger.LogError("[VoteRepository] vote creation failed for vote {@upvote}, error " +
                     "message: {e}", upvote, e.Message);
                 return false;
             }
         }
 
-        //  When updating a comment, this method updates the database with the edited comment.
+        //  When updating a vote, this method updates the database with the edited vote.
         public async Task<bool> Update(Upvote upvote)
         {
             try
@@ -96,13 +91,13 @@ namespace OsloMetAngular.DAL
             }
             catch (Exception e)
             {
-                _logger.LogError("[CommentRepository] comment FindAsync(id) failed when updating " +
-                    "the CommentID {CommentID:0000}, error message: {e}", upvote, e.Message);
+                _logger.LogError("[VoteRepository] vote FindAsync(id) failed when updating " +
+                    "the UpvoteID {UpvoteID:0000}, error message: {e}", upvote, e.Message);
                 return false;
             }
         }
 
-        //  When deleting a comment, this method deletes it from the database.
+        //  When deleting a vote, this method deletes it from the database.
         public async Task<bool> Delete(int id)
         {
             try
@@ -110,7 +105,7 @@ namespace OsloMetAngular.DAL
                 var upvote = await _db.Upvotes.FindAsync(id);
                 if (upvote == null)
                 {
-                    _logger.LogError("[CommentRepository] comment not found for the CommentID {CommentID:0000}", id);
+                    _logger.LogError("[VoteRepository] vote not found for the UpvoteID {UpvoteID:0000}", id);
                     return false;
                 }
                 _db.Upvotes.Remove(upvote);
@@ -119,8 +114,8 @@ namespace OsloMetAngular.DAL
             }
             catch (Exception e)
             {
-                _logger.LogError("[CommentRepository] comment deletion failed for the " +
-                    "CommentID {CommentID:0000}, error message: {e}", id, e.Message);
+                _logger.LogError("[VoteRepository] vote deletion failed for the " +
+                    "UpvoteID {UpvoteID:0000}, error message: {e}", id, e.Message);
                 return false;
             }
         }      

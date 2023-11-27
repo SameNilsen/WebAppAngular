@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace OsloMetAngular.Controllers;
-
+//  Premade! Not made by us!
 public class OidcConfigurationController : Controller
 {
     private readonly ILogger<OidcConfigurationController> _logger;

@@ -7,7 +7,7 @@ using OsloMetAngular.Models;
 
 namespace OsloMetAngular.DAL
 {
-    public class PostDbContext : ApiAuthorizationDbContext<ApplicationUser> // Inherits DbContext
+    public class PostDbContext : ApiAuthorizationDbContext<ApplicationUser> 
     {
         public PostDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions)
         : base(options, operationalStoreOptions)
@@ -19,9 +19,6 @@ namespace OsloMetAngular.DAL
         public DbSet<User> Users { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Upvote> Upvotes { get; set; }
-        //public DbSet<Customer> Customers { get; set; }
-        //public DbSet<Order> Orders { get; set; }
-        //public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

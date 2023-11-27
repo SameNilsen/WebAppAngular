@@ -14,8 +14,6 @@ import { UserService } from "../user/users.service";
 export class PostsComponent implements OnInit{
 
   viewTitle: string = "MainFeedTable";
-  displayImage: boolean = true;    //  Kan fjernes tror jeg.
-  //listFilter: string = "";
 
   //  List filter getter and setter:
   private _listFilter: string = "";
@@ -33,7 +31,7 @@ export class PostsComponent implements OnInit{
 
   constructor(private _router: Router, private _postService: PostService, private _userService: UserService) { }
 
-  //  Method for deleting post. May not be in use anymore??
+  //  Method for deleting post.
   deletePost(post: IPost): void {
     const confirmDelete = confirm(`Are you sure you want to delete "${post.Title}"?`);
     if (confirmDelete) {
@@ -51,9 +49,6 @@ export class PostsComponent implements OnInit{
     }
   }
 
-  testNavigate() {
-    this._router.navigate(["/test"]);
-  }
 
   //  Method for fetching all posts. Should be called on init.
   getPosts(): void {
@@ -61,26 +56,21 @@ export class PostsComponent implements OnInit{
     this._postService.getPosts()
       .subscribe(data => {
         console.log("All", JSON.stringify(data));  //  Print result to console.
-        console.log("postscomponent2?");
         this.posts = data;                         //  Sets data in out posts variable.
-        console.log(this.posts);
         this.filteredPosts = this.posts;           //  Also sets it in filteredPosts, so its ready for filtering.
       }
     );
     console.log("it worked?");
   }
 
-  //  Not in use??
+  //  Get users for posts.
   getUsers(): void {
-    console.log("postscomponent21")
     this._userService.getUsers()
       .subscribe(data => {
         console.log("All", JSON.stringify(data));
-        console.log("postscomponent22?");
         this.users = data;
       }
       );
-    console.log("it worked?");
   }
 
   filteredPosts: IPost[] = this.posts;
@@ -92,6 +82,7 @@ export class PostsComponent implements OnInit{
       post.Title.toLocaleLowerCase().includes(filterBy));  //  Uses built in filter method.
   }
 
+  //  Function for toggling visibility for filter input field.
   toggleFilter(id: string): void {
     var div = document.getElementById(id)!;
     if (div.style.display == "block") {
@@ -104,7 +95,6 @@ export class PostsComponent implements OnInit{
 
   //  Method to be called on page load. As a lifecycle hook it executes at the beginning.
   ngOnInit(): void {
-    //document.body.setAttribute('data-bs-theme', "dark");
     document.documentElement.setAttribute('data-bs-theme', "dark");  //  Sets html document to dark theme.
     this.getPosts()  //  Calls method to get all posts to be displayed in table.
   }

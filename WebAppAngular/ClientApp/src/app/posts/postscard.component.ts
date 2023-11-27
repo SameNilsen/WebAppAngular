@@ -15,7 +15,6 @@ export class PostsCardComponent implements OnInit {
 
   viewTitle: string = "MainFeedTable";
   displayImage: boolean = true;
-  //listFilter: string = "";
   private _listFilter: string = "";
   get listFilter(): string {
     return this._listFilter;
@@ -33,6 +32,7 @@ export class PostsCardComponent implements OnInit {
 
   constructor(private _router: Router, private _postService: PostService, private _userService: UserService) { }
 
+  //  Function for deleting post.
   deletePost(post: IPost): void {
     const confirmDelete = confirm(`Are you sure you want to delete "${post.Title}"?`);
     if (confirmDelete) {
@@ -50,23 +50,16 @@ export class PostsCardComponent implements OnInit {
     }
   }
 
-  testNavigate() {
-    this._router.navigate(["/test"]);
-  }
-
+  //  Function to get all posts.
   getPosts(): void {
-    console.log("postscomponent1")
     this._postService.getPosts()
       .subscribe(data => {
-        console.log("All", JSON.stringify(data));
-        console.log("postscomponent2?");
+        console.log("All", JSON.stringify(data));  //  Log response.
         this.posts = data;
-        console.log(this.posts);
-        this.filteredPosts = this.posts;
-        this.getVoting();
+        this.filteredPosts = this.posts;  //  Set to variable.
+        this.getVoting();  //  Call on function to get all votes by user on these posts.
       }
       );
-    console.log("it worked?");
   }
 
   getUsers(): void {
@@ -83,12 +76,14 @@ export class PostsCardComponent implements OnInit {
 
   filteredPosts: IPost[] = this.posts;
 
+  //  Filters posts.
   performFilter(filterBy: string): IPost[] {
     filterBy = filterBy.toLocaleLowerCase();
     return this.posts.filter((post: IPost) =>
-      post.Title.toLocaleLowerCase().includes(filterBy));
+      post.Title.toLocaleLowerCase().includes(filterBy));  // return filtered posts by filter input.
   }
 
+  //  Function to toggle on and of visibility of filter input field.
   toggleFilter(id: string): void {
     var div = document.getElementById(id)!;
     if (div.style.display == "block") {
@@ -103,12 +98,14 @@ export class PostsCardComponent implements OnInit {
     //document.body.setAttribute('data-bs-theme', "dark");
     document.documentElement.setAttribute('data-bs-theme', "dark");
     this.getSignedIn();
-    this.getPosts()
+    this.getPosts();  //  Get all posts.
   }
 
+  //  Function to see if user is signed in. Used for upvoting.
   getSignedIn(): void {
     this._postService.getSignedIn(-1).subscribe(response => {
       if (response.success) {
+        //  Set and log signed in.
         console.log("signed in: " + response.message + " " + response.userspost);
         this.isSignedIn = true;
       }
@@ -126,57 +123,48 @@ export class PostsCardComponent implements OnInit {
   //     we map each uservote to its post with a dictionary upon initialization, and then getting the correct
   //     uservote from that when needed. 
   getVoting(): void {
-    console.log("START: " + this.posts.length);
     this.posts.forEach((post) => {  //  Iterates through all posts.
-      console.log(post.PostId);
       var postId = post.PostId;
       this._postService.getVote(postId).subscribe(response => {  //  Gets the users vote on that post.
         if (response.success) {
           console.log("vote: " + response.vote + " " + postId);
           this.yourVotes[postId.toString()] = response.vote;    //  Map it in dictionary.
-          console.log("vote.: " + this.yourVotes + " " + this.yourVotes[postId.toString()]);
         }
         else {
-          console.log("Uffda, ingen votes for " + postId);
+          console.log("No votes for: " + postId);
           console.log(response.message);
           this.yourVotes.postId = "blank";
         }
       });
     });
-    console.log("Alle posts sjekka: " + this.yourVotes);
   }
 
+  //  When clicking upvote button on a post.
   setUpvote(postId: number): void {
-    console.log(1111);
-    if (this.isSignedIn) {
+    if (this.isSignedIn) {  //  Has to be signed in.
       this._postService.upvotePost(postId)
         .subscribe(
           (response) => {
             if (response.success) {
-              console.log(response.message);
-              //this.ngOnInit();
-              //this._router.navigate(["/detailedpost", this.post.PostId]);
+              console.log(response.message);  //  Log success.
               location.reload();
-              //this._router.navigate(["/postscard"]);
             }
           }
           , (error) => {
-            console.log("Error upvoting:", error);
+            console.log("Error upvoting: ", error);
           });
     }
   }
 
+  //  When clicking downvote button on a post.
   setDownvote(postId: number): void {
-    if (this.isSignedIn) {
+    if (this.isSignedIn) {  //  Must be signed in.
       this._postService.downvotePost(postId)
         .subscribe(
           (response) => {
             if (response.success) {
-              console.log(response.message);
-              //this.ngOnInit();
-              //this._router.navigate(["/detailedpost", this.post.PostId]);
+              console.log(response.message);  //  Log success.
               location.reload();
-              //this._router.navigate(["/postscard"]);
             }
           }
           , (error) => {
