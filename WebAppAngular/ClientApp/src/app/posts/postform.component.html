@@ -34,7 +34,7 @@
   </select>
   <div class="form-group" style="margin-bottom: 10px">
     <label for="imageUrl">Image Url:</label>
-    <input type="text" id="imageUrl" formControlName="imageUrl" class="form-control" placeholder="/assets/images/books.jpg" />
+    <input type="text" id="imageUrl" formControlName="imageUrl" class="form-control" placeholder="assets/images/books.jpg" />
   </div>
   <button name="submitBtn" style="margin-right:10px" class="btn btn-primary" type="submit" [disabled]="postForm.invalid || !isSignedIn">
     {{ isEditMode ? "Update" : "Create"}}
