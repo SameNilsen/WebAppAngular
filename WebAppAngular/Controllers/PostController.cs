@@ -1,34 +1,30 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using OsloMetAngular.DAL;
 using OsloMetAngular.Models;
-using OsloMetAngular.ViewModels;
 
 namespace OsloMetAngular.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    [ApiController]   //  Tags this controller as an ApiController which should handle http api requests.
+    [Route("api/[controller]")]    //  This translates to 'api/post' which is the route.
     public class PostController : Controller
     {
 
         private readonly IPostRepository _postRepository;
-        private readonly IUserRepository? _userRepository;
-        private readonly IUpVoteRepository? _upvoteRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUpVoteRepository _upvoteRepository;
         private readonly ILogger<PostController> _logger;
-        private readonly UserManager<ApplicationUser>? _userManager;
-        private readonly SignInManager<ApplicationUser>? _signInManager;
-        private readonly PostDbContext? _postDbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public PostController(IPostRepository postRepository, IUserRepository? userRepository, ILogger<PostController> logger, UserManager<ApplicationUser>? userManager, SignInManager<ApplicationUser>? signInManager, IUpVoteRepository? upvoteRepository)
+        public PostController(IPostRepository postRepository, IUserRepository userRepository, ILogger<PostController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUpVoteRepository upvoteRepository)
         {
             _postRepository = postRepository;
             _userRepository = userRepository;
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
-            //_postDbContext = postDbContext;
             _upvoteRepository = upvoteRepository;
         }
 
@@ -36,12 +32,11 @@ namespace OsloMetAngular.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            Console.Write("postcontroller1");
-            var posts = await _postRepository.GetAll();
-            Console.Write("postcontroller2");
+            var posts = await _postRepository.GetAll();  //  calls repo for all posts.
+            
             if (posts == null)
             {
-                Console.Write("postcontroller3");
+                //  If return is null, log error and return NotFoundObjectResult.
                 _logger.LogError("[PostController] Post list not found when executing _postRepository.GetAll(),");
                 return NotFound("Post list not found");
             }
@@ -68,35 +63,31 @@ namespace OsloMetAngular.Controllers
                 };
                 viewModelPosts.Add(simplePost);
             }
-            var postListViewModel = new PostListViewModel(viewModelPosts);
             return Ok(viewModelPosts);
         }
 
         //  Creates new post.
-        [Authorize]
+        [Authorize]  //  Authorization is also handled in frontend.
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] Post newPost)
+        public async Task<IActionResult> Create([FromBody] Post newPost)  //  Gets the newPost from request body.
         {
-            Console.WriteLine("postontroleler");
             if (newPost == null)
             {
-                return BadRequest("Invalid post data");
+                return BadRequest("Invalid post data");  //  If the post is of bad format.
             }
 
-            if (_signInManager.IsSignedIn(User))
-            {
-                Console.WriteLine("--------signed in----------");
-                Console.WriteLine(_userManager.GetUserId(User));
+            if (_signInManager.IsSignedIn(User))  //  Verify that the user is logged in.
+            {               
                 //  <--- This block is for getting both the User user and IdentityUser user. We need the
                 //       IdentityUser because then we can automatically assign the user as the 
                 //        logged in user.
-                var identityUserId = _userManager.GetUserId(User);
+                var identityUserId = _userManager.GetUserId(User)!;  //  This cannot be null as we know the user is signed in and therefore there has to be a user.                
                 var user = _userRepository.GetUserByIdentity(identityUserId).Result;
                 if (user == null)
                 {
                     var newUser = new User
                     {
-                        Name = _userManager.GetUserName(User),
+                        Name = _userManager.GetUserName(User)!,  //  Again, we know this cannot be null.
                         IdentityUserId = identityUserId
                     };
                     await _userRepository.Create(newUser);
@@ -112,7 +103,7 @@ namespace OsloMetAngular.Controllers
             {
                 Console.WriteLine("----Not signed in----");
             }
-
+            //  Create a new post with the patched values + the newly computed User.
             Post simplePost = new Post
             {
                 PostID = newPost.PostID,
@@ -125,18 +116,20 @@ namespace OsloMetAngular.Controllers
                 SubForum = newPost.SubForum,
                 User = newPost.User
             };
-            //newItem.ItemId = GetNextItemId();
-            bool returnOk = await _postRepository.Create(simplePost);
+
+            bool returnOk = await _postRepository.Create(simplePost);  //  Try to create post via repo.
 
             if (returnOk)
             {
+                //  If success:
                 simplePost.User.Credebility += 7;  //  When creating a post the user gets added score of 7 to their "Credebility".
-                await _userRepository.Update(simplePost.User);
+                await _userRepository.Update(simplePost.User);  //  Update for creds.
                 var response = new { success = true, message = "Post " + newPost.Title + " created succesfully" };
-                return Ok(response);                
+                return Ok(response);  //  Return a response.               
             }
             else
             {
+                //  If fail, return response message with error parameters.
                 var response = new { success = false, message = "Post creation failed" };
                 return Ok(response);
             }
@@ -146,12 +139,13 @@ namespace OsloMetAngular.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItembyId(int id)
         {
-            var post = await _postRepository.GetItemById(id);
+            var post = await _postRepository.GetItemById(id);  //  Get post from repo.
             if (post == null)
             {
                 _logger.LogError("[PostController] Post list not found when executing _postRepository.GetAll(),");
                 return NotFound("Post list not found");
             }
+            //  Create a simplified post because we dont want all relational entities.
             Post simplePost = new Post
             {
                 PostID = post.PostID,
@@ -171,29 +165,30 @@ namespace OsloMetAngular.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(Post newPost)
         {
-            Console.WriteLine(newPost);
-            Console.WriteLine("---" + newPost.UserId);
 
             if (newPost == null)
             {
                 return BadRequest("Invalid post data");
             }
 
-            var identityUserId = _userManager.GetUserId(User);
-            var user = _userRepository.GetUserByIdentity(identityUserId).Result;
-
+            //  Only a logged in user can update a post. This is verified in the frontend. We 
+            //   therefore know the user and can get it with this:
+            var identityUserId = _userManager.GetUserId(User)!;
+            var user = _userRepository.GetUserByIdentity(identityUserId).Result!;
+            //  To be able to update a post, you must first own the post, and to own the post
+            //   you must have created the post. When creating a post it is checked or created
+            //   that the User entity is linked with IdentityUser so we know that it exists a
+            //   user with the given identityUserId.
             newPost.User = user;
 
-            Console.WriteLine(22);
-            bool returnOk = await _postRepository.Update(newPost);
-            Console.WriteLine(33);
-            Console.WriteLine(returnOk);
-            if (returnOk)
+            bool returnOk = await _postRepository.Update(newPost);  //  Call on repo to update post.
+            
+            if (returnOk)  //  Success:
             {
                 var response = new { success = true, message = "Post " + newPost.Title + " updated succesfully" };
                 return Ok(response);
             }
-            else
+            else  //  Fail:
             {
                 var response = new { success = false, message = "Post update failed" };
                 return Ok(response);
@@ -204,23 +199,24 @@ namespace OsloMetAngular.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            bool returnOk= await _postRepository.Delete(id);
-            if (!returnOk)
+            bool returnOk= await _postRepository.Delete(id);  //  Call on repo to delete.
+            if (!returnOk)  //  On fail:
             {
                 _logger.LogError("[PostController] Post deletion failed for the PostId {PostId:0000}", id);
                 return NotFound("Post deletion failed");
             }
+            //  On success:
             var response = new { success = true, message = "Post " + id.ToString()+ " deleted succesfully" };
             return Ok(response);
         }
 
         //  Fetches all posts that belongs to a given subforum.
         [HttpGet("subforum/{forum}")]
-        public async Task<IActionResult> GetBySubForum(string forum)
+        public IActionResult GetBySubForum(string forum)
         {
-            var posts = _postRepository.GetBySubForum(forum);
+            var posts = _postRepository.GetBySubForum(forum);  //  Calls on repo for posts.
 
-            if (posts == null)
+            if (posts == null)  //  On error.
             {
                 _logger.LogError("[PostController] Post list not found when executing _postRepository.GetBySubForum(),");
                 return NotFound("Post list not found");
@@ -243,7 +239,7 @@ namespace OsloMetAngular.Controllers
                 };
                 viewModelPosts.Add(simplePost);
             }
-            var postListViewModel = new PostListViewModel(viewModelPosts);
+            //  Return the revised list of posts.
             return Ok(viewModelPosts);
         }
 
@@ -254,29 +250,32 @@ namespace OsloMetAngular.Controllers
         [HttpGet("signedin/{id}")]
         public async Task<IActionResult> GetSignedIn(int id)
         {
-            if (_signInManager.IsSignedIn(User))
+            if (_signInManager.IsSignedIn(User))  //  Check if logged in, if true continue.
             {
-                var userspost = false;
-                var post = await _postRepository.GetItemById(id);
-                if (post == null)
+                var userspost = false;  //  Default not the users post.
+                var post = await _postRepository.GetItemById(id);  //  Get the post.
+                if (post == null)  //  No post = logged in but not userspost.
                 {
                     var responseO = new { success = true, message = _userManager.GetUserId(User), userspost };
                     return Ok(responseO);
                 }
-                var identityUserId = _userManager.GetUserId(User);
+                //  If we find the post, we must get the user and check if the post belong to it.
+                var identityUserId = _userManager.GetUserId(User)!;
                 var user = _userRepository.GetUserByIdentity(identityUserId).Result;
                 if (user != null)
                 {
                     if (post.UserId == user.UserId)
                     {
-                        userspost = true;
+                        userspost = true;  //  The post is the user's!
                     }
                 }
+                //  Return that the user is logged in and that the post is its own.
                 var response = new { success = true, message = _userManager.GetUserId(User), userspost };
                 return Ok(response);
             }
             else
             {
+                //  Not logged in:
                 var response = new { success = false, message = "User not signed in" };
                 return Ok(response);
             }
@@ -434,17 +433,19 @@ namespace OsloMetAngular.Controllers
         [HttpGet("getvote/{id}")]
         public async Task<IActionResult> GetVoteString(int id)
         {
-            var vote = "blank";
+            var vote = "blank";  //  Default no vote.
             if (_signInManager.IsSignedIn(User) == false)
             {
                 //  Not signed in, so no vote.
                 var Nresponse = new { success = false, message = "Not signed in" };
                 return Ok(Nresponse);
             }
-            var identityUserId = _userManager.GetUserId(User);
+            //  Find the user.
+            var identityUserId = _userManager.GetUserId(User)!;
             var user = _userRepository.GetUserByIdentity(identityUserId).Result;
             if (user == null)
             {
+                //  No User but logged in? -> Create user.
                 var newUser = new User
                 {
                     Name = _userManager.GetUserName(User),
@@ -455,12 +456,13 @@ namespace OsloMetAngular.Controllers
             user = _userRepository.GetUserByIdentity(identityUserId).Result;
             if (user == null)
             {
+                //  No user. Log error, respond with error string.
                 _logger.LogError("[PostController] User not found for this PostID {PostID:0000}", identityUserId);
                 var Nresponse = new { success = false, message = "could not get user" };
                 return Ok(Nresponse);
             }
-            var post = await _postRepository.GetItemById(id);
-
+            var post = await _postRepository.GetItemById(id);  //  Get the post in question.
+            //  Find the vote.
             if (post.UserVotes != null)
             {
                 if (post.UserVotes.Exists(x => x.UserId == user.UserId && x.Post == post))
@@ -468,7 +470,7 @@ namespace OsloMetAngular.Controllers
                     var modelVote = post.UserVotes.FirstOrDefault(x => x.UserId == user.UserId && x.Post == post);
                     if (modelVote != null)
                     {
-                        vote = modelVote.Vote;
+                        vote = modelVote.Vote;  //  Save the vote.
                     }
                     else
                     {
@@ -481,18 +483,9 @@ namespace OsloMetAngular.Controllers
                 }
             }
             else { vote = "error"; }
-
+            //  Return response with the vote.
             var response = new { success = true, vote = vote };
             return Ok(response);
-        }
-
-        //private static int GetNextItemId()
-        //{
-        //    if (Items.Count == 0)
-        //    {
-        //        return 1;
-        //    }
-        //    return Items.Max(item => item.ItemId) + 1;
-        //}
+        }       
     }
 }
