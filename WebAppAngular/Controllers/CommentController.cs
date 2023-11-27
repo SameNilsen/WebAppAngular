@@ -33,30 +33,14 @@ namespace OsloMetAngular.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var comments = await _commentRepository.GetAll();
+            var comments = await _commentRepository.GetAll();  //  Calls on repo for all comments.
             if (comments == null)
             {
+                //  Log error.
                 _logger.LogError("[CommentController] Comment list not found when executing _commentRepository.GetAll(),");
                 return NotFound("Comment list not found");
             }
-            //  Wrap it in viewmodel without reference to other entities to avoid referencing loop by json.
-            //List<Post> viewModelPosts = new List<Post>();
-            //foreach (var post in posts)
-            //{
-            //    Post simplePost = new Post {
-            //        PostID = post.PostID,
-            //        Title = post.Title,
-            //        Text = post.Text,
-            //        ImageUrl = post.ImageUrl,
-            //        PostDate = post.PostDate,
-            //        //UserId = post.UserId,
-            //        UpvoteCount = post.UpvoteCount,
-            //        SubForum = post.SubForum,
-            //        User = new User { Name = post.User.Name},
-            //    };
-            //    viewModelPosts.Add(simplePost);
-            //}
-            //var postListViewModel = new PostListViewModel(viewModelPosts);
+            //  Return comments.
             return Ok(comments);
         }
 
@@ -64,20 +48,19 @@ namespace OsloMetAngular.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] Comment newComment)
         {
-            if (_signInManager.IsSignedIn(User))
+            if (_signInManager.IsSignedIn(User))  //  Must be signed in.
             {
                 Console.WriteLine("--------signed in----------");
-                Console.WriteLine(_userManager.GetUserId(User));
                 //  <--- This block is for getting both the User user and IdentityUser user. We need the
                 //       IdentityUser because then we can automatically assign the user as the 
                 //        logged in user.
-                var identityUserId = _userManager.GetUserId(User);
+                var identityUserId = _userManager.GetUserId(User)!;
                 var user = _userRepository.GetUserByIdentity(identityUserId).Result;
                 if (user == null)
                 {
                     var newUser = new User
                     {
-                        Name = _userManager.GetUserName(User),
+                        Name = _userManager.GetUserName(User)!,
                         IdentityUserId = identityUserId
                     };
                     await _userRepository.Create(newUser);
@@ -95,14 +78,12 @@ namespace OsloMetAngular.Controllers
             }
                 
             
-            if (newComment == null)
+            if (newComment == null)  //  Return BadRequest if bad comment.
             {
                 return BadRequest("Invalid comment data");
             }
 
-            Console.WriteLine(newComment);
-            Console.WriteLine(newComment.ToString());
-            Console.WriteLine(newComment.UserId + "..a.a.a.");
+            //  Create new comment object with proper values + the user we got above.
             var newComment2 = new Comment
             {
                 CommentText = newComment.CommentText,
@@ -110,15 +91,14 @@ namespace OsloMetAngular.Controllers
                 UserId = newComment.User.UserId,
                 User = newComment.User,  //  Need to get proper user.
                 PostID = newComment.PostID,
-                //Post = newComment.Post
             };
-            bool returnOk = await _commentRepository.Create(newComment2);
+            bool returnOk = await _commentRepository.Create(newComment2);  //  Call on repo to create comment.
 
             if (returnOk)
             {
                 //  Set credibility for the commenter:
                 newComment2.User.Credebility += 3;
-                await _userRepository.Update(newComment2.User);
+                await _userRepository.Update(newComment2.User);  //  Update for creds.
 
                 //  Set credibility for the posts poster:
                 var post = await _postRepository.GetItemById(newComment2.PostID);
@@ -143,7 +123,7 @@ namespace OsloMetAngular.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCommentbyId(int id)
         {
-            var comment = await _commentRepository.GetCommentById(id);
+            var comment = await _commentRepository.GetCommentById(id);  //  Gets comment via repo.
             if (comment == null)
             {
                 _logger.LogError("[CommentController] Comment list not found when executing _commentRepository.GetAll(),");
@@ -156,7 +136,7 @@ namespace OsloMetAngular.Controllers
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetCommentsbyPostId(int id)
         {
-            var comments = _commentRepository.GetCommentsByPostId(id);
+            var comments = _commentRepository.GetCommentsByPostId(id);  //  Call on repo for comments.
             if (comments == null)
             {
                 _logger.LogError("[CommentController] Comment list not found when executing _commentRepository.GetAll(),");
@@ -176,7 +156,7 @@ namespace OsloMetAngular.Controllers
                 };
                 viewModelComments.Add(simpleComment);
             }
-            //Console.WriteLine(viewModelComments[0]. + "---");
+            //  Return comments.
             return Ok(viewModelComments);
         }
 
@@ -184,21 +164,19 @@ namespace OsloMetAngular.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(Comment newComment)
         {
-            Console.WriteLine(newComment + "aaaaaa");
-            if (newComment == null)
+            if (newComment == null) //  Bad comment.
             {
                 return BadRequest("Invalid comment data");
             }
+            //  Get the post the comment belongs to.
             var post = _postRepository.GetItemById(newComment.PostID).Result!;
             newComment.Post = post;
-
-            var identityUserId = _userManager.GetUserId(User);
-            var user = _userRepository.GetUserByIdentity(identityUserId).Result;
-            Console.WriteLine("User " + user.Name + " " + user.UserId);
+            //  Get the user the comment belongs to.
+            var identityUserId = _userManager.GetUserId(User)!;
+            var user = _userRepository.GetUserByIdentity(identityUserId).Result!;            
             newComment.UserId = user.UserId;
             newComment.User = user;
-            Console.WriteLine("User " + newComment.User.Name + " " + newComment.User.UserId);
-
+            //  Update with proper post and user.
             bool returnOk = await _commentRepository.Update(newComment);
 
             if (returnOk)
@@ -217,7 +195,7 @@ namespace OsloMetAngular.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            bool returnOk= await _commentRepository.Delete(id);
+            bool returnOk= await _commentRepository.Delete(id);  //  Call on repo to delete.
             if (!returnOk)
             {
                 _logger.LogError("[CommentController] Comment deletion failed for the CommentId {CommentId:0000}", id);

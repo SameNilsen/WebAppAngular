@@ -28,8 +28,7 @@ namespace OsloMetAngular.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            Console.Write("usercontroller1");
-            var users = await _userRepository.GetAll();
+            var users = await _userRepository.GetAll();  //  Calls on repo for users.
             if (users == null)
             {
                 _logger.LogError("[UserController] User list not found when executing _userRepository.GetAll(),");
@@ -46,7 +45,7 @@ namespace OsloMetAngular.Controllers
             {
                 return BadRequest("Invalid user data");
             }
-            bool returnOk = await _userRepository.Create(newUser);
+            bool returnOk = await _userRepository.Create(newUser);  //  Send user to repo for creation.
 
             if (returnOk)
             {
@@ -64,7 +63,7 @@ namespace OsloMetAngular.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserbyId(int id)
         {
-            var user = await _userRepository.GetItemById(id);
+            var user = await _userRepository.GetItemById(id);  //  Fetches user via repo.
             if (user == null)
             {
                 _logger.LogError("[UserController] User list not found when executing _userRepository.GetAll(),");
@@ -78,14 +77,14 @@ namespace OsloMetAngular.Controllers
         [HttpGet("simpleuser/{id}")]
         public async Task<IActionResult> GetSimplifiedUser(int id)
         {
-            var user = await _userRepository.GetItemById(id);
+            var user = await _userRepository.GetItemById(id);  //  Fetches the user.
             if (user == null)
             {
                 _logger.LogError("[UserController] User not found while executing" +
                     "_userRepository.GetItemById(id)", id);
                 return NotFound("Did not find user");
             }
-            
+            //  Simplify User.
             User simpleUser = new User
             {
                 UserId = user.UserId,
@@ -100,30 +99,20 @@ namespace OsloMetAngular.Controllers
         [HttpGet("getuseridbyidentity/{id}")]
         public async Task<IActionResult> GetUserIdByIdentity(string id)
         {
-            var user = await _userRepository.GetUserByIdentity(id);
+            var user = await _userRepository.GetUserByIdentity(id);  //  Get a user by its identityId.
             
             if (user == null)
             {
+                //  If a user cannot be found, create a user with the unassigned identityUserId.
                 var newUser = new User
                 {
                     Name = _userManager.GetUserName(User),
                     IdentityUserId = id
                 };
                 await _userRepository.Create(newUser);
-                user = newUser;
-
-                //_logger.LogError("[UserController] User not found while executing" +
-                //    "_userRepository.GetItemById(id)", id);
-                //return NotFound("Did not find user");
+                user = newUser;                
             }
 
-            //User simpleUser = new User
-            //{
-            //    UserId = user.UserId,
-            //    Name = user.Name,
-            //    Credebility = user.Credebility,
-            //    IdentityUserId = user.IdentityUserId,
-            //};
             return Ok(user.UserId);
         }
 
@@ -131,12 +120,12 @@ namespace OsloMetAngular.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(User newUser)
         {
-            if (newUser == null)
+            if (newUser == null)  //  Bad User.
             {
                 return BadRequest("Invalid user data");
             }
 
-            bool returnOk = await _userRepository.Update(newUser);
+            bool returnOk = await _userRepository.Update(newUser);  //  Send to update by repo.
 
             if (returnOk)
             {
@@ -154,7 +143,7 @@ namespace OsloMetAngular.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            bool returnOk= await _userRepository.Delete(id);
+            bool returnOk= await _userRepository.Delete(id);  //  Delete user via repo.
             if (!returnOk)
             {
                 _logger.LogError("[UserController] User deletion failed for the UserId {UserId:0000}", id);
@@ -168,7 +157,7 @@ namespace OsloMetAngular.Controllers
         [HttpGet("posts/{id}")]
         public async Task<IActionResult> GetPosts(int id)
         {
-            var user = await _userRepository.GetItemById(id);
+            var user = await _userRepository.GetItemById(id);  //  Get user.
             if (user == null)
             {
                 _logger.LogError("[UserController] User not found while executing" +
@@ -176,7 +165,7 @@ namespace OsloMetAngular.Controllers
                 return NotFound("Did not find user");
             }
 
-            var posts = user.Posts;
+            var posts = user.Posts;  //  Get user's posts.
 
             if (posts == null)
             {
@@ -194,14 +183,13 @@ namespace OsloMetAngular.Controllers
                     Text = post.Text,
                     ImageUrl = post.ImageUrl,
                     PostDate = post.PostDate,
-                    //UserId = post.UserId,
                     UpvoteCount = post.UpvoteCount,
                     SubForum = post.SubForum,
                     User = new User { Name = post.User.Name },
                 };
                 viewModelPosts.Add(simplePost);
             }
-            var postListViewModel = new PostListViewModel(viewModelPosts);
+            //  Return posts.
             return Ok(viewModelPosts);
         }
 
@@ -209,7 +197,7 @@ namespace OsloMetAngular.Controllers
         [HttpGet("comments/{id}")]
         public async Task<IActionResult> GetComments(int id)
         {
-            var user = await _userRepository.GetItemById(id);
+            var user = await _userRepository.GetItemById(id);  //  Get user.
             if (user == null)
             {
                 _logger.LogError("[UserController] User not found while executing" +
@@ -217,7 +205,7 @@ namespace OsloMetAngular.Controllers
                 return NotFound("Did not find user");
             }
 
-            var comments = user.Comments;
+            var comments = user.Comments;  //  Get user's posts.
 
             if (comments == null)
             {
@@ -237,6 +225,7 @@ namespace OsloMetAngular.Controllers
                 };
                 viewModelComments.Add(simpleComment);
             }
+            //  Return comments.
             return Ok(viewModelComments);
         }
 
@@ -244,7 +233,7 @@ namespace OsloMetAngular.Controllers
         [HttpGet("votes/{id}")]
         public async Task<IActionResult> GetVotes(int id)
         {
-            var user = await _userRepository.GetItemById(id);
+            var user = await _userRepository.GetItemById(id);  //  Get user.
             if (user == null)
             {
                 _logger.LogError("[UserController] User not found while executing" +
@@ -252,7 +241,7 @@ namespace OsloMetAngular.Controllers
                 return NotFound("Did not find user");
             }
 
-            var votes = user.UserVotes;
+            var votes = user.UserVotes;  //  Get user's votes.
 
             if (votes == null)
             {
@@ -271,16 +260,8 @@ namespace OsloMetAngular.Controllers
                 };
                 viewModelVotes.Add(simpleVote);
             }
+            //  Return votes.
             return Ok(viewModelVotes);
         }
-
-        //private static int GetNextItemId()
-        //{
-        //    if (Items.Count == 0)
-        //    {
-        //        return 1;
-        //    }
-        //    return Items.Max(item => item.ItemId) + 1;
-        //}
     }
 }
