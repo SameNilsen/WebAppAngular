@@ -146,13 +146,16 @@ namespace OsloMetAngular.Controllers
             List<Comment> viewModelComments = new List<Comment>();
             foreach (var comment in comments)
             {
+                var identityUserId = "-1";
+                if (comment.User.IdentityUserId == null){identityUserId = "-1";}
+                else{identityUserId = comment.User.IdentityUserId;}
                 Comment simpleComment = new Comment
                 {
                     CommentID = comment.CommentID,
                     CommentText = comment.CommentText,
                     PostDate = comment.PostDate,
                     UserId = comment.UserId,
-                    User = new User { Name = comment.User.Name, Credebility = comment.User.Credebility, IdentityUserId = comment.User.IdentityUserId },
+                    User = new User { Name = comment.User.Name, Credebility = comment.User.Credebility, IdentityUserId = identityUserId },
                 };
                 viewModelComments.Add(simpleComment);
             }

@@ -7,7 +7,6 @@ namespace OsloMetAngular.DAL
         Task<IEnumerable<Comment>?> GetAll();
         Task<Comment?> GetCommentById(int id); 
         IEnumerable<Comment>? GetCommentsByPostId(int id);
-        //Task<Comment?> GetUserByIdentity(string id);
 
         Task<bool> Create(Comment comment);
         Task<bool> Update(Comment comment);

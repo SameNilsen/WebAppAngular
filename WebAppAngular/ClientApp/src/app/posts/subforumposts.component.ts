@@ -65,7 +65,6 @@ export class SubForumPostsComponent implements OnInit{
         this.filteredPosts = this.posts;
       }
     );
-    console.log("it worked?");
   }
 
   //  Gets the users of the posts.

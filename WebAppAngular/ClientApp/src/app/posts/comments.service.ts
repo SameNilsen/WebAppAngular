@@ -12,12 +12,14 @@ export class CommentService {
 
   constructor(private _http: HttpClient) { }
 
+  //  Service Injection class which handles http request calls to the server. The baseUrl
+  //   string specifies which apiController to be used.
+
   getComments(): Observable<IComment[]> {
     return this._http.get<IComment[]>(this.baseUrl);
   }
 
   createComment(newComment: IComment): Observable<any> {
-    console.log(newComment);
     const createUrl = "api/comment/create";
     return this._http.post<any>(createUrl, newComment);
   }
@@ -28,7 +30,6 @@ export class CommentService {
   }
 
   getCommentsByPostId(postId: number): Observable<IComment[]> {
-    console.log("Hello");
     const url = `${this.baseUrl}/get/${postId}`;
     return this._http.get<IComment[]>(url);
   }

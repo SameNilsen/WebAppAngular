@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using OsloMetAngular.Models;
-//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace OsloMetAngular.DAL
 {

@@ -127,12 +127,9 @@ export class PostsCardComponent implements OnInit {
       var postId = post.PostId;
       this._postService.getVote(postId).subscribe(response => {  //  Gets the users vote on that post.
         if (response.success) {
-          console.log("vote: " + response.vote + " " + postId);
           this.yourVotes[postId.toString()] = response.vote;    //  Map it in dictionary.
         }
         else {
-          console.log("No votes for: " + postId);
-          console.log(response.message);
           this.yourVotes.postId = "blank";
         }
       });

@@ -12,6 +12,9 @@ export class UserService {
 
   constructor(private _http: HttpClient) { }
 
+  //  Service Injection class which handles http request calls to the server. The baseUrl
+  //   string specifies which apiController to be used.
+
   getUsers(): Observable<IUser[]> {
     return this._http.get<IUser[]>(this.baseUrl);
   }
@@ -49,19 +52,16 @@ export class UserService {
 
   getPosts(id: number): Observable<any> {
     const url = `${this.baseUrl}posts/${id}`;
-    console.log(url + " hello");
     return this._http.get<any>(url);
   }
 
   getComments(id: number): Observable<any> {
     const url = `${this.baseUrl}comments/${id}`;
-    console.log(url + " hello");
     return this._http.get<any>(url);
   }
 
   getVotes(id: number): Observable<any> {
     const url = `${this.baseUrl}votes/${id}`;
-    console.log(url + " hello");
     return this._http.get<any>(url);
   }
 }
