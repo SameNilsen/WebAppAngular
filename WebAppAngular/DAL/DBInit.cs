@@ -10,9 +10,9 @@ namespace OsloMetAngular.DAL
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
             PostDbContext context = serviceScope.ServiceProvider.GetRequiredService<PostDbContext>();
-            
+
             // Wipe and recreate database
-            //context.Database.EnsureDeleted();
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             // Initial user data

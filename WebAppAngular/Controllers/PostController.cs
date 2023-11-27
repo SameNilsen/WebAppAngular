@@ -287,13 +287,13 @@ namespace OsloMetAngular.Controllers
             //  <--- This block is for getting both the User user and IdentityUser user. We need the
             //       IdentityUser because then we can automatically assign the user as the 
             //        logged in user.
-            var identityUserId = _userManager.GetUserId(User);
+            var identityUserId = _userManager.GetUserId(User)!;
             var user = _userRepository.GetUserByIdentity(identityUserId).Result;
             if (user == null)
             {
                 var newUser = new User
                 {
-                    Name = _userManager.GetUserName(User),
+                    Name = _userManager.GetUserName(User)!,
                     IdentityUserId = identityUserId
                 };
                 await _userRepository.Create(newUser);
@@ -448,7 +448,7 @@ namespace OsloMetAngular.Controllers
                 //  No User but logged in? -> Create user.
                 var newUser = new User
                 {
-                    Name = _userManager.GetUserName(User),
+                    Name = _userManager.GetUserName(User)!,
                     IdentityUserId = identityUserId
                 };
                 await _userRepository.Create(newUser);
@@ -462,6 +462,12 @@ namespace OsloMetAngular.Controllers
                 return Ok(Nresponse);
             }
             var post = await _postRepository.GetItemById(id);  //  Get the post in question.
+            if (post == null)
+            {
+                var Nresponse = new { success = false, message = "Could not find post" };
+                return Ok(Nresponse);
+            }
+
             //  Find the vote.
             if (post.UserVotes != null)
             {

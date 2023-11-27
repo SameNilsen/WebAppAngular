@@ -14,6 +14,8 @@ namespace OsloMetAngular.DAL
             Database.EnsureCreated();
         }
 
+        //  We unfortunatly have an entity "User" which is also used by Identity. We have
+        //   separeted them, but still get a warning.
         public DbSet<Post> Posts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Comment> Comments { get; set; }

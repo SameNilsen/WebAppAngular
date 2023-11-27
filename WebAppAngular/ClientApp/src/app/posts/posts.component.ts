@@ -60,7 +60,6 @@ export class PostsComponent implements OnInit{
         this.filteredPosts = this.posts;           //  Also sets it in filteredPosts, so its ready for filtering.
       }
     );
-    console.log("it worked?");
   }
 
   //  Get users for posts.

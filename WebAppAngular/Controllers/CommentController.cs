@@ -134,7 +134,7 @@ namespace OsloMetAngular.Controllers
 
         //  Fetches all comments belonging to a given post by its postId.
         [HttpGet("get/{id}")]
-        public async Task<IActionResult> GetCommentsbyPostId(int id)
+        public IActionResult GetCommentsbyPostId(int id)
         {
             var comments = _commentRepository.GetCommentsByPostId(id);  //  Call on repo for comments.
             if (comments == null)
