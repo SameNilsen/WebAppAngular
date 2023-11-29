@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OsloMetAngular.Models;
 using OsloMetAngular.DAL;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,16 +58,16 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IUpVoteRepository, UpVoteRepository>();
 
 // Logger
-//var loggerConfiguration = new LoggerConfiguration()
-//.MinimumLevel.Information()
-//.WriteTo.File($"Logs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+var loggerConfiguration = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.File($"Logs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
 
-//loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var value) &&
-//e.Level == LogEventLevel.Information &&
-//e.MessageTemplate.Text.Contains("Executed DbCommand"));
+loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var value) &&
+e.Level == LogEventLevel.Information &&
+e.MessageTemplate.Text.Contains("Executed DbCommand"));
 
-//var logger = loggerConfiguration.CreateLogger();
-//builder.Logging.AddSerilog(logger);
+var logger = loggerConfiguration.CreateLogger();
+builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
 
